@@ -1,0 +1,1496 @@
+DIGEST 4f967846037e3f598d0caeeb8fb1dacb
+FMetaCoq.Translations.param_exists_test
+ind 79:85 <> augTest
+constr 97:99 <> Aug
+R104:106 Coq.Init.Datatypes <> nat ind
+binder 102:102 <> n:3
+R112:115 Coq.Init.Datatypes <> bool ind
+binder 110:110 <> b:4
+ind 129:133 <> Prod1
+constr 147:149 <> Con
+binder 136:136 <> X:5
+R158:158 MetaCoq.Translations.param_exists_test <> X:5 var
+binder 152:153 <> x1:8
+binder 155:156 <> x2:9
+ind 172:175 <> Prod
+constr 191:194 <> pair
+binder 178:178 <> X:10
+binder 180:180 <> Y:11
+R199:199 MetaCoq.Translations.param_exists_test <> X:10 var
+binder 197:197 <> x:14
+R205:205 MetaCoq.Translations.param_exists_test <> Y:11 var
+binder 203:203 <> y:15
+ind 219:222 <> List
+constr 241:244 <> nilL
+constr 248:252 <> consL
+binder 225:225 <> X:16
+R257:257 MetaCoq.Translations.param_exists_test <> X:16 var
+binder 255:255 <> x:19
+R264:267 MetaCoq.Translations.param_exists_test <> List:17 ind
+R269:269 MetaCoq.Translations.param_exists_test <> X:16 var
+binder 261:262 <> xs:20
+ind 283:289 <> Complex
+constr 305:306 <> AC
+constr 316:317 <> BC
+constr 337:338 <> CC
+binder 292:292 <> X:21
+binder 294:294 <> Y:22
+R311:311 MetaCoq.Translations.param_exists_test <> X:21 var
+binder 309:309 <> x:25
+R322:322 MetaCoq.Translations.param_exists_test <> X:21 var
+binder 320:320 <> x:26
+R332:332 MetaCoq.Translations.param_exists_test <> Y:22 var
+binder 326:327 <> y1:27
+binder 329:330 <> y2:28
+R343:343 MetaCoq.Translations.param_exists_test <> Y:22 var
+binder 341:341 <> y:29
+R349:355 MetaCoq.Translations.param_exists_test <> Complex:23 ind
+R359:359 MetaCoq.Translations.param_exists_test <> Y:22 var
+R357:357 MetaCoq.Translations.param_exists_test <> X:21 var
+binder 347:347 <> c:30
+ind 374:374 <> G
+constr 387:388 <> GI
+binder 377:377 <> X:31
+R396:399 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R400:400 MetaCoq.Translations.param_exists_test <> X:31 var
+R393:395 Coq.Init.Datatypes <> nat ind
+binder 391:391 <> f:34
+ind 414:414 <> R
+constr 427:427 <> T
+binder 417:417 <> X:35
+R433:436 MetaCoq.Translations.param_exists_test <> List ind
+R438:438 MetaCoq.Translations.param_exists_test <> X:35 var
+binder 430:431 <> xs:38
+ind 452:452 <> F
+constr 474:475 <> FI
+R461:464 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R458:460 Coq.Init.Datatypes <> nat ind
+binder 455:456 <> FT:39
+R480:481 MetaCoq.Translations.param_exists_test <> FT:39 var
+binder 478:478 <> x:42
+ind 497:499 <> Ind
+constr 527:530 <> IndC
+binder 502:502 <> X:43
+R515:518 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R512:514 Coq.Init.Datatypes <> nat ind
+R534:536 MetaCoq.Translations.param_exists_test <> Ind:44 ind
+R538:538 MetaCoq.Translations.param_exists_test <> X:43 var
+ind 553:556 <> Ind2
+constr 584:588 <> IndC2
+binder 559:559 <> X:46
+R572:575 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R569:571 Coq.Init.Datatypes <> nat ind
+R593:593 MetaCoq.Translations.param_exists_test <> X:46 var
+binder 591:591 <> x:49
+R598:601 MetaCoq.Translations.param_exists_test <> Ind2:47 ind
+R603:603 MetaCoq.Translations.param_exists_test <> X:46 var
+ind 618:621 <> IndT
+constr 659:663 <> IndTC
+binder 624:624 <> X:50
+binder 642:642 <> Y:51
+R668:668 MetaCoq.Translations.param_exists_test <> X:50 var
+binder 666:666 <> x:54
+R672:675 MetaCoq.Translations.param_exists_test <> IndT:52 ind
+R679:681 Coq.Init.Datatypes <> nat ind
+R677:677 MetaCoq.Translations.param_exists_test <> X:50 var
+ind 694:695 <> TA
+constr 716:718 <> TAC
+binder 698:698 <> X:55
+R724:724 MetaCoq.Translations.param_exists_test <> X:55 var
+binder 722:722 <> x:58
+binder 728:728 <> Y:59
+R739:739 MetaCoq.Translations.param_exists_test <> Y:59 var
+binder 737:737 <> y:60
+R744:745 MetaCoq.Translations.param_exists_test <> TA:56 ind
+R747:747 MetaCoq.Translations.param_exists_test <> X:55 var
+ind 760:762 <> TA2
+constr 783:786 <> TA2C
+binder 765:765 <> X:61
+binder 790:790 <> Y:64
+R801:801 MetaCoq.Translations.param_exists_test <> Y:64 var
+binder 799:799 <> y:65
+R806:808 MetaCoq.Translations.param_exists_test <> TA2:62 ind
+R810:810 MetaCoq.Translations.param_exists_test <> X:61 var
+R109:113 MetaCoq.Template.utils <> <> lib
+R115:117 MetaCoq.Template.All <> <> lib
+R161:177 MetaCoq.Translations.translation_utils <> <> lib
+R179:189 MetaCoq.Translations.param_unary <> <> lib
+R229:234 MetaCoq.Template.Pretty <> <> lib
+R258:264 Coq.Arith.PeanoNat Nat leb def
+not 250:250 <> :::x_'<='_x
+def 279:290 <> default_term
+R295:298 MetaCoq.Template.Ast <> tVar constr
+def 333:342 <> debug_term
+binder 344:346 <> msg:66
+R350:353 MetaCoq.Template.Ast <> tVar constr
+R365:367 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R368:370 MetaCoq.Translations.param_exists_test <> msg:66 var
+def 387:402 <> tsl_ident_exists
+binder 404:405 <> id:67
+R412:412 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R410:411 MetaCoq.Translations.param_exists_test <> id:67 var
+def 431:439 <> tsl_ident
+R444:459 MetaCoq.Translations.param_exists_test <> tsl_ident_exists def
+def 590:597 <> applyEnv
+R602:611 MetaCoq.Translations.param_unary <> tsl_rec0_2 def
+R643:649 MetaCoq.Checker.Checker <> <> lib
+def 901:907 <> augment
+R912:915 MetaCoq.Template.Ast <> term ind
+binder 910:910 <> t:68
+R920:925 Coq.Init.Datatypes <> option ind
+R927:930 MetaCoq.Template.Ast <> term ind
+R943:943 MetaCoq.Translations.param_exists_test <> t:68 var
+R955:959 MetaCoq.Template.Ast <> tSort constr
+R966:969 Coq.Init.Datatypes <> Some constr
+R972:978 MetaCoq.Template.Ast <> tLambda constr
+R989:993 MetaCoq.Template.Ast <> tProd constr
+R1010:1010 MetaCoq.Translations.param_exists_test <> t:68 var
+R1002:1005 MetaCoq.Template.Ast <> tRel constr
+R995:999 MetaCoq.Template.BasicAst <> nAnon constr
+R986:986 MetaCoq.Translations.param_exists_test <> t:68 var
+R980:984 MetaCoq.Template.BasicAst <> nAnon constr
+R1018:1022 MetaCoq.Template.Ast <> tProd constr
+R1041:1043 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1054:1057 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1066:1076 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1311:1321 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1044:1050 MetaCoq.Translations.param_exists_test <> augment:69 def
+R1058:1061 Coq.Init.Datatypes <> Some constr
+binder 1063:1065 <> t2':71
+R1077:1080 Coq.Init.Datatypes <> Some constr
+R1087:1093 MetaCoq.Template.Ast <> tLambda constr
+R1105:1109 MetaCoq.Template.LiftSubst <> lift0 syndef
+R1114:1118 MetaCoq.Template.Ast <> tProd constr
+R1133:1135 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1146:1149 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1158:1171 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1244:1263 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1136:1142 MetaCoq.Translations.param_exists_test <> augment:69 def
+R1150:1153 Coq.Init.Datatypes <> Some constr
+binder 1155:1157 <> t1':72
+R1172:1176 MetaCoq.Template.Ast <> tProd constr
+R1196:1204 MetaCoq.Translations.translation_utils <> subst_app def
+R1219:1219 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1242:1242 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1220:1223 MetaCoq.Template.Ast <> tApp constr
+R1234:1234 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1241:1241 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1235:1238 MetaCoq.Template.Ast <> tRel constr
+R1226:1229 MetaCoq.Template.Ast <> tRel constr
+R1206:1210 MetaCoq.Template.LiftSubst <> lift0 syndef
+R1214:1216 MetaCoq.Translations.param_exists_test <> t2':71 var
+R1182:1186 MetaCoq.Template.LiftSubst <> lift0 syndef
+R1190:1192 MetaCoq.Translations.param_exists_test <> t1':72 var
+R1264:1272 MetaCoq.Translations.translation_utils <> subst_app def
+R1278:1278 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1301:1301 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1279:1282 MetaCoq.Template.Ast <> tApp constr
+R1293:1293 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1300:1300 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1294:1297 MetaCoq.Template.Ast <> tRel constr
+R1285:1288 MetaCoq.Template.Ast <> tRel constr
+R1274:1276 MetaCoq.Translations.param_exists_test <> t2':71 var
+R1098:1098 MetaCoq.Translations.param_exists_test <> t:68 var
+R1322:1325 Coq.Init.Datatypes <> None constr
+R1336:1339 Coq.Init.Datatypes <> None constr
+def 1360:1365 <> on_fst
+binder 1368:1368 <> X:73
+binder 1370:1370 <> Y:74
+binder 1372:1372 <> Z:75
+R1379:1380 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1381:1381 MetaCoq.Translations.param_exists_test <> Z:75 var
+R1378:1378 MetaCoq.Translations.param_exists_test <> X:73 var
+binder 1376:1376 <> f:76
+R1388:1388 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R1387:1387 MetaCoq.Translations.param_exists_test <> X:73 var
+R1389:1389 MetaCoq.Translations.param_exists_test <> Y:74 var
+binder 1385:1385 <> p:77
+R1401:1401 MetaCoq.Translations.param_exists_test <> p:77 var
+R1408:1408 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1410:1410 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1412:1412 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1417:1417 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1421:1421 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1423:1423 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1418:1418 MetaCoq.Translations.param_exists_test <> f:76 var
+def 1442:1449 <> name_map
+binder 1451:1451 <> f:79
+R1457:1460 MetaCoq.Template.BasicAst <> name ind
+binder 1454:1455 <> na:80
+R1466:1468 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1471:1474 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1484:1489 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1503:1508 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1469:1470 MetaCoq.Translations.param_exists_test <> na:80 var
+R1475:1480 MetaCoq.Template.BasicAst <> nNamed constr
+binder 1482:1483 <> id:81
+R1490:1495 MetaCoq.Template.BasicAst <> nNamed constr
+R1498:1498 MetaCoq.Translations.param_exists_test <> f:79 var
+R1500:1501 MetaCoq.Translations.param_exists_test <> id:81 var
+R1509:1513 MetaCoq.Template.BasicAst <> nAnon constr
+def 1612:1626 <> transformParams
+R1633:1635 MetaCoq.Translations.param_unary <> Env def
+binder 1629:1631 <> env:82
+R1646:1652 MetaCoq.Template.Ast <> context def
+binder 1639:1644 <> params:83
+R1664:1664 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R1657:1663 MetaCoq.Template.Ast <> context def
+R1665:1667 MetaCoq.Translations.param_unary <> Env def
+R1680:1685 MetaCoq.Translations.param_exists_test <> params:83 var
+R1697:1699 Coq.Init.Datatypes <> nil constr
+R1704:1704 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1708:1708 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1712:1712 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1705:1707 Coq.Init.Datatypes <> nil constr
+R1709:1711 MetaCoq.Translations.param_exists_test <> env:82 var
+R1718:1718 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1745:1747 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1719:1724 MetaCoq.Template.Ast <> mkdecl constr
+R1758:1763 MetaCoq.Translations.param_exists_test <> on_fst def
+R1809:1811 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1839:1842 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1850:1862 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R2001:2017 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R1812:1818 MetaCoq.Translations.param_exists_test <> augment def
+R1821:1828 MetaCoq.Translations.param_exists_test <> applyEnv def
+R1830:1832 MetaCoq.Translations.param_exists_test <> env:82 var
+R1843:1846 Coq.Init.Datatypes <> Some constr
+binder 1848:1849 <> tL:86
+R1873:1881 MetaCoq.Translations.translation_utils <> subst_app def
+R1886:1886 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1893:1893 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1887:1890 MetaCoq.Template.Ast <> tRel constr
+R1883:1884 MetaCoq.Translations.param_exists_test <> tL:86 var
+binder 1867:1868 <> t':87
+R1904:1909 MetaCoq.Translations.param_exists_test <> on_fst def
+R1957:1971 MetaCoq.Translations.param_exists_test <> transformParams:84 def
+R1974:1981 MetaCoq.Translations.param_unary <> EnvLift0 def
+R1984:1988 MetaCoq.Translations.param_unary <> EnvUp def
+R1990:1992 MetaCoq.Translations.param_exists_test <> env:82 var
+R1912:1915 Coq.Init.Datatypes <> cons constr
+R1918:1921 MetaCoq.Template.Ast <> vass def
+R1950:1951 MetaCoq.Translations.param_exists_test <> t':87 var
+R1924:1931 MetaCoq.Translations.param_exists_test <> name_map def
+R1933:1941 MetaCoq.Translations.param_exists_test <> tsl_ident def
+R2018:2032 MetaCoq.Translations.param_exists_test <> transformParams:84 def
+R2035:2039 MetaCoq.Translations.param_unary <> EnvUp def
+R2041:2043 MetaCoq.Translations.param_exists_test <> env:82 var
+R1766:1769 Coq.Init.Datatypes <> cons constr
+R1772:1775 MetaCoq.Template.Ast <> vass def
+R1783:1790 MetaCoq.Translations.param_exists_test <> applyEnv def
+R1792:1794 MetaCoq.Translations.param_exists_test <> env:82 var
+def 2137:2150 <> paramTermTrans
+R2155:2163 MetaCoq.Translations.translation_utils <> tsl_table def
+binder 2153:2153 <> E:88
+R2169:2172 MetaCoq.Template.Ast <> term ind
+binder 2167:2167 <> t:89
+R2196:2217 MetaCoq.Translations.param_unary <> decompose_prod_context def
+R2219:2219 MetaCoq.Translations.param_exists_test <> t:89 var
+binder 2185:2187 <> ctx:90
+binder 2189:2190 <> tb:91
+R2244:2258 MetaCoq.Translations.param_exists_test <> transformParams def
+R2273:2275 MetaCoq.Translations.param_exists_test <> ctx:90 var
+binder 2265:2265 <> n:92
+R2270:2270 MetaCoq.Translations.param_exists_test <> n:92 var
+binder 2231:2234 <> ctx':93
+binder 2236:2238 <> env:94
+R2282:2299 MetaCoq.Template.Ast <> it_mkProd_or_LetIn def
+R2312:2313 MetaCoq.Translations.param_exists_test <> tb:91 var
+R2302:2304 MetaCoq.Template.utils.MCList <> rev def
+R2306:2309 MetaCoq.Translations.param_exists_test <> ctx':93 var
+def 2394:2401 <> makeRels
+R2406:2408 Coq.Init.Datatypes <> nat ind
+binder 2404:2404 <> n:95
+R2422:2422 MetaCoq.Translations.param_exists_test <> n:95 var
+R2434:2434 Coq.Init.Datatypes <> O constr
+R2439:2440 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R2446:2446 Coq.Init.Datatypes <> S constr
+R2459:2460 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2453:2456 MetaCoq.Template.Ast <> tRel constr
+R2461:2468 MetaCoq.Translations.param_exists_test <> makeRels:96 def
+def 2595:2601 <> cutList
+binder 2604:2604 <> X:98
+binder 2607:2607 <> n:99
+R2613:2616 Coq.Init.Datatypes <> list ind
+R2618:2618 MetaCoq.Translations.param_exists_test <> X:98 var
+binder 2610:2611 <> xs:100
+R2632:2632 MetaCoq.Translations.param_exists_test <> n:99 var
+R2644:2644 Coq.Init.Datatypes <> O constr
+R2649:2650 MetaCoq.Translations.param_exists_test <> xs:100 var
+R2656:2656 Coq.Init.Datatypes <> S constr
+R2663:2664 Coq.Lists.List <> tl def
+R2667:2673 MetaCoq.Translations.param_exists_test <> cutList:101 def
+R2677:2678 MetaCoq.Translations.param_exists_test <> xs:100 var
+def 2741:2750 <> removeApps
+binder 2752:2752 <> n:103
+binder 2754:2754 <> t:104
+R2761:2763 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R2765:2768 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R2781:2786 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R2813:2818 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R2764:2764 MetaCoq.Translations.param_exists_test <> t:104 var
+R2769:2772 MetaCoq.Template.Ast <> tApp constr
+binder 2777:2780 <> args:105
+binder 2774:2775 <> tb:106
+R2787:2792 MetaCoq.Template.Ast <> mkApps def
+R2798:2804 MetaCoq.Translations.param_exists_test <> cutList def
+R2808:2811 MetaCoq.Translations.param_exists_test <> args:105 var
+R2806:2806 MetaCoq.Translations.param_exists_test <> n:103 var
+R2794:2795 MetaCoq.Translations.param_exists_test <> tb:106 var
+R2819:2819 MetaCoq.Translations.param_exists_test <> t:104 var
+def 2911:2917 <> tExists
+binder 2919:2920 <> na:107
+binder 2922:2923 <> t1:108
+binder 2925:2926 <> t2:109
+R2933:2936 MetaCoq.Template.Ast <> tApp constr
+R2952:2952 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2955:2955 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2972:2972 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2953:2954 MetaCoq.Translations.param_exists_test <> t1:108 var
+R2956:2962 MetaCoq.Template.Ast <> tLambda constr
+R2970:2971 MetaCoq.Translations.param_exists_test <> t2:109 var
+R2967:2968 MetaCoq.Translations.param_exists_test <> t1:108 var
+R2964:2965 MetaCoq.Translations.param_exists_test <> na:107 var
+R2939:2941 MetaCoq.Template.Loader <> :::'<%'_x_'%>' not
+R2947:2949 MetaCoq.Template.Loader <> :::'<%'_x_'%>' not
+R2943:2946 Coq.Init.Specif <> sigT ind
+def 3034:3042 <> tsl_rec1'
+R3049:3057 MetaCoq.Translations.translation_utils <> tsl_table def
+binder 3045:3045 <> E:110
+R3084:3086 Coq.Init.Datatypes <> nat ind
+binder 3061:3073 <> oldParamCount:111
+binder 3075:3082 <> argCount:112
+R3094:3097 MetaCoq.Template.Ast <> term ind
+binder 3090:3092 <> rec:113
+R3108:3116 MetaCoq.Template.BasicAst <> inductive rec
+binder 3101:3106 <> recInd:114
+R3124:3127 MetaCoq.Template.Ast <> term ind
+binder 3120:3120 <> t:115
+R3132:3137 Coq.Init.Datatypes <> option ind
+R3139:3142 MetaCoq.Template.Ast <> term ind
+binder 3159:3162 <> case:117
+binder 3164:3169 <> symbol:118
+R3180:3189 MetaCoq.Translations.param_exists_test <> debug_term def
+R3204:3206 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R3211:3213 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R3207:3210 MetaCoq.Translations.param_exists_test <> case:117 var
+R3217:3219 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R3226:3228 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R3220:3225 MetaCoq.Translations.param_exists_test <> symbol:118 var
+binder 3153:3157 <> debug:119
+R3254:3254 MetaCoq.Translations.param_exists_test <> t:115 var
+R3265:3268 MetaCoq.Template.Ast <> tRel constr
+R3271:3271 Coq.Init.Datatypes <> S constr
+R3460:3462 Coq.Arith.Compare_dec <> leb syndef
+R3464:3471 MetaCoq.Translations.param_exists_test <> argCount:112 var
+R3511:3514 Coq.Init.Datatypes <> None constr
+R3486:3489 Coq.Init.Datatypes <> Some constr
+R3492:3495 MetaCoq.Template.Ast <> tRel constr
+R3521:3524 MetaCoq.Template.Ast <> tInd constr
+R3576:3587 MetaCoq.Template.BasicAst <> eq_inductive def
+R3593:3598 MetaCoq.Translations.param_exists_test <> recInd:114 var
+R3729:3744 MetaCoq.Translations.translation_utils <> lookup_tsl_table def
+R3749:3754 MetaCoq.Template.BasicAst <> IndRef constr
+R3746:3746 MetaCoq.Translations.param_exists_test <> E:110 var
+R3708:3711 Coq.Init.Datatypes <> Some constr
+R3713:3715 MetaCoq.Translations.param_exists_test <> rec:113 var
+R3850:3853 MetaCoq.Template.Ast <> tApp constr
+R3871:3873 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R3922:3925 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R3932:3981 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R4245:4254 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R3874:3882 MetaCoq.Translations.param_exists_test <> tsl_rec1':116 def
+R3913:3918 MetaCoq.Translations.param_exists_test <> recInd:114 var
+R3909:3911 MetaCoq.Translations.param_exists_test <> rec:113 var
+R3900:3907 MetaCoq.Translations.param_exists_test <> argCount:112 var
+R3886:3898 MetaCoq.Translations.param_exists_test <> oldParamCount:111 var
+R3884:3884 MetaCoq.Translations.param_exists_test <> E:110 var
+R3926:3929 Coq.Init.Datatypes <> Some constr
+binder 3931:3931 <> r:121
+R3982:3985 Coq.Init.Datatypes <> Some constr
+R3988:3993 MetaCoq.Template.Ast <> mkApps def
+R3998:4003 Coq.Lists.List <> concat def
+R4006:4008 Coq.Lists.List <> map def
+binder 4015:4015 <> a:122
+R4086:4088 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R4136:4139 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R4147:4160 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R4167:4204 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R4089:4097 MetaCoq.Translations.param_exists_test <> tsl_rec1':116 def
+R4135:4135 MetaCoq.Translations.param_exists_test <> a:122 var
+R4128:4133 MetaCoq.Translations.param_exists_test <> recInd:114 var
+R4124:4126 MetaCoq.Translations.param_exists_test <> rec:113 var
+R4115:4122 MetaCoq.Translations.param_exists_test <> argCount:112 var
+R4101:4113 MetaCoq.Translations.param_exists_test <> oldParamCount:111 var
+R4099:4099 MetaCoq.Translations.param_exists_test <> E:110 var
+R4140:4143 Coq.Init.Datatypes <> Some constr
+binder 4145:4146 <> ra:123
+R4161:4161 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4163:4163 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4166:4166 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4162:4162 MetaCoq.Translations.param_exists_test <> a:122 var
+R4164:4165 MetaCoq.Translations.param_exists_test <> ra:123 var
+R4205:4205 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4207:4207 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4206:4206 MetaCoq.Translations.param_exists_test <> a:122 var
+R3995:3995 MetaCoq.Translations.param_exists_test <> r:121 var
+R4255:4258 Coq.Init.Datatypes <> None constr
+R4264:4268 MetaCoq.Template.Ast <> tProd constr
+R4345:4347 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R4396:4399 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R4406:4415 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R4573:4580 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R4348:4356 MetaCoq.Translations.param_exists_test <> tsl_rec1':116 def
+R4387:4392 MetaCoq.Translations.param_exists_test <> recInd:114 var
+R4383:4385 MetaCoq.Translations.param_exists_test <> rec:113 var
+R4374:4381 MetaCoq.Translations.param_exists_test <> argCount:112 var
+R4360:4372 MetaCoq.Translations.param_exists_test <> oldParamCount:111 var
+R4358:4358 MetaCoq.Translations.param_exists_test <> E:110 var
+R4400:4403 Coq.Init.Datatypes <> Some constr
+binder 4405:4405 <> r:124
+R4416:4419 Coq.Init.Datatypes <> Some constr
+R4422:4428 MetaCoq.Template.Ast <> tLambda constr
+R4446:4452 MetaCoq.Translations.param_exists_test <> tExists def
+R4512:4520 MetaCoq.Translations.translation_utils <> subst_app def
+R4534:4534 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4557:4557 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4535:4538 MetaCoq.Template.Ast <> tApp constr
+R4549:4549 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4556:4556 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4550:4553 MetaCoq.Template.Ast <> tRel constr
+R4541:4544 MetaCoq.Template.Ast <> tRel constr
+R4523:4527 MetaCoq.Template.LiftSubst <> lift0 syndef
+R4531:4531 MetaCoq.Translations.param_exists_test <> r:124 var
+R4458:4462 MetaCoq.Template.LiftSubst <> lift0 syndef
+R4436:4436 MetaCoq.Translations.param_exists_test <> t:115 var
+R4430:4434 MetaCoq.Template.BasicAst <> nAnon constr
+R4581:4584 Coq.Init.Datatypes <> None constr
+R4595:4598 Coq.Init.Datatypes <> None constr
+def 4878:4890 <> tsl_mind_body
+R4899:4902 Coq.Init.Datatypes <> bool ind
+binder 4893:4897 <> prune:125
+R4910:4918 MetaCoq.Translations.translation_utils <> tsl_table def
+binder 4906:4906 <> E:126
+R4927:4933 MetaCoq.Template.BasicAst <> modpath ind
+binder 4922:4923 <> mp:127
+R4942:4948 MetaCoq.Template.BasicAst <> kername def
+binder 4937:4938 <> kn:128
+R4970:4990 MetaCoq.Template.Ast <> mutual_inductive_body rec
+binder 4963:4966 <> mind:129
+R5004:5006 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R4995:5003 MetaCoq.Translations.translation_utils <> tsl_table def
+R5007:5010 Coq.Init.Datatypes <> list ind
+R5012:5032 MetaCoq.Template.Ast <> mutual_inductive_body rec
+R5394:5399 MetaCoq.Translations.param_exists_test <> on_fst def
+R5406:5420 MetaCoq.Translations.param_exists_test <> transformParams def
+R5436:5438 MetaCoq.Template.utils.MCList <> rev def
+R5446:5455 MetaCoq.Template.Ast <> ind_params proj
+binder 5427:5427 <> n:130
+R5432:5432 MetaCoq.Translations.param_exists_test <> n:130 var
+R5401:5403 MetaCoq.Template.utils.MCList <> rev def
+R5394:5399 MetaCoq.Translations.param_exists_test <> on_fst def
+R5406:5420 MetaCoq.Translations.param_exists_test <> transformParams def
+R5436:5438 MetaCoq.Template.utils.MCList <> rev def
+R5446:5455 MetaCoq.Template.Ast <> ind_params proj
+binder 5427:5427 <> n:131
+R5432:5432 MetaCoq.Translations.param_exists_test <> n:131 var
+R5401:5403 MetaCoq.Template.utils.MCList <> rev def
+R5516:5516 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5518:5519 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5788:5788 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5520:5523 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5785:5787 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5524:5532 MetaCoq.Template.Ast <> ind_npars proj
+R5524:5532 MetaCoq.Template.Ast <> ind_npars proj
+R5568:5577 MetaCoq.Template.Ast <> ind_params proj
+R5610:5619 MetaCoq.Template.Ast <> ind_bodies proj
+R5644:5653 MetaCoq.Template.Ast <> ind_finite proj
+R5694:5706 MetaCoq.Template.Ast <> ind_universes proj
+R5750:5761 MetaCoq.Template.Ast <> ind_variance proj
+R5772:5783 MetaCoq.Template.Ast <> ind_variance proj
+R5717:5729 MetaCoq.Template.Ast <> ind_universes proj
+R5537:5538 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R5548:5548 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R5664:5673 MetaCoq.Template.Ast <> ind_finite proj
+R5516:5516 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5518:5519 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5788:5788 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5520:5523 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5785:5787 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5524:5532 MetaCoq.Template.Ast <> ind_npars proj
+R5524:5532 MetaCoq.Template.Ast <> ind_npars proj
+R5568:5577 MetaCoq.Template.Ast <> ind_params proj
+R5610:5619 MetaCoq.Template.Ast <> ind_bodies proj
+R5644:5653 MetaCoq.Template.Ast <> ind_finite proj
+R5694:5706 MetaCoq.Template.Ast <> ind_universes proj
+R5750:5761 MetaCoq.Template.Ast <> ind_variance proj
+R5772:5783 MetaCoq.Template.Ast <> ind_variance proj
+R5717:5729 MetaCoq.Template.Ast <> ind_universes proj
+R5537:5538 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R5548:5548 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R5664:5673 MetaCoq.Template.Ast <> ind_finite proj
+R5923:5923 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5926:5927 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5942:5942 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5928:5936 MetaCoq.Translations.param_exists_test <> tsl_ident def
+R5940:5941 MetaCoq.Template.utils.MCProd <> ::pair_scope:x_'.2' not
+R5912:5918 MetaCoq.Template.BasicAst <> kername def
+binder 5906:5908 <> kn':132
+R5959:5969 MetaCoq.Template.utils.MCList <> fold_left_i def
+R6018:6019 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6006:6015 MetaCoq.Template.Ast <> ind_bodies proj
+binder 5976:5976 <> E:133
+binder 5978:5978 <> i:134
+binder 5980:5982 <> ind:135
+R5988:5991 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R5993:5996 Coq.Init.Datatypes <> ::list_scope:x_'++'_x not
+R5997:5997 MetaCoq.Translations.param_exists_test <> E:133 var
+R5923:5923 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5926:5927 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5942:5942 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5928:5936 MetaCoq.Translations.param_exists_test <> tsl_ident def
+R5940:5941 MetaCoq.Template.utils.MCProd <> ::pair_scope:x_'.2' not
+R5912:5918 MetaCoq.Template.BasicAst <> kername def
+binder 5906:5908 <> kn':136
+R5959:5969 MetaCoq.Template.utils.MCList <> fold_left_i def
+R6018:6019 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6006:6015 MetaCoq.Template.Ast <> ind_bodies proj
+binder 5976:5976 <> E:137
+binder 5978:5978 <> i:138
+binder 5980:5982 <> ind:139
+R5988:5991 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R5993:5996 Coq.Init.Datatypes <> ::list_scope:x_'++'_x not
+R5997:5997 MetaCoq.Translations.param_exists_test <> E:137 var
+R6235:6235 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6255:6256 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6278:6278 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6236:6241 MetaCoq.Template.BasicAst <> IndRef constr
+R6244:6248 MetaCoq.Template.BasicAst <> mkInd constr
+R6257:6260 MetaCoq.Template.Ast <> tInd constr
+R6276:6277 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6263:6267 MetaCoq.Template.BasicAst <> mkInd constr
+R6235:6235 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6255:6256 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6278:6278 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6236:6241 MetaCoq.Template.BasicAst <> IndRef constr
+R6244:6248 MetaCoq.Template.BasicAst <> mkInd constr
+R6257:6260 MetaCoq.Template.Ast <> tInd constr
+R6276:6277 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6263:6267 MetaCoq.Template.BasicAst <> mkInd constr
+R6400:6410 MetaCoq.Template.utils.MCList <> fold_left_i def
+R6450:6451 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6439:6447 MetaCoq.Template.Ast <> ind_ctors proj
+binder 6417:6417 <> E:140
+binder 6419:6419 <> k:141
+R6427:6430 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R6431:6431 MetaCoq.Translations.param_exists_test <> E:140 var
+R6400:6410 MetaCoq.Template.utils.MCList <> fold_left_i def
+R6450:6451 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6439:6447 MetaCoq.Template.Ast <> ind_ctors proj
+binder 6417:6417 <> E:142
+binder 6419:6419 <> k:143
+R6427:6430 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R6431:6431 MetaCoq.Translations.param_exists_test <> E:142 var
+R6467:6467 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6495:6496 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6526:6526 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6468:6479 MetaCoq.Template.BasicAst <> ConstructRef constr
+R6482:6486 MetaCoq.Template.BasicAst <> mkInd constr
+R6497:6506 MetaCoq.Template.Ast <> tConstruct constr
+R6524:6525 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6509:6513 MetaCoq.Template.BasicAst <> mkInd constr
+R6467:6467 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6495:6496 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6526:6526 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6468:6479 MetaCoq.Template.BasicAst <> ConstructRef constr
+R6482:6486 MetaCoq.Template.BasicAst <> mkInd constr
+R6497:6506 MetaCoq.Template.Ast <> tConstruct constr
+R6524:6525 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6509:6513 MetaCoq.Template.BasicAst <> mkInd constr
+R6600:6603 MetaCoq.Template.utils.MCList <> mapi def
+R6613:6622 MetaCoq.Template.Ast <> ind_bodies proj
+R6600:6603 MetaCoq.Template.utils.MCList <> mapi def
+R6613:6622 MetaCoq.Template.Ast <> ind_bodies proj
+R6701:6708 MetaCoq.Template.Ast <> ind_name proj
+R6701:6708 MetaCoq.Template.Ast <> ind_name proj
+R6753:6760 MetaCoq.Template.Ast <> ind_type proj
+R6782:6790 MetaCoq.Template.Ast <> ind_kelim proj
+R6826:6834 MetaCoq.Template.Ast <> ind_ctors proj
+R6856:6864 MetaCoq.Template.Ast <> ind_projs proj
+R6869:6870 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6800:6808 MetaCoq.Template.Ast <> ind_kelim proj
+R6713:6721 MetaCoq.Translations.param_exists_test <> tsl_ident def
+R6728:6735 MetaCoq.Template.Ast <> ind_name proj
+R6701:6708 MetaCoq.Template.Ast <> ind_name proj
+R6701:6708 MetaCoq.Template.Ast <> ind_name proj
+R6753:6760 MetaCoq.Template.Ast <> ind_type proj
+R6782:6790 MetaCoq.Template.Ast <> ind_kelim proj
+R6826:6834 MetaCoq.Template.Ast <> ind_ctors proj
+R6856:6864 MetaCoq.Template.Ast <> ind_projs proj
+R6869:6870 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R6800:6808 MetaCoq.Template.Ast <> ind_kelim proj
+R6713:6721 MetaCoq.Translations.param_exists_test <> tsl_ident def
+R6728:6735 MetaCoq.Template.Ast <> ind_name proj
+R6988:7009 MetaCoq.Translations.param_unary <> decompose_prod_context def
+R7012:7023 MetaCoq.Template.AstUtils <> remove_arity def
+R7047:7054 MetaCoq.Template.Ast <> ind_type proj
+R7031:7039 MetaCoq.Template.Ast <> ind_npars proj
+binder 6977:6979 <> ctx:144
+binder 6981:6982 <> tb:145
+R7069:7086 MetaCoq.Template.Ast <> it_mkProd_or_LetIn def
+R7110:7127 MetaCoq.Template.Ast <> it_mkProd_or_LetIn def
+R7160:7164 MetaCoq.Template.Ast <> tProd constr
+R7340:7344 MetaCoq.Template.LiftSubst <> lift0 syndef
+R7348:7349 MetaCoq.Translations.param_exists_test <> tb:145 var
+R7184:7189 MetaCoq.Template.Ast <> mkApps def
+R7280:7287 MetaCoq.Translations.param_exists_test <> makeRels def
+R7289:7290 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R7294:7294 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R7291:7293 MetaCoq.Translations.param_exists_test <> ctx:144 var
+R7192:7196 MetaCoq.Template.LiftSubst <> lift0 syndef
+R7198:7199 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R7203:7203 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R7200:7202 MetaCoq.Translations.param_exists_test <> ctx:144 var
+R7206:7213 MetaCoq.Translations.param_exists_test <> applyEnv def
+R7220:7223 MetaCoq.Template.Ast <> tApp constr
+R7249:7256 MetaCoq.Translations.param_exists_test <> makeRels def
+R7264:7272 MetaCoq.Template.Ast <> ind_npars proj
+R7226:7229 MetaCoq.Template.Ast <> tInd constr
+R7244:7245 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R7232:7236 MetaCoq.Template.BasicAst <> mkInd constr
+R7166:7170 MetaCoq.Template.BasicAst <> nAnon constr
+R7129:7131 MetaCoq.Translations.param_exists_test <> ctx:144 var
+R6988:7009 MetaCoq.Translations.param_unary <> decompose_prod_context def
+R7012:7023 MetaCoq.Template.AstUtils <> remove_arity def
+R7047:7054 MetaCoq.Template.Ast <> ind_type proj
+R7031:7039 MetaCoq.Template.Ast <> ind_npars proj
+binder 6977:6979 <> ctx:146
+binder 6981:6982 <> tb:147
+R7069:7086 MetaCoq.Template.Ast <> it_mkProd_or_LetIn def
+R7110:7127 MetaCoq.Template.Ast <> it_mkProd_or_LetIn def
+R7160:7164 MetaCoq.Template.Ast <> tProd constr
+R7340:7344 MetaCoq.Template.LiftSubst <> lift0 syndef
+R7348:7349 MetaCoq.Translations.param_exists_test <> tb:147 var
+R7184:7189 MetaCoq.Template.Ast <> mkApps def
+R7280:7287 MetaCoq.Translations.param_exists_test <> makeRels def
+R7289:7290 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R7294:7294 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R7291:7293 MetaCoq.Translations.param_exists_test <> ctx:146 var
+R7192:7196 MetaCoq.Template.LiftSubst <> lift0 syndef
+R7198:7199 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R7203:7203 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R7200:7202 MetaCoq.Translations.param_exists_test <> ctx:146 var
+R7206:7213 MetaCoq.Translations.param_exists_test <> applyEnv def
+R7220:7223 MetaCoq.Template.Ast <> tApp constr
+R7249:7256 MetaCoq.Translations.param_exists_test <> makeRels def
+R7264:7272 MetaCoq.Template.Ast <> ind_npars proj
+R7226:7229 MetaCoq.Template.Ast <> tInd constr
+R7244:7245 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R7232:7236 MetaCoq.Template.BasicAst <> mkInd constr
+R7166:7170 MetaCoq.Template.BasicAst <> nAnon constr
+R7129:7131 MetaCoq.Translations.param_exists_test <> ctx:146 var
+R7502:7507 Coq.Lists.List <> concat def
+R7502:7507 Coq.Lists.List <> concat def
+R7531:7534 MetaCoq.Template.utils.MCList <> mapi def
+R8681:8689 MetaCoq.Template.Ast <> ind_ctors proj
+binder 7557:7557 <> k:148
+R7561:7561 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R7566:7566 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R7570:7570 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R7576:7576 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+binder 7571:7575 <> nargs:149
+binder 7567:7569 <> typ:150
+binder 7562:7565 <> name:151
+binder 7559:7577 <> pat:152
+R7657:7667 MetaCoq.Template.utils.MCList <> fold_left_i def
+R7830:7832 MetaCoq.Translations.param_exists_test <> typ:150 var
+R7724:7726 MetaCoq.Template.utils.MCList <> rev def
+R7729:7732 MetaCoq.Template.utils.MCList <> mapi def
+R7804:7813 MetaCoq.Template.Ast <> ind_bodies proj
+binder 7739:7739 <> i:153
+R7746:7749 MetaCoq.Template.Ast <> tInd constr
+R7764:7765 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R7752:7756 MetaCoq.Template.BasicAst <> mkInd constr
+R7761:7761 MetaCoq.Translations.param_exists_test <> i:153 var
+binder 7687:7688 <> t0:154
+binder 7690:7690 <> i:155
+binder 7692:7692 <> u:156
+R7700:7701 MetaCoq.Template.LiftSubst <> :::x_'{'_x_':='_x_'}' not
+R7703:7706 MetaCoq.Template.LiftSubst <> :::x_'{'_x_':='_x_'}' not
+R7708:7708 MetaCoq.Template.LiftSubst <> :::x_'{'_x_':='_x_'}' not
+R7707:7707 MetaCoq.Translations.param_exists_test <> u:156 var
+R7702:7702 MetaCoq.Translations.param_exists_test <> i:155 var
+R7698:7699 MetaCoq.Translations.param_exists_test <> t0:154 var
+binder 7595:7600 <> typInd:157
+R7858:7869 MetaCoq.Template.AstUtils <> remove_arity def
+R7890:7895 MetaCoq.Translations.param_exists_test <> typInd:157 var
+R7878:7886 MetaCoq.Template.Ast <> ind_npars proj
+binder 7850:7853 <> typ':158
+R7925:7946 MetaCoq.Translations.param_unary <> decompose_prod_context def
+R7949:7956 MetaCoq.Translations.param_exists_test <> applyEnv def
+R7962:7965 MetaCoq.Translations.param_exists_test <> typ':158 var
+binder 7913:7916 <> args:159
+binder 7918:7919 <> tb:160
+R8001:8006 MetaCoq.Template.Ast <> mkApps def
+R8106:8113 MetaCoq.Translations.param_exists_test <> makeRels def
+R8115:8116 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8121:8121 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8117:8120 MetaCoq.Translations.param_exists_test <> args:159 var
+R8009:8013 MetaCoq.Template.LiftSubst <> lift0 syndef
+R8015:8016 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8021:8021 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8017:8020 MetaCoq.Translations.param_exists_test <> args:159 var
+R8024:8031 MetaCoq.Translations.param_exists_test <> applyEnv def
+R8038:8041 MetaCoq.Template.Ast <> tApp constr
+R8075:8082 MetaCoq.Translations.param_exists_test <> makeRels def
+R8090:8098 MetaCoq.Template.Ast <> ind_npars proj
+R8044:8053 MetaCoq.Template.Ast <> tConstruct constr
+R8070:8071 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R8068:8068 MetaCoq.Translations.param_exists_test <> k:148 var
+R8056:8060 MetaCoq.Template.BasicAst <> mkInd constr
+binder 7983:7986 <> inst:161
+R8217:8220 MetaCoq.Template.Ast <> tRel constr
+R8235:8237 Coq.Init.Peano <> ::nat_scope:x_'+'_x not
+R8223:8224 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8234:8234 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8238:8239 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8244:8244 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8240:8243 MetaCoq.Translations.param_exists_test <> args:159 var
+binder 8206:8212 <> recInst:162
+R8287:8292 MetaCoq.Template.Ast <> mkApps def
+R8303:8305 Coq.Lists.List <> map def
+R8324:8331 MetaCoq.Translations.param_exists_test <> makeRels def
+R8333:8334 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8344:8344 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8308:8312 MetaCoq.Template.LiftSubst <> lift0 syndef
+R8314:8315 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8320:8320 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8316:8319 MetaCoq.Translations.param_exists_test <> args:159 var
+R8294:8300 MetaCoq.Translations.param_exists_test <> recInst:162 var
+binder 8262:8272 <> tbNewParams:163
+R8397:8399 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R8402:8406 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R8422:8488 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R8542:8557 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R8400:8401 MetaCoq.Translations.param_exists_test <> tb:160 var
+R8407:8410 MetaCoq.Template.Ast <> tApp constr
+binder 8415:8421 <> appargs:164
+binder 8412:8413 <> tI:165
+R8489:8494 MetaCoq.Template.Ast <> mkApps def
+R8509:8515 MetaCoq.Translations.param_exists_test <> cutList def
+R8534:8540 MetaCoq.Translations.param_exists_test <> appargs:164 var
+R8523:8531 MetaCoq.Template.Ast <> ind_npars proj
+R8496:8506 MetaCoq.Translations.param_exists_test <> tbNewParams:163 var
+R8558:8564 MetaCoq.Translations.param_exists_test <> recInst:162 var
+binder 8371:8381 <> tbNewIndApp:166
+R8597:8601 MetaCoq.Template.Ast <> mkApp def
+R8615:8618 MetaCoq.Translations.param_exists_test <> inst:161 var
+R8603:8613 MetaCoq.Translations.param_exists_test <> tbNewIndApp:166 var
+binder 8590:8592 <> tb':167
+R8641:8649 MetaCoq.Translations.param_exists_test <> tsl_ident def
+R8651:8654 MetaCoq.Translations.param_exists_test <> name:151 var
+binder 8635:8636 <> na:168
+R7531:7534 MetaCoq.Template.utils.MCList <> mapi def
+R8681:8689 MetaCoq.Template.Ast <> ind_ctors proj
+binder 7557:7557 <> k:169
+R7561:7561 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R7566:7566 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R7570:7570 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R7576:7576 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+binder 7571:7575 <> nargs:170
+binder 7567:7569 <> typ:171
+binder 7562:7565 <> name:172
+binder 7559:7577 <> pat:173
+R7657:7667 MetaCoq.Template.utils.MCList <> fold_left_i def
+R7830:7832 MetaCoq.Translations.param_exists_test <> typ:171 var
+R7724:7726 MetaCoq.Template.utils.MCList <> rev def
+R7729:7732 MetaCoq.Template.utils.MCList <> mapi def
+R7804:7813 MetaCoq.Template.Ast <> ind_bodies proj
+binder 7739:7739 <> i:174
+R7746:7749 MetaCoq.Template.Ast <> tInd constr
+R7764:7765 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R7752:7756 MetaCoq.Template.BasicAst <> mkInd constr
+R7761:7761 MetaCoq.Translations.param_exists_test <> i:174 var
+binder 7687:7688 <> t0:175
+binder 7690:7690 <> i:176
+binder 7692:7692 <> u:177
+R7700:7701 MetaCoq.Template.LiftSubst <> :::x_'{'_x_':='_x_'}' not
+R7703:7706 MetaCoq.Template.LiftSubst <> :::x_'{'_x_':='_x_'}' not
+R7708:7708 MetaCoq.Template.LiftSubst <> :::x_'{'_x_':='_x_'}' not
+R7707:7707 MetaCoq.Translations.param_exists_test <> u:177 var
+R7702:7702 MetaCoq.Translations.param_exists_test <> i:176 var
+R7698:7699 MetaCoq.Translations.param_exists_test <> t0:175 var
+binder 7595:7600 <> typInd:178
+R7858:7869 MetaCoq.Template.AstUtils <> remove_arity def
+R7890:7895 MetaCoq.Translations.param_exists_test <> typInd:178 var
+R7878:7886 MetaCoq.Template.Ast <> ind_npars proj
+binder 7850:7853 <> typ':179
+R7925:7946 MetaCoq.Translations.param_unary <> decompose_prod_context def
+R7949:7956 MetaCoq.Translations.param_exists_test <> applyEnv def
+R7962:7965 MetaCoq.Translations.param_exists_test <> typ':179 var
+binder 7913:7916 <> args:180
+binder 7918:7919 <> tb:181
+R8001:8006 MetaCoq.Template.Ast <> mkApps def
+R8106:8113 MetaCoq.Translations.param_exists_test <> makeRels def
+R8115:8116 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8121:8121 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8117:8120 MetaCoq.Translations.param_exists_test <> args:180 var
+R8009:8013 MetaCoq.Template.LiftSubst <> lift0 syndef
+R8015:8016 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8021:8021 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8017:8020 MetaCoq.Translations.param_exists_test <> args:180 var
+R8024:8031 MetaCoq.Translations.param_exists_test <> applyEnv def
+R8038:8041 MetaCoq.Template.Ast <> tApp constr
+R8075:8082 MetaCoq.Translations.param_exists_test <> makeRels def
+R8090:8098 MetaCoq.Template.Ast <> ind_npars proj
+R8044:8053 MetaCoq.Template.Ast <> tConstruct constr
+R8070:8071 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R8068:8068 MetaCoq.Translations.param_exists_test <> k:169 var
+R8056:8060 MetaCoq.Template.BasicAst <> mkInd constr
+binder 7983:7986 <> inst:182
+R8217:8220 MetaCoq.Template.Ast <> tRel constr
+R8235:8237 Coq.Init.Peano <> ::nat_scope:x_'+'_x not
+R8223:8224 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8234:8234 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8238:8239 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8244:8244 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8240:8243 MetaCoq.Translations.param_exists_test <> args:180 var
+binder 8206:8212 <> recInst:183
+R8287:8292 MetaCoq.Template.Ast <> mkApps def
+R8303:8305 Coq.Lists.List <> map def
+R8324:8331 MetaCoq.Translations.param_exists_test <> makeRels def
+R8333:8334 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8344:8344 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8308:8312 MetaCoq.Template.LiftSubst <> lift0 syndef
+R8314:8315 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8320:8320 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8316:8319 MetaCoq.Translations.param_exists_test <> args:180 var
+R8294:8300 MetaCoq.Translations.param_exists_test <> recInst:183 var
+binder 8262:8272 <> tbNewParams:184
+R8397:8399 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R8402:8406 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R8422:8488 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R8542:8557 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R8400:8401 MetaCoq.Translations.param_exists_test <> tb:181 var
+R8407:8410 MetaCoq.Template.Ast <> tApp constr
+binder 8415:8421 <> appargs:185
+binder 8412:8413 <> tI:186
+R8489:8494 MetaCoq.Template.Ast <> mkApps def
+R8509:8515 MetaCoq.Translations.param_exists_test <> cutList def
+R8534:8540 MetaCoq.Translations.param_exists_test <> appargs:185 var
+R8523:8531 MetaCoq.Template.Ast <> ind_npars proj
+R8496:8506 MetaCoq.Translations.param_exists_test <> tbNewParams:184 var
+R8558:8564 MetaCoq.Translations.param_exists_test <> recInst:183 var
+binder 8371:8381 <> tbNewIndApp:187
+R8597:8601 MetaCoq.Template.Ast <> mkApp def
+R8615:8618 MetaCoq.Translations.param_exists_test <> inst:182 var
+R8603:8613 MetaCoq.Translations.param_exists_test <> tbNewIndApp:187 var
+binder 8590:8592 <> tb':188
+R8641:8649 MetaCoq.Translations.param_exists_test <> tsl_ident def
+R8651:8654 MetaCoq.Translations.param_exists_test <> name:172 var
+binder 8635:8636 <> na:189
+R8719:8721 MetaCoq.Template.utils.MCList <> rev def
+R8723:8733 MetaCoq.Template.utils.MCList <> fold_left_i def
+R9535:9536 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+binder 8748:8750 <> acc:190
+binder 8752:8752 <> j:191
+binder 8754:8756 <> arg:192
+binder 8818:8820 <> rec:193
+R8896:8904 MetaCoq.Translations.param_exists_test <> tsl_rec1' def
+R8951:8955 MetaCoq.Template.LiftSubst <> lift0 syndef
+R8965:8967 Coq.Init.Peano <> ::nat_scope:x_'-'_x not
+R8958:8959 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8964:8964 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8968:8968 MetaCoq.Translations.param_exists_test <> j:191 var
+R8972:8980 MetaCoq.Template.Ast <> decl_type proj
+R8982:8984 MetaCoq.Translations.param_exists_test <> arg:192 var
+R8938:8942 MetaCoq.Template.BasicAst <> mkInd constr
+R8933:8935 MetaCoq.Translations.param_exists_test <> rec:193 var
+R8925:8926 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8931:8931 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8914:8922 MetaCoq.Template.Ast <> ind_npars proj
+binder 8885:8891 <> augArgO:194
+R9001:9003 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R9011:9014 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R9027:9080 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R9500:9515 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R9004:9010 MetaCoq.Translations.param_exists_test <> augArgO:194 var
+R9015:9018 Coq.Init.Datatypes <> Some constr
+binder 9020:9026 <> augArgP:195
+R9095:9103 MetaCoq.Translations.translation_utils <> subst_app def
+R9113:9113 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R9134:9134 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R9114:9117 MetaCoq.Template.Ast <> tRel constr
+R9127:9129 Coq.Init.Peano <> ::nat_scope:x_'-'_x not
+R9120:9121 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9126:9126 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9130:9130 Coq.Init.Datatypes <> S constr
+R9132:9132 MetaCoq.Translations.param_exists_test <> j:191 var
+R9105:9111 MetaCoq.Translations.param_exists_test <> augArgP:195 var
+binder 9085:9090 <> augArg:196
+R9178:9195 MetaCoq.Template.Ast <> it_mkProd_or_LetIn def
+R9219:9236 MetaCoq.Template.Ast <> it_mkProd_or_LetIn def
+R9263:9267 MetaCoq.Template.Ast <> tProd constr
+R9295:9299 MetaCoq.Template.LiftSubst <> lift0 syndef
+R9275:9280 MetaCoq.Translations.param_exists_test <> augArg:196 var
+R9269:9273 MetaCoq.Template.BasicAst <> nAnon constr
+R9239:9241 MetaCoq.Template.utils.MCList <> rev def
+binder 9154:9162 <> ctor_type:197
+R9482:9495 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R9369:9369 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R9390:9402 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R9412:9424 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R9481:9481 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R9372:9373 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R9389:9389 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R9374:9386 MetaCoq.Template.utils.MCString <> string_of_nat def
+R9388:9388 MetaCoq.Translations.param_exists_test <> j:191 var
+R9403:9411 MetaCoq.Translations.param_exists_test <> ctor_type:197 var
+R9466:9468 Coq.Init.Peano <> ::nat_scope:x_'-'_x not
+R9425:9426 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9465:9465 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9427:9429 Coq.Init.Datatypes <> fst def
+R9432:9453 MetaCoq.Translations.param_unary <> decompose_prod_context def
+R9455:9463 MetaCoq.Translations.param_exists_test <> ctor_type:197 var
+R9469:9470 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9480:9480 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9496:9498 MetaCoq.Translations.param_exists_test <> acc:190 var
+R9516:9518 MetaCoq.Translations.param_exists_test <> acc:190 var
+R8719:8721 MetaCoq.Template.utils.MCList <> rev def
+R8723:8733 MetaCoq.Template.utils.MCList <> fold_left_i def
+R9535:9536 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+binder 8748:8750 <> acc:198
+binder 8752:8752 <> j:199
+binder 8754:8756 <> arg:200
+binder 8818:8820 <> rec:201
+R8896:8904 MetaCoq.Translations.param_exists_test <> tsl_rec1' def
+R8951:8955 MetaCoq.Template.LiftSubst <> lift0 syndef
+R8965:8967 Coq.Init.Peano <> ::nat_scope:x_'-'_x not
+R8958:8959 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8964:8964 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8968:8968 MetaCoq.Translations.param_exists_test <> j:199 var
+R8972:8980 MetaCoq.Template.Ast <> decl_type proj
+R8982:8984 MetaCoq.Translations.param_exists_test <> arg:200 var
+R8938:8942 MetaCoq.Template.BasicAst <> mkInd constr
+R8933:8935 MetaCoq.Translations.param_exists_test <> rec:201 var
+R8925:8926 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8931:8931 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R8914:8922 MetaCoq.Template.Ast <> ind_npars proj
+binder 8885:8891 <> augArgO:202
+R9001:9003 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R9011:9014 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R9027:9080 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R9500:9515 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R9004:9010 MetaCoq.Translations.param_exists_test <> augArgO:202 var
+R9015:9018 Coq.Init.Datatypes <> Some constr
+binder 9020:9026 <> augArgP:203
+R9095:9103 MetaCoq.Translations.translation_utils <> subst_app def
+R9113:9113 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R9134:9134 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R9114:9117 MetaCoq.Template.Ast <> tRel constr
+R9127:9129 Coq.Init.Peano <> ::nat_scope:x_'-'_x not
+R9120:9121 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9126:9126 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9130:9130 Coq.Init.Datatypes <> S constr
+R9132:9132 MetaCoq.Translations.param_exists_test <> j:199 var
+R9105:9111 MetaCoq.Translations.param_exists_test <> augArgP:203 var
+binder 9085:9090 <> augArg:204
+R9178:9195 MetaCoq.Template.Ast <> it_mkProd_or_LetIn def
+R9219:9236 MetaCoq.Template.Ast <> it_mkProd_or_LetIn def
+R9263:9267 MetaCoq.Template.Ast <> tProd constr
+R9295:9299 MetaCoq.Template.LiftSubst <> lift0 syndef
+R9275:9280 MetaCoq.Translations.param_exists_test <> augArg:204 var
+R9269:9273 MetaCoq.Template.BasicAst <> nAnon constr
+R9239:9241 MetaCoq.Template.utils.MCList <> rev def
+binder 9154:9162 <> ctor_type:205
+R9482:9495 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R9369:9369 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R9390:9402 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R9412:9424 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R9481:9481 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R9372:9373 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R9389:9389 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R9374:9386 MetaCoq.Template.utils.MCString <> string_of_nat def
+R9388:9388 MetaCoq.Translations.param_exists_test <> j:199 var
+R9403:9411 MetaCoq.Translations.param_exists_test <> ctor_type:205 var
+R9466:9468 Coq.Init.Peano <> ::nat_scope:x_'-'_x not
+R9425:9426 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9465:9465 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9427:9429 Coq.Init.Datatypes <> fst def
+R9432:9453 MetaCoq.Translations.param_unary <> decompose_prod_context def
+R9455:9463 MetaCoq.Translations.param_exists_test <> ctor_type:205 var
+R9469:9470 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9480:9480 MetaCoq.Template.utils.MCList <> :::'#|'_x_'|' not
+R9496:9498 MetaCoq.Translations.param_exists_test <> acc:198 var
+R9516:9518 MetaCoq.Translations.param_exists_test <> acc:198 var
+def 9622:9631 <> tsl_ident'
+binder 9633:9634 <> id:206
+R9639:9647 MetaCoq.Translations.param_exists_test <> tsl_ident def
+R9649:9651 Coq.Init.Datatypes <> fst def
+R9653:9660 MetaCoq.Translations.param_unary <> lastPart def
+R9662:9663 MetaCoq.Translations.param_exists_test <> id:206 var
+inst 9759:9768 <> existparam
+R9772:9782 MetaCoq.Translations.translation_utils <> Translation class
+R9792:9797 MetaCoq.Translations.translation_utils <> tsl_id meth
+R9792:9797 MetaCoq.Translations.translation_utils <> tsl_id meth
+R9820:9825 MetaCoq.Translations.translation_utils <> tsl_tm meth
+R9965:9970 MetaCoq.Translations.translation_utils <> tsl_ty meth
+R9987:9993 MetaCoq.Translations.translation_utils <> tsl_ind meth
+binder 10002:10004 <> ΣE:207
+binder 10006:10007 <> mp:208
+binder 10009:10010 <> kn:209
+binder 10012:10015 <> mind:210
+R10026:10028 MetaCoq.Template.monad_utils <> ret meth
+R10031:10043 MetaCoq.Translations.param_exists_test <> tsl_mind_body def
+R10067:10070 MetaCoq.Translations.param_exists_test <> mind:210 var
+R10064:10065 MetaCoq.Translations.param_exists_test <> kn:209 var
+R10061:10062 MetaCoq.Translations.param_exists_test <> mp:208 var
+R10052:10054 Coq.Init.Datatypes <> snd def
+R10056:10058 MetaCoq.Translations.param_exists_test <> ΣE:207 var
+R10045:10049 Coq.Init.Datatypes <> false constr
+R9975:9978 Coq.Init.Datatypes <> None constr
+binder 9834:9836 <> ΣE:211
+binder 9838:9838 <> t:212
+R9843:9845 MetaCoq.Template.monad_utils <> ret meth
+R9848:9861 MetaCoq.Translations.param_exists_test <> paramTermTrans def
+R9873:9873 MetaCoq.Translations.param_exists_test <> t:212 var
+R9864:9866 Coq.Init.Datatypes <> snd def
+R9868:9870 MetaCoq.Translations.param_exists_test <> ΣE:211 var
+R9802:9811 MetaCoq.Translations.param_exists_test <> tsl_ident' def
+rec 10369:10383 <> existtranslated
+proj 10479:10485 <> content
+R10390:10405 MetaCoq.Template.BasicAst <> global_reference ind
+binder 10386:10388 <> ref:213
+R10489:10497 MetaCoq.Translations.translation_utils <> tsl_table def
+def 10729:10744 <> checkTranslation
+R10751:10761 MetaCoq.Translations.translation_utils <> tsl_context def
+binder 10747:10749 <> ΣE:216
+R10769:10784 MetaCoq.Template.BasicAst <> global_reference ind
+binder 10765:10767 <> ref:217
+R10789:10801 MetaCoq.Template.TemplateMonad.Core <> TemplateMonad ind
+R10803:10813 MetaCoq.Translations.translation_utils <> tsl_context def
+R10830:10845 MetaCoq.Translations.translation_utils <> lookup_tsl_table def
+R10857:10859 MetaCoq.Translations.param_exists_test <> ref:217 var
+R10848:10850 Coq.Init.Datatypes <> snd def
+R10852:10854 MetaCoq.Translations.param_exists_test <> ΣE:216 var
+R10874:10877 Coq.Init.Datatypes <> Some constr
+R10884:10886 MetaCoq.Template.monad_utils <> ret meth
+R10888:10890 MetaCoq.Translations.param_exists_test <> ΣE:216 var
+R10900:10903 Coq.Init.Datatypes <> None constr
+R10967:10970 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R11013:11025 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R10971:10985 MetaCoq.Template.TemplateMonad.Core <> tmInferInstance constr
+R10993:11007 MetaCoq.Translations.param_exists_test <> existtranslated class
+R11009:11011 MetaCoq.Translations.param_exists_test <> ref:217 var
+R10987:10990 Coq.Init.Datatypes <> None constr
+binder 10964:10966 <> opt:218
+R11032:11034 MetaCoq.Translations.param_exists_test <> opt:218 var
+R11113:11119 MetaCoq.Template.TemplateMonad.Common <> my_Some constr
+R11150:11152 Coq.Init.Datatypes <> fst def
+R11154:11156 MetaCoq.Translations.param_exists_test <> ΣE:216 var
+binder 11143:11145 <> Σ':220
+R11184:11184 Coq.Init.Datatypes <> ::list_scope:x_'++'_x not
+R11197:11203 Coq.Init.Datatypes <> ::list_scope:x_'++'_x not
+R11211:11211 Coq.Init.Datatypes <> ::list_scope:x_'++'_x not
+R11186:11192 MetaCoq.Translations.param_exists_test <> content meth
+R11204:11206 Coq.Init.Datatypes <> snd def
+R11208:11210 MetaCoq.Translations.param_exists_test <> ΣE:216 var
+binder 11177:11178 <> E':221
+R11237:11240 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R11256:11271 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R11241:11246 MetaCoq.Template.TemplateMonad.Core <> tmEval constr
+R11253:11255 MetaCoq.Translations.param_exists_test <> Σ':220 var
+R11248:11251 MetaCoq.Template.TemplateMonad.Common <> lazy constr
+binder 11234:11236 <> Σ':222
+R11274:11277 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R11292:11307 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R11278:11283 MetaCoq.Template.TemplateMonad.Core <> tmEval constr
+R11290:11291 MetaCoq.Translations.param_exists_test <> E':221 var
+R11285:11288 MetaCoq.Template.TemplateMonad.Common <> lazy constr
+binder 11272:11273 <> E':223
+R11308:11310 MetaCoq.Template.monad_utils <> ret meth
+R11312:11312 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11316:11317 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11320:11320 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11313:11315 MetaCoq.Translations.param_exists_test <> Σ':222 var
+R11318:11319 MetaCoq.Translations.param_exists_test <> E':223 var
+R11334:11340 MetaCoq.Template.TemplateMonad.Common <> my_None constr
+R11345:11347 MetaCoq.Template.monad_utils <> ret meth
+R11349:11351 MetaCoq.Translations.param_exists_test <> ΣE:216 var
+def 11590:11609 <> ConstructExistsTable
+binder 11612:11612 <> A:224
+R11618:11618 MetaCoq.Translations.param_exists_test <> A:224 var
+binder 11616:11616 <> t:225
+R11623:11635 MetaCoq.Template.TemplateMonad.Core <> TemplateMonad ind
+R11637:11647 MetaCoq.Translations.translation_utils <> tsl_context def
+R11655:11658 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R11671:11676 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R11659:11668 MetaCoq.Template.TemplateMonad.Core <> tmQuoteRec def
+R11670:11670 MetaCoq.Translations.param_exists_test <> t:225 var
+binder 11654:11654 <> p:226
+R11705:11710 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_';;'_x not
+R11677:11683 MetaCoq.Template.TemplateMonad.Core <> tmPrint constr
+R11711:11726 MetaCoq.Template.monad_utils <> monad_fold_right def
+R11977:11983 MetaCoq.Translations.translation_utils <> emptyTC def
+R11969:11971 Coq.Init.Datatypes <> fst def
+R11973:11973 MetaCoq.Translations.param_exists_test <> p:226 var
+binder 11733:11735 <> ΣE:227
+R11738:11738 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11741:11742 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11747:11747 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+binder 11743:11746 <> decl:228
+binder 11739:11740 <> kn:229
+binder 11737:11747 <> pat:230
+R11803:11810 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_';;'_x not
+R11756:11763 MetaCoq.Template.TemplateMonad.Core <> print_nf def
+R11779:11781 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R11782:11798 MetaCoq.Template.BasicAst <> string_of_kername def
+R11800:11801 MetaCoq.Translations.param_exists_test <> kn:229 var
+R11817:11820 MetaCoq.Translations.param_exists_test <> decl:228 var
+R11833:11844 MetaCoq.Template.Ast <> ConstantDecl constr
+R11854:11869 MetaCoq.Translations.param_exists_test <> checkTranslation def
+R11876:11883 MetaCoq.Template.BasicAst <> ConstRef constr
+R11885:11886 MetaCoq.Translations.param_exists_test <> kn:229 var
+R11871:11873 MetaCoq.Translations.param_exists_test <> ΣE:227 var
+R11895:11907 MetaCoq.Template.Ast <> InductiveDecl constr
+R11914:11929 MetaCoq.Translations.param_exists_test <> checkTranslation def
+R11936:11941 MetaCoq.Template.BasicAst <> IndRef constr
+R11944:11948 MetaCoq.Template.BasicAst <> mkInd constr
+R11950:11951 MetaCoq.Translations.param_exists_test <> kn:229 var
+R11931:11933 MetaCoq.Translations.param_exists_test <> ΣE:227 var
+def 12128:12143 <> getIdentKername'
+R12148:12151 MetaCoq.Template.Ast <> term ind
+binder 12146:12146 <> t:232
+R12157:12169 MetaCoq.Template.TemplateMonad.Core <> TemplateMonad ind
+R12171:12177 MetaCoq.Template.BasicAst <> kername def
+R12184:12191 MetaCoq.Template.TemplateMonad.Core <> tmReturn constr
+R12199:12199 MetaCoq.Translations.param_exists_test <> t:232 var
+R12244:12247 MetaCoq.Template.Ast <> tInd constr
+R12250:12254 MetaCoq.Template.BasicAst <> mkInd constr
+R12273:12278 MetaCoq.Template.Ast <> tConst constr
+R12294:12303 MetaCoq.Template.Ast <> tConstruct constr
+R12306:12310 MetaCoq.Template.BasicAst <> mkInd constr
+R12352:12352 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R12362:12362 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R12365:12365 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R12353:12358 MetaCoq.Template.BasicAst <> MPfile constr
+R12360:12361 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+def 12405:12419 <> getIdentKername
+binder 12422:12422 <> A:234
+R12428:12428 MetaCoq.Translations.param_exists_test <> A:234 var
+binder 12426:12426 <> t:235
+R12434:12446 MetaCoq.Template.TemplateMonad.Core <> TemplateMonad ind
+R12448:12454 MetaCoq.Template.BasicAst <> kername def
+R12462:12465 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R12475:12479 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R12466:12472 MetaCoq.Template.TemplateMonad.Core <> tmQuote constr
+R12474:12474 MetaCoq.Translations.param_exists_test <> t:235 var
+binder 12461:12461 <> q:236
+R12480:12495 MetaCoq.Translations.param_exists_test <> getIdentKername' def
+R12498:12500 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R12502:12505 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R12515:12520 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R12523:12528 MetaCoq.Translations.param_unary <> :::'if'_x_'is'_x_'then'_x_'else'_x not
+R12501:12501 MetaCoq.Translations.param_exists_test <> q:236 var
+R12506:12509 MetaCoq.Template.Ast <> tApp constr
+binder 12511:12512 <> q':237
+R12521:12522 MetaCoq.Translations.param_exists_test <> q':237 var
+R12529:12529 MetaCoq.Translations.param_exists_test <> q:236 var
+def 12592:12599 <> getIdent
+binder 12602:12602 <> A:238
+R12608:12608 MetaCoq.Translations.param_exists_test <> A:238 var
+binder 12606:12606 <> t:239
+R12614:12626 MetaCoq.Template.TemplateMonad.Core <> TemplateMonad ind
+R12628:12633 Coq.Strings.String <> string ind
+R12647:12650 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R12668:12672 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R12651:12665 MetaCoq.Translations.param_exists_test <> getIdentKername def
+R12667:12667 MetaCoq.Translations.param_exists_test <> t:239 var
+binder 12640:12646 <> kername:240
+R12673:12680 MetaCoq.Template.TemplateMonad.Core <> tmReturn constr
+R12683:12685 Coq.Init.Datatypes <> snd def
+R12687:12693 MetaCoq.Translations.param_exists_test <> kername:240 var
+def 12765:12780 <> getIdentComplete
+binder 12783:12783 <> A:241
+R12789:12789 MetaCoq.Translations.param_exists_test <> A:241 var
+binder 12787:12787 <> t:242
+R12795:12807 MetaCoq.Template.TemplateMonad.Core <> TemplateMonad ind
+R12809:12814 Coq.Strings.String <> string ind
+R12828:12831 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R12849:12853 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R12832:12846 MetaCoq.Translations.param_exists_test <> getIdentKername def
+R12848:12848 MetaCoq.Translations.param_exists_test <> t:242 var
+binder 12821:12827 <> kername:243
+R12854:12861 MetaCoq.Template.TemplateMonad.Core <> tmReturn constr
+R12864:12880 MetaCoq.Template.BasicAst <> string_of_kername def
+R12882:12888 MetaCoq.Translations.param_exists_test <> kername:243 var
+def 12968:12975 <> tmLookup
+binder 12978:12978 <> A:244
+R12984:12984 MetaCoq.Translations.param_exists_test <> A:244 var
+binder 12982:12982 <> t:245
+R12989:13001 MetaCoq.Template.TemplateMonad.Core <> TemplateMonad ind
+R13003:13018 MetaCoq.Template.BasicAst <> global_reference ind
+R13043:13047 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'>>='_x not
+R13025:13040 MetaCoq.Translations.param_exists_test <> getIdentComplete def
+R13042:13042 MetaCoq.Translations.param_exists_test <> t:245 var
+R13048:13056 MetaCoq.Template.TemplateMonad.Core <> tmLocate1 def
+def 13146:13170 <> persistentExistsTranslate
+binder 13173:13173 <> A:246
+R13179:13179 MetaCoq.Translations.param_exists_test <> A:246 var
+binder 13177:13177 <> t:247
+R13184:13196 MetaCoq.Template.TemplateMonad.Core <> TemplateMonad ind
+R13198:13208 MetaCoq.Translations.translation_utils <> tsl_context def
+R13217:13220 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13243:13265 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13221:13240 MetaCoq.Translations.param_exists_test <> ConstructExistsTable def
+R13242:13242 MetaCoq.Translations.param_exists_test <> t:247 var
+binder 13215:13216 <> tc:248
+R13268:13271 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13290:13294 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13272:13287 MetaCoq.Translations.param_exists_test <> getIdentComplete def
+R13289:13289 MetaCoq.Translations.param_exists_test <> t:247 var
+binder 13266:13267 <> id:249
+R13301:13304 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13315:13319 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13305:13312 MetaCoq.Translations.param_exists_test <> getIdent def
+R13314:13314 MetaCoq.Translations.param_exists_test <> t:247 var
+binder 13295:13300 <> idname:250
+R13354:13358 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_';;'_x not
+R13320:13324 MetaCoq.Template.TemplateMonad.Core <> tmMsg constr
+R13350:13350 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R13351:13352 MetaCoq.Translations.param_exists_test <> id:249 var
+R13394:13398 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_';;'_x not
+R13359:13363 MetaCoq.Template.TemplateMonad.Core <> tmMsg constr
+R13386:13386 MetaCoq.Template.utils <> ::string_scope2:x_'^'_x not
+R13387:13392 MetaCoq.Translations.param_exists_test <> idname:250 var
+R13402:13405 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13435:13473 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13408:13416 MetaCoq.Translations.translation_utils <> Translate def
+R13418:13427 MetaCoq.Translations.param_exists_test <> existparam inst
+R13433:13434 MetaCoq.Translations.param_exists_test <> id:249 var
+R13430:13431 MetaCoq.Translations.param_exists_test <> tc:248 var
+binder 13399:13401 <> tc':251
+R13476:13479 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13490:13521 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13480:13487 MetaCoq.Translations.param_exists_test <> tmLookup def
+R13489:13489 MetaCoq.Translations.param_exists_test <> t:247 var
+binder 13474:13475 <> gr:252
+R13532:13535 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13578:13586 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13536:13541 MetaCoq.Template.TemplateMonad.Core <> tmEval constr
+R13549:13554 Coq.Strings.String <> append def
+R13556:13561 MetaCoq.Translations.param_exists_test <> idname:250 var
+R13543:13546 MetaCoq.Template.TemplateMonad.Common <> lazy constr
+binder 13522:13531 <> nameString:253
+R13594:13597 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13620:13628 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R13598:13608 MetaCoq.Template.TemplateMonad.Core <> tmFreshName constr
+R13610:13619 MetaCoq.Translations.param_exists_test <> nameString:253 var
+binder 13587:13593 <> newName:254
+R13734:13796 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_';;'_x not
+R13629:13640 MetaCoq.Template.TemplateMonad.Core <> tmDefinition def
+R13708:13722 MetaCoq.Translations.param_exists_test <> existtranslated class
+R13724:13725 MetaCoq.Translations.param_exists_test <> gr:252 var
+R13675:13681 MetaCoq.Translations.param_exists_test <> content meth
+R13675:13681 MetaCoq.Translations.param_exists_test <> content meth
+R13686:13688 Coq.Init.Datatypes <> snd def
+R13690:13692 MetaCoq.Translations.param_exists_test <> tc':251 var
+R13642:13648 MetaCoq.Translations.param_exists_test <> newName:254 var
+R13832:13836 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_';;'_x not
+R13797:13814 MetaCoq.Template.TemplateMonad.Core <> tmExistingInstance constr
+R13817:13822 MetaCoq.Template.BasicAst <> VarRef constr
+R13824:13830 MetaCoq.Translations.param_exists_test <> newName:254 var
+R13837:13844 MetaCoq.Template.TemplateMonad.Core <> tmReturn constr
+R13846:13848 MetaCoq.Translations.param_exists_test <> tc':251 var
+def 13866:13884 <> persistentTranslate
+binder 13887:13887 <> A:255
+R13893:13893 MetaCoq.Translations.param_exists_test <> A:255 var
+binder 13891:13891 <> t:256
+R13898:13910 MetaCoq.Template.TemplateMonad.Core <> TemplateMonad ind
+R13912:13922 MetaCoq.Translations.translation_utils <> tsl_context def
+R13929:13953 MetaCoq.Translations.param_exists_test <> persistentExistsTranslate def
+R13955:13955 MetaCoq.Translations.param_exists_test <> t:256 var
+def 844:857 <> printInductive
+binder 860:860 <> X:257
+R866:866 MetaCoq.Translations.param_exists_test <> X:257 var
+binder 864:864 <> t:258
+R875:878 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R888:892 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R879:885 MetaCoq.Template.TemplateMonad.Core <> tmQuote constr
+R887:887 MetaCoq.Translations.param_exists_test <> t:258 var
+binder 874:874 <> q:259
+R899:899 MetaCoq.Translations.param_exists_test <> q:259 var
+R911:914 MetaCoq.Template.Ast <> tApp constr
+R917:920 MetaCoq.Template.Ast <> tInd constr
+R923:927 MetaCoq.Template.BasicAst <> mkInd constr
+R945:948 MetaCoq.Template.Ast <> tInd constr
+R951:955 MetaCoq.Template.BasicAst <> mkInd constr
+R978:981 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R1002:1008 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R982:997 MetaCoq.Template.TemplateMonad.Core <> tmQuoteInductive constr
+binder 974:977 <> qInd:261
+R1009:1016 MetaCoq.Template.TemplateMonad.Core <> print_nf def
+R1018:1021 MetaCoq.Translations.param_exists_test <> qInd:261 var
+R978:981 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R1002:1008 MetaCoq.Template.monad_utils MonadNotation ::monad_scope:x_'<-'_x_';;'_x not
+R982:997 MetaCoq.Template.TemplateMonad.Core <> tmQuoteInductive constr
+binder 974:977 <> qInd:262
+R1009:1016 MetaCoq.Template.TemplateMonad.Core <> print_nf def
+R1018:1021 MetaCoq.Translations.param_exists_test <> qInd:262 var
+R1032:1037 MetaCoq.Template.TemplateMonad.Core <> tmFail constr
+R1086:1104 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1106:1112 MetaCoq.Translations.param_exists_test <> augTest ind
+R1122:1131 MetaCoq.Translations.param_exists_test <> augTestᴱ ind
+R1147:1165 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1167:1169 Coq.Init.Datatypes <> nat ind
+R1179:1184 MetaCoq.Translations.param_exists_test <> natᴱ ind
+R1200:1218 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1220:1224 MetaCoq.Translations.param_exists_test <> Prod1 ind
+R1234:1241 MetaCoq.Translations.param_exists_test <> Prod1ᴱ ind
+R1257:1275 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1277:1280 MetaCoq.Translations.param_exists_test <> Prod ind
+R1290:1296 MetaCoq.Translations.param_exists_test <> Prodᴱ ind
+R1312:1330 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1332:1335 MetaCoq.Translations.param_exists_test <> List ind
+R1345:1351 MetaCoq.Translations.param_exists_test <> Listᴱ ind
+R1367:1385 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1387:1393 MetaCoq.Translations.param_exists_test <> Complex ind
+R1403:1412 MetaCoq.Translations.param_exists_test <> Complexᴱ ind
+R1429:1447 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1449:1449 MetaCoq.Translations.param_exists_test <> G ind
+R1459:1462 MetaCoq.Translations.param_exists_test <> Gᴱ ind
+R1478:1496 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1498:1498 MetaCoq.Translations.param_exists_test <> R ind
+R1508:1511 MetaCoq.Translations.param_exists_test <> Rᴱ ind
+R1527:1545 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1547:1547 MetaCoq.Translations.param_exists_test <> F ind
+R1557:1560 MetaCoq.Translations.param_exists_test <> Fᴱ ind
+R1576:1594 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1596:1598 MetaCoq.Translations.param_exists_test <> Ind ind
+R1608:1613 MetaCoq.Translations.param_exists_test <> Indᴱ ind
+R1629:1647 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1649:1652 MetaCoq.Translations.param_exists_test <> Ind2 ind
+R1662:1668 MetaCoq.Translations.param_exists_test <> Ind2ᴱ ind
+R1684:1702 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1704:1707 MetaCoq.Translations.param_exists_test <> IndT ind
+R1717:1723 MetaCoq.Translations.param_exists_test <> IndTᴱ ind
+R1739:1757 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1759:1760 MetaCoq.Translations.param_exists_test <> TA ind
+R1770:1774 MetaCoq.Translations.param_exists_test <> TAᴱ ind
+R1790:1808 MetaCoq.Translations.param_exists_test <> persistentTranslate def
+R1810:1812 MetaCoq.Translations.param_exists_test <> TA2 ind
+R1822:1827 MetaCoq.Translations.param_exists_test <> TA2ᴱ ind
+ind 4533:4534 <> Ft
+constr 4604:4606 <> FIt
+R4543:4546 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4540:4542 Coq.Init.Datatypes <> nat ind
+binder 4537:4538 <> FT:263
+R4567:4569 Coq.Init.Datatypes <> nat ind
+binder 4565:4565 <> n:264
+R4576:4579 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4572:4573 MetaCoq.Translations.param_exists_test <> FT:263 var
+R4575:4575 MetaCoq.Translations.param_exists_test <> n:264 var
+binder 4554:4556 <> FTT:265
+R4592:4595 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4588:4588 MetaCoq.Translations.param_exists_test <> F ind
+R4611:4612 MetaCoq.Translations.param_exists_test <> FT:263 var
+binder 4609:4609 <> x:268
+R4625:4628 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4629:4630 MetaCoq.Translations.param_exists_test <> Ft:266 ind
+R4640:4641 MetaCoq.Translations.param_exists_test <> FI constr
+R4646:4646 MetaCoq.Translations.param_exists_test <> x:268 var
+R4643:4644 MetaCoq.Translations.param_exists_test <> FT:263 var
+R4635:4637 MetaCoq.Translations.param_exists_test <> FTT:265 var
+R4632:4633 MetaCoq.Translations.param_exists_test <> FT:263 var
+R4618:4620 MetaCoq.Translations.param_exists_test <> FTT:265 var
+R4624:4624 MetaCoq.Translations.param_exists_test <> x:268 var
+ind 4660:4663 <> natt
+constr 4685:4685 <> O
+constr 4698:4698 <> S
+R4670:4673 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4667:4669 Coq.Init.Datatypes <> nat ind
+R4689:4692 MetaCoq.Translations.param_exists_test <> natt:269 ind
+R4694:4694 Coq.Init.Datatypes <> O constr
+binder 4700:4700 <> n:271
+R4703:4706 MetaCoq.Translations.param_exists_test <> natt:269 ind
+R4709:4709 Coq.Init.Datatypes <> S constr
+R4711:4711 MetaCoq.Translations.param_exists_test <> n:271 var
+ind 4725:4730 <> Prod1'
+constr 4757:4760 <> Con'
+binder 4733:4733 <> X:272
+R4746:4747 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4745:4745 MetaCoq.Translations.param_exists_test <> X:272 var
+binder 4742:4743 <> X':273
+R4769:4769 MetaCoq.Translations.param_exists_test <> X:272 var
+binder 4763:4764 <> x1:276
+binder 4766:4767 <> x2:277
+ind 4783:4788 <> Prod1t
+constr 4833:4836 <> Cont
+binder 4791:4791 <> X:278
+R4804:4805 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4803:4803 MetaCoq.Translations.param_exists_test <> X:278 var
+binder 4800:4801 <> X':279
+R4821:4824 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4814:4818 MetaCoq.Translations.param_exists_test <> Prod1 ind
+R4845:4845 MetaCoq.Translations.param_exists_test <> X:278 var
+binder 4839:4840 <> x1:282
+binder 4842:4843 <> x2:283
+R4849:4854 MetaCoq.Translations.param_exists_test <> Prod1t:280 ind
+R4862:4864 MetaCoq.Translations.param_exists_test <> Con constr
+R4871:4872 MetaCoq.Translations.param_exists_test <> x2:283 var
+R4868:4869 MetaCoq.Translations.param_exists_test <> x1:282 var
+R4866:4866 MetaCoq.Translations.param_exists_test <> X:278 var
+R4858:4859 MetaCoq.Translations.param_exists_test <> X':279 var
+R4856:4856 MetaCoq.Translations.param_exists_test <> X:278 var
+ind 4886:4890 <> Prodt
+constr 4944:4948 <> pairt
+binder 4892:4892 <> X:284
+R4899:4900 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4898:4898 MetaCoq.Translations.param_exists_test <> X:284 var
+binder 4895:4896 <> Xt:285
+binder 4907:4907 <> Y:286
+R4914:4915 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4913:4913 MetaCoq.Translations.param_exists_test <> Y:286 var
+binder 4910:4911 <> Yt:287
+R4932:4935 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4924:4927 MetaCoq.Translations.param_exists_test <> Prod ind
+R4953:4953 MetaCoq.Translations.param_exists_test <> X:284 var
+binder 4951:4951 <> x:290
+R4959:4959 MetaCoq.Translations.param_exists_test <> Y:286 var
+binder 4957:4957 <> y:291
+R4963:4967 MetaCoq.Translations.param_exists_test <> Prodt:288 ind
+R4980:4983 MetaCoq.Translations.param_exists_test <> pair constr
+R4991:4991 MetaCoq.Translations.param_exists_test <> y:291 var
+R4989:4989 MetaCoq.Translations.param_exists_test <> x:290 var
+R4987:4987 MetaCoq.Translations.param_exists_test <> Y:286 var
+R4985:4985 MetaCoq.Translations.param_exists_test <> X:284 var
+R4976:4977 MetaCoq.Translations.param_exists_test <> Yt:287 var
+R4974:4974 MetaCoq.Translations.param_exists_test <> Y:286 var
+R4971:4972 MetaCoq.Translations.param_exists_test <> Xt:285 var
+R4969:4969 MetaCoq.Translations.param_exists_test <> X:284 var
+ind 5005:5009 <> Listt
+constr 5053:5057 <> nilLt
+constr 5084:5089 <> consLt
+binder 5012:5012 <> X:292
+R5024:5025 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5023:5023 MetaCoq.Translations.param_exists_test <> X:292 var
+binder 5020:5021 <> Xt:293
+R5039:5042 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5033:5036 MetaCoq.Translations.param_exists_test <> List ind
+R5061:5065 MetaCoq.Translations.param_exists_test <> Listt:294 ind
+R5073:5076 MetaCoq.Translations.param_exists_test <> nilL constr
+R5078:5078 MetaCoq.Translations.param_exists_test <> X:292 var
+R5069:5070 MetaCoq.Translations.param_exists_test <> Xt:293 var
+R5067:5067 MetaCoq.Translations.param_exists_test <> X:292 var
+R5094:5094 MetaCoq.Translations.param_exists_test <> X:292 var
+binder 5092:5092 <> x:296
+R5101:5104 MetaCoq.Translations.param_exists_test <> List ind
+R5106:5106 MetaCoq.Translations.param_exists_test <> X:292 var
+binder 5098:5099 <> xs:297
+R5111:5115 MetaCoq.Translations.param_exists_test <> Listt:294 ind
+R5123:5127 MetaCoq.Translations.param_exists_test <> consL constr
+R5133:5134 MetaCoq.Translations.param_exists_test <> xs:297 var
+R5131:5131 MetaCoq.Translations.param_exists_test <> x:296 var
+R5129:5129 MetaCoq.Translations.param_exists_test <> X:292 var
+R5119:5120 MetaCoq.Translations.param_exists_test <> Xt:293 var
+R5117:5117 MetaCoq.Translations.param_exists_test <> X:292 var

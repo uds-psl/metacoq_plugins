@@ -1,0 +1,9 @@
+_CoqProject.in
+!metacoq-config
+website/*.html
+old
+
+*.aux
+*.vos
+*.vok
+*.vo
