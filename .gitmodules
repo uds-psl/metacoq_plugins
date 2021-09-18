@@ -1,3 +1,4 @@
 [submodule "metacoq"]
 	path = metacoq
-	url = https://github.com/MetaCoq/metacoq.git
+  url = https://github.com/MetaCoq/metacoq.git
+  branch = coq-8.12
