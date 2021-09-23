@@ -181,3 +181,31 @@ MetaCoq Run Derive ∀∀ for rose2.
 MetaCoq Run Derive full Parametricity for rose2.
 Print rose2ᵗ. (* TODO: too much pruning *)
 Print rose2ᵗ0.
+
+
+(* Polymorphic Inductive listrose := leaf3 | node3 (xs:list listrose). *)
+(* Polymorphic  *)
+Inductive listrose (X:Type) : Type := leaf3 (x:X) | node3 (xs:list (listrose X)).
+Set Printing Universes.
+About list.
+About listrose.
+
+Inductive listroseᵗ (X : Type) (Xᵗ : X -> Type) : listrose X -> Type :=
+	node3ᵗ : forall h : list (listrose X),
+              listᵗ (listrose X) (listroseᵗ X Xᵗ) h -> 
+              listroseᵗ X Xᵗ (node3 X h).
+
+
+
+
+(* Print list.u0. *)
+
+From MetaCoq.Translations Require Import param_unary param_exists param_other.
+Require Import String List.
+Open Scope list.
+Open Scope string.
+MetaCoq Run (persistentTranslate_prune listrose false).
+
+
+MetaCoq Run Derive full Parametricity for listrose.
+Print listroseᵗ.
