@@ -2,7 +2,9 @@
 
 ## Nested Induction Principles
 
+
 ## Subterm Relations
+
 
 ## Pickle/Unpickle
 
