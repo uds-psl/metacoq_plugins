@@ -11,13 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-
-    strategy:
-      matrix:
-        target: [ submodules ]
-
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v2
 
