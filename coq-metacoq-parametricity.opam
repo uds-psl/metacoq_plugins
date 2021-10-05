@@ -1,0 +1,16 @@
+opam-version: "2.0"
+version: "dev+8.12"
+authors: ["Yannick Forster"
+          "Marcel Ullrich"]
+license: "MIT"
+build: [
+  [make "-C" "parametricity" "-j%{jobs}%"]
+]
+install: [
+  [make "-C" "parametricity" "install"]
+]
+depends: [
+  "coq" {= "8.12.2"}
+  "coq-metacoq-template" {= "1.0~beta2+8.12"}
+  "coq-metacoq-pcuic" {= "1.0~beta2+8.12"}
+]
