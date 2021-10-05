@@ -2,7 +2,6 @@
 
 ## Nested Induction Principles
 
-
 ## Subterm Relations
 
 
