@@ -3,7 +3,7 @@ name: Test compilation
 on: [push, pull_request]
 
 env:
-  OCAML_VERSION: 4.07.1+flambda
+  OCAML_VERSION: 4.07.1
   COQ_VERSION: 8.12.2
   METACOQ_VERSION: 1.0~beta2+8.12
 
@@ -27,7 +27,7 @@ jobs:
       - name: Install OCaml
         uses: avsm/setup-ocaml@v2
         with:
-          ocaml-compiler: ${{ env.OCAML_VERSION }}
+          ocaml-compiler: ${{ env.OCAML_VERSION }}, ocaml-option-flambda
 
       - run: opam repo add coq-released https://coq.inria.fr/opam/released
       - run: opam install coq.${{ env.COQ_VERSION }} coq-metacoq.${{ env.METACOQ_VERSION }}
