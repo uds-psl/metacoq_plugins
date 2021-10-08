@@ -27,7 +27,7 @@ jobs:
       - name: Install OCaml
         uses: avsm/setup-ocaml@v2
         with:
-          ocaml-compiler: ${{ env.OCAML_VERSION }}, ocaml-option-flambda
+          ocaml-compiler: ocaml-base-compiler.4.07.1+flambda
 
       - run: opam repo add coq-released https://coq.inria.fr/opam/released
       - run: opam install coq.${{ env.COQ_VERSION }} coq-metacoq.${{ env.METACOQ_VERSION }}
