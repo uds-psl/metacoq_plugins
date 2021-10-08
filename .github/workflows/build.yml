@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
   OCAML_VERSION: 4.07.1
-  COQ_VERSION: 8.12.2
+  COQ_VERSION: 8.12.0
   METACOQ_VERSION: 1.0~beta2+8.12
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
       - name: Install OCaml
         uses: avsm/setup-ocaml@v2
         with:
-          ocaml-compiler: ocaml-variants.4.07.1+flambda
+          ocaml-compiler: ocaml-variants.${{ env.OCAML_VERSION }}+flambda
           opam-local-packages: |
             !*.opam
 
