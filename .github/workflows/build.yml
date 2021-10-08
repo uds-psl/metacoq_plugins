@@ -28,9 +28,10 @@ jobs:
         uses: avsm/setup-ocaml@v2
         with:
           ocaml-compiler: ocaml-variants.4.07.1+flambda
+          opam-repositories: https://coq.inria.fr/opam/released
 
-      - run: opam repo add coq-released https://coq.inria.fr/opam/released
-      - run: opam install coq.${{ env.COQ_VERSION }} coq-metacoq.${{ env.METACOQ_VERSION }}
+      # - run: opam repo add coq-released https://coq.inria.fr/opam/released
+      # - run: opam install coq.${{ env.COQ_VERSION }} coq-metacoq.${{ env.METACOQ_VERSION }}
 
-      - run: opam install .
-      - run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction
+      # - run: opam install .
+      # - run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction
