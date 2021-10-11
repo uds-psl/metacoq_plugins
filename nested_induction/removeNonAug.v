@@ -105,7 +105,8 @@ Fixpoint removeArgList (t:term) (xs:list nat) (rec:nat) :=
 
 (* Print monad_map. *)
 
-Definition cleanOInd (ind:one_inductive_body) :=
+Definition cleanOInd (ind:one_inductive_body) := 
+  (* : TemplateMonad one_inductive_body := *)
   xp <- removeNonAugmentable ind.(ind_type) 0;;
   let (t,xs) := xp : term * list nat in
   (* tmPrint xs;; *)
@@ -128,6 +129,7 @@ let rmt := removeArgList tp.1 xs 0 in
       (* ind.(ind_ctors) *)
       ctors
       ind.(ind_projs)
+      ind.(ind_relevance)
   ).
 
   (* Print kername.
@@ -139,7 +141,7 @@ Definition cleanInd (kname:kername) (idx:nat) (u:Instance.t) :=
     mind <- tmQuoteInductive kname;;
     nparam <- (removeNonAugList (rev mind.(ind_params)));;
     noinds <- monad_map cleanOInd mind.(ind_bodies);;
-    (* tmMsg "Fin" *)
+    (* tmMsg "Fin". *)
     tmMkInductive (mind_body_to_entry {|
       ind_finite := mind.(ind_finite);
       ind_npars := #|nparam|;
@@ -148,6 +150,7 @@ Definition cleanInd (kname:kername) (idx:nat) (u:Instance.t) :=
       ind_universes := mind.(ind_universes);
       ind_variance := mind.(ind_variance)
     |});;
+    (* tmMsg "Fin". *)
     match nth_error noinds idx with
       None => tmFail "no inductive was constructed"
     | Some oind => tmReturn oind.(ind_name)

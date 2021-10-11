@@ -24,18 +24,18 @@ Require Import de_bruijn_print.
 Require Import Even.
 Require Import Recdef.
 
-Scheme Equality for sort_family.
+Scheme Equality for allowed_eliminations.
 
-Definition canElim := sort_family_beq.
+Definition canElim := allowed_eliminations_beq.
 
 
 Unset Strict Unquote Universe Mode. 
 
   (* convert max elimination level into term *)
-Definition getMaxElim (xs : sort_family) :PCUICAst.term :=
+Definition getMaxElim (xs : allowed_eliminations) :PCUICAst.term :=
   TemplateToPCUIC.trans
-  (if canElim InType xs then <% Type %> else (* todo: is this always the correct Level? *)
-    if canElim InSet xs then <% Set %> else
+  (if canElim IntoAny xs then <% Type %> else (* todo: is this always the correct Level? *)
+    if canElim IntoSetPropSProp xs then <% Set %> else
       <% Prop %>).
 
 Fixpoint collect_prods (t:term) : list (context_decl) :=
@@ -113,10 +113,14 @@ Definition tr2 := trans <% trivialProof %>.
 
 
 Definition extendName pre na :=
-  match na with
+  {| 
+  binder_name :=
+  match na.(binder_name) with
     nAnon => nAnon
   | nNamed s => nNamed (pre +s s)
-  end.
+  end;
+  binder_relevance := na.(binder_relevance)
+  |}.
 
 (* predicate calls with indices and arguments *)
 Definition generatePCall2 paramCount recpos ppos app appList n args : option term :=
@@ -248,6 +252,13 @@ Import ListNotations.
 
 Open Scope list_scope.
 
+Definition dummyName : aname :=
+  {|
+  binder_name := nAnon;
+  (* binder_relevance := Irrelevant *)
+  binder_relevance := Relevant
+  |}.
+
 (* generated induction hypotheses, constructor cases, and proof terms *)
 Definition generateInductiveAssumptions
   (paramCount : nat) (nested : kername -> nat -> option (term × term))
@@ -337,13 +348,13 @@ refine(
                     ([t2] ++
                     match generateInductiveAssumptions (lift0 1 t2) _ paramCount nested generateInduction (S recpos) (S ppos) (S fpos) (tRel 0) [] true false mainApp false with
                       None => []
-                    | Some a => [(tLambda nAnon t2 a)]
+                    | Some a => [(tLambda dummyName t2 a)]
                     end
                     ++
                     (if generateProof then
                     match generateInductiveAssumptions (lift0 1 t2) _ paramCount nested generateInduction (S recpos) (S ppos) (S fpos) (tRel 0) [] true generateProof mainApp false with
                       None => []
-                    | Some a => [(tLambda nAnon t2 a)]
+                    | Some a => [(tLambda dummyName t2 a)]
                     end
                      else [])
                     ++
@@ -414,7 +425,7 @@ Definition quantifyCases (isInductive:bool) (ctors : list ((ident×term)×nat)) 
           let (name,a) := y in
           let lcount := n in (* how many cases before this *)
            vass
-             (nNamed ("H_" +s name))
+             ({| binder_name := nNamed ("H_" +s name); binder_relevance := Relevant |})
              (
                      let ppos := n in
                      let paramOffset := 1+ppos in
@@ -487,7 +498,7 @@ Definition createElim (isInductive:bool) (ind:inductive) (univ:Instance.t) (ind_
        replaceLastProd
          (
             (* add ∀ for instance *)
-            (tProd (nNamed "inst")
+            (tProd ({| binder_name := nNamed "inst"; binder_relevance := Relevant |})
                    (createAppChain (lift0 allIndCount ind_applied) allIndCount)
                  (* if prop => elim over prop *)
                  (* if type => elim over type *)
@@ -500,7 +511,7 @@ Definition createElim (isInductive:bool) (ind:inductive) (univ:Instance.t) (ind_
   it_mkLambda_or_LetIn trueParams
   (tLambda
      (* predicate *)
-     (nNamed "p")
+     ({| binder_name := nNamed "p"; binder_relevance := Relevant |})
      (* the type of p is a transformation of the type
       todo: fold indices for type of p or use the type in index construction below
       for consistency*)
@@ -513,7 +524,7 @@ Definition createElim (isInductive:bool) (ind:inductive) (univ:Instance.t) (ind_
          (
               tFix
             [{|
-             dname := nNamed "f"%string;
+             dname := {| binder_name := nNamed "f"%string; binder_relevance := Relevant |};
              dtype := (* could be omitted using type inference *)
                (* lift over cases for constructor and p *)
                replaceLastProd'
@@ -620,12 +631,13 @@ Definition runElim {A:Type} (indTm : A) (isInductive:bool) (create:bool) (nameOp
      | Ast.tInd ind0 univ =>
        decl <- tmQuoteInductive (inductive_mind ind0) ;;
        nestedFunc <- extractFunction (TemplateToPCUIC.trans_minductive_body decl) (inductive_ind ind0);;
-            let namingFun : name -> term -> name :=
+            let namingFun (na:name) (t:term) : name :=
                 fresh_name
                   (empty_ext
                      (TemplateToPCUIC.trans_global_decls env)
                   )
                   []
+                  t na
             in
             let lemma : option (term×string) := createElim isInductive ind0 univ (TemplateToPCUIC.trans_minductive_body decl) (option_map trans returnType) namingFun nestedFunc in
             evaluated <- tmEval lazy lemma;;

@@ -89,7 +89,7 @@ Fixpoint bruijn_print_aux (t:term) : TemplateMonad string :=
   | tEvar n xs => tmReturn "TODO:EVAR"
   | tSort univ => 
     tmReturn "tSort ?"
-  | tProd n t t2 => match n with
+  | tProd n t t2 => match n.(binder_name) with
                    | nAnon => s1 <- bruijn_print_aux t;;
                              s2 <- bruijn_print_aux t2;;
                              tmReturn("(":s append s1 (append ") -> " s2))
@@ -99,7 +99,7 @@ Fixpoint bruijn_print_aux (t:term) : TemplateMonad string :=
                    end
   | tLambda s t t2 => s1 <- bruijn_print_aux t;;
                     s2 <- bruijn_print_aux t2;;
-                    tmReturn("λ ("+s match s with
+                    tmReturn("λ ("+s match s.(binder_name) with
                         nAnon => "_"
                       | nNamed s => s
                       end
@@ -108,7 +108,7 @@ Fixpoint bruijn_print_aux (t:term) : TemplateMonad string :=
     s1 <- bruijn_print_aux t1;;
     s2 <- bruijn_print_aux t2;;
     s3 <- bruijn_print_aux t3;;
-    tmReturn("let "+s (nameToString name) +s " := "+s s1 +s " : " +s s2 +s " in "+s linebreak +s s3)
+    tmReturn("let "+s (nameToString name.(binder_name)) +s " := "+s s1 +s " : " +s s2 +s " in "+s linebreak +s s3)
   | tApp t1 t2 =>
     s1 <- bruijn_print_aux t1;;
     s2 <- bruijn_print_aux t2;;
@@ -131,7 +131,7 @@ Fixpoint bruijn_print_aux (t:term) : TemplateMonad string :=
                   sr <- f xs;;
           stype <- bruijn_print_aux (mfb.(dtype));;
           sbody <- bruijn_print_aux (mfb.(dbody));;
-          tmReturn (linebreak +s "(fix "+s (nameToString mfb.(dname)) +s " : " +s stype +s " := " +s linebreak +s sbody +s ") "+s sr)
+          tmReturn (linebreak +s "(fix "+s (nameToString mfb.(dname).(binder_name)) +s " : " +s stype +s " := " +s linebreak +s sbody +s ") "+s sr)
                 end
     ) mf
   | _ => tmReturn "TODO"

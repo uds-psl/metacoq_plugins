@@ -27,14 +27,14 @@ Definition getMode (m:string) : TemplateMonad bool :=
   );;
   tmReturn val.
 
-
 Definition getName (x : nat -> nat) :=
   x <- tmEval cbv x;;
   t <- tmQuote x;;
   match t with 
-  | Ast.tLambda (nNamed na) _ _ => tmReturn na
+  | Ast.tLambda ({| binder_name := nNamed na |}) _ _ => tmReturn na
   | _ => tmReturn ""%string
   end.
+
 
 Notation "'Set' n" := (
   name <- getName (fun n:nat => n);;
