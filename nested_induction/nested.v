@@ -4,7 +4,7 @@ Require Import MetaCoq.Template.All.
 Require Import destruct_lemma.
 Require Import MetaCoq.Template.Pretty.
 Require Import List String.
-Import ListNotations MonadNotation.
+Import ListNotations MCMonadNotation.
 
 Require Import List.
 Import ListNotations.

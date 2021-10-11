@@ -12,7 +12,7 @@ From MetaCoq.PCUIC Require Import PCUICToTemplate.
 From MetaCoq.PCUIC Require Import TemplateToPCUIC.
 
 Require Import List String.
-Import ListNotations MonadNotation Nat.
+Import ListNotations MCMonadNotation Nat.
 Require Import MetaCoq.Template.Pretty.
 Require Import MetaCoq.PCUIC.PCUICPretty.
 

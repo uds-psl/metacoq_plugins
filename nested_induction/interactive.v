@@ -3,7 +3,7 @@
 Require Import MetaCoq.Template.All.
 
 Require Import List String.
-Import ListNotations MonadNotation Nat.
+Import ListNotations MCMonadNotation Nat.
 
 Fixpoint printer (n:nat) :=
 match n with 

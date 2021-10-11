@@ -2,7 +2,7 @@
 
 Require Import MetaCoq.Template.All.
 Require Import String.
-Import MonadNotation.
+Import MCMonadNotation.
 
 Class mode (s:string) := { state: bool }.
 

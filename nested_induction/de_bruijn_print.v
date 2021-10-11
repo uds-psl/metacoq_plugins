@@ -20,7 +20,7 @@ From MetaCoq.PCUIC Require Import TemplateToPCUIC.
 Require Import List String.
 Require Import Ascii.
 Require Import Program Arith Lia PeanoNat.
-Import ListNotations MonadNotation Nat.
+Import ListNotations MCMonadNotation Nat.
 
 Definition ascii_to_string (a:ascii) : string := String a (EmptyString).
 Definition natToChar (n:nat) : ascii := ascii_of_nat(48+n).

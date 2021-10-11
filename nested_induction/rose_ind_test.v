@@ -9,7 +9,7 @@ Require Import Modes.
 
 
 Require Import MetaCoq.Template.All.
-Import MonadNotation.
+Import MCMonadNotation.
 Require Import String.
 
 Print roseTree.

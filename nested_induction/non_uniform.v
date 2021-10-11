@@ -7,7 +7,7 @@ From MetaCoq.PCUIC Require Import PCUICAst PCUICAstUtils PCUICInduction
      PCUICUnivSubst PCUICTyping PCUICGeneration.
 
 Require Import List String.
-Import ListNotations MonadNotation Nat.
+Import ListNotations MCMonadNotation Nat.
 
 (*
 Map over

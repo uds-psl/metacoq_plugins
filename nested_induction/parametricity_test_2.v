@@ -3,7 +3,7 @@
 
 From MetaCoq Require Import Template.All.
 Require Import List String.
-Import ListNotations MonadNotation.
+Import ListNotations MCMonadNotation.
 Require Import MetaCoq.Template.Pretty.
 
 

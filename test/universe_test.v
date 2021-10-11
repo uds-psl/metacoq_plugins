@@ -1,5 +1,5 @@
 Require Import MetaCoq.Template.All.
-Import MonadNotation.
+Import MCMonadNotation.
 Require Import String.
 
 
