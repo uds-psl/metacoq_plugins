@@ -3,9 +3,9 @@ name: Test compilation
 on: [push, pull_request]
 
 env:
-  OCAML_VERSION: 4.07.1
+  OCAML_VERSION: 4.07.1+flambda
   COQ_VERSION: 8.12.0
-  METACOQ_VERSION: 1.0~beta2+8.12
+  METACOQ_VERSION: 7281139
 
 jobs:
   build:
@@ -27,12 +27,23 @@ jobs:
       - name: Install OCaml
         uses: avsm/setup-ocaml@v2
         with:
-          ocaml-compiler: ocaml-variants.${{ env.OCAML_VERSION }}+flambda
+          ocaml-compiler: ocaml-variants.${{ env.OCAML_VERSION }}
           opam-local-packages: |
             !*.opam
 
-      - run: opam repo add coq-released https://coq.inria.fr/opam/released
-      - run: opam install coq.${{ env.COQ_VERSION }} coq-metacoq.${{ env.METACOQ_VERSION }}
+      - name: Install Coq
+        run: |
+          opam repo add coq-released https://coq.inria.fr/opam/released
+          opam install coq.${{ env.COQ_VERSION }}
+      - name: Install dev version of MetaCoq (commit ${{ env.METACOQ_VERSION}})
+        run: |
+          opam pin add -n -y -k git coq-metacoq-template.dev "https://github.com/MetaCoq/metacoq.git#${{ env.METACOQ_VERSION }}"
+          opam pin add -n -y -k git coq-metacoq-pcuic.dev "https://github.com/MetaCoq/metacoq.git#${{ env.METACOQ_VERSION }}"
+          opam pin add -n -y -k git coq-metacoq-translations.dev "https://github.com/MetaCoq/metacoq.git#${{ env.METACOQ_VERSION }}"
+          opam install coq-metacoq-template.dev coq-metacoq-pcuic.dev coq-metacoq-translations.dev
 
-      - run: opam install .
+      - name: Compile this project
+        run: opam install .
+
+      - name: Cleanup
       - run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction

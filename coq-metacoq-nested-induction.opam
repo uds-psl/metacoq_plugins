@@ -11,6 +11,6 @@ install: [
 ]
 depends: [
   "coq" {= "8.12.0"}
-  "coq-metacoq-template" {= "1.0~beta2+8.12"}
-  "coq-metacoq-pcuic" {= "1.0~beta2+8.12"}
+  "coq-metacoq-template" {= "dev"}
+  "coq-metacoq-pcuic" {= "dev"}
 ]
