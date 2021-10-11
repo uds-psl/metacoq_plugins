@@ -46,4 +46,4 @@ jobs:
         run: opam install .
 
       - name: Cleanup
-      - run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction
+        run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction
