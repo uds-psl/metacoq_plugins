@@ -5,6 +5,7 @@
 From MetaCoq.Template Require Import utils All.
 From MetaCoq.Translations Require Import translation_utils param_unary param_exists.
 From MetaCoq.Template Require Import Pretty.
+Import MCMonadNotation.
 
 Local Infix "<=" := Nat.leb.
 
@@ -106,7 +107,7 @@ Definition otherParam {A} (t:A) (na:ident->ident) (refTrans:term) (dummy:term) (
           let dummyAppTerm := 
             it_mkLambda_or_LetIn (rev params') 
             (it_mkLambda_or_LetIn (rev indices) 
-            (tLambda nAnon (** instance of ind type **)
+            (tLambda (relevant_aname nAnon) (** instance of ind type **)
             (** lifted params (env lifting for transformation), lifted over indices **)
               (mkApps (lift0 #|indices| (applyEnv env (tApp q (makeRels mind.(ind_npars))))) (makeRels #|indices|))
               (** combined using conn **)

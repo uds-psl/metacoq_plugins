@@ -2,8 +2,8 @@
 
 (*** translation_utils: utils for general translations of inductive types ***)
 
-From MetaCoq.Template Require Import utils All.
-Require Import MetaCoq.Checker.All.
+From MetaCoq.Template Require Import utils Checker All.
+Import MCMonadNotation.
 
 (** applies a term with direct subsitution while creations **)
 (** use case: subst_app (λ x. x) [y] = y **)
@@ -83,11 +83,13 @@ Class Translation :=
 
 Definition tsl_ident (id : ident) : ident := (id ^ "ᵗ").
 
-Definition tsl_name tsl_ident n :=
+Definition tsl_name0 tsl_ident n :=
   match n with
   | nAnon => nAnon
   | nNamed n => nNamed (tsl_ident n)
   end.
+
+Definition tsl_name f := map_binder_annot (tsl_name0 f).
 
 Definition tmDebug {A} : A -> TemplateMonad unit
   := print_nf.

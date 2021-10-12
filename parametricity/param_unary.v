@@ -21,8 +21,6 @@ Definition tsl_ident := tsl_ident_unparam.
 
 
 
-
-
 (**
 Environment mappings are used as a generalized lifting function
 n ↦ S n
@@ -124,6 +122,11 @@ match t with
 | _ => false
 end.
 
+Definition relevant_aname {X} (na:X) :=
+  {| 
+    binder_name := na;
+    binder_relevance := Relevant
+  |}.
 
 (** the unary parametricity translation of an object is
 a relation over the objects **)
@@ -147,14 +150,14 @@ Fixpoint tsl_rec1' (deleteNonTypes:bool) (Env Envt: nat -> nat) (E : tsl_table) 
   | tSort s => (** s ⇒ λ (A:s). A → s **)
   (** s_1: s -> s' and for A:s, s_1 A holds and A_1 : s_1 A **)
   (** a relation over types A of sort s, the s in the end is the property **)
-    tLambda (nNamed "X") (tSort s) (tProd nAnon (tRel 0) (tSort s))
+    tLambda (relevant_aname(nNamed "X")) (tSort s) (tProd (relevant_aname nAnon) (tRel 0) (tSort s))
   | tProd na A B =>
   (** ∀ (x:A). B ⇒ λ(f:∀(x:A_0,B_0)). ∀(x:A_0) (xᵗ:A_1 x). B_1 (f x) **)
   (** the translation relates functions A->B 
     by the relation of their results (B) on related inputs (x) **)
     let generate := isAugmentable A || (negb deleteNonTypes) in
 
-    tLambda (nNamed "f") (tProd na (tsl_rec0_2 Env A) (tsl_rec0_2 (EnvUp Env) B))
+    tLambda (relevant_aname(nNamed "f")) (tProd na (tsl_rec0_2 Env A) (tsl_rec0_2 (EnvUp Env) B))
       (tProd na (tsl_rec0_2 (EnvLift0 Env 1) A)
       (**     x  :  A      **)
                           (** lift over f **)
@@ -264,6 +267,7 @@ Fixpoint tsl_rec1' (deleteNonTypes:bool) (Env Envt: nat -> nat) (E : tsl_table) 
   | tProj _ _ => todo "tsl"
   | tFix _ _ | tCoFix _ _ => todo "tsl"
   | tVar _ | tEvar _ _ => todo "tsl var"
+  | tInt _ | tFloat _ => todo "tsl numeric"
   end.
 
 Notation "'if' x 'is' p 'then' A 'else' B" :=
@@ -380,6 +384,7 @@ Definition tsl_mind_body (prune:bool) (E : tsl_table) (mp : modpath) (kn : kerna
       )
       ind.(ind_ctors)
     ).
+    + exact (ind.(ind_relevance)).
 Defined.
 
 
@@ -434,6 +439,8 @@ Class translated (ref:global_reference) :=
   content : tsl_table (** needed for inductive translations **)
   (** for constants this degenerates to [(ref,contentTerm)] **)
 }.
+
+Import MCMonadNotation.
 
 (** lookup a global reference in the translation database and add its
   translation table to the context **)

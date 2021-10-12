@@ -8,7 +8,7 @@ From MetaCoq.Template Require Import Pretty.
 
 From MetaCoq.Translations Require Import param_unary param_exists param_other.
 
-
+Import MCMonadNotation.
 
 (** define one translation to be an alias to another translation **)
 (** general enough for arbitrary alias definitions **)
@@ -45,7 +45,7 @@ Definition getName (x : nat -> nat) :=
   x <- tmEval cbv x;;
   t <- tmQuote x;;
   match t with 
-  | Ast.tLambda (nNamed na) _ _ => tmReturn na
+  | Ast.tLambda ({| binder_name :=(nNamed na) |}) _ _ => tmReturn na
   | _ => tmReturn "" 
   end.
 

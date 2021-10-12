@@ -56,10 +56,10 @@ Ltac lindebugger p :=
 
 (** debug messages in terms **)
 Definition debugMessage (m:string) (t:term) :=
-    mkApp (tLambda (nNamed m) <% unit %> (lift0 1 t)) <% tt %>.
+    mkApp (tLambda ({| binder_name := nNamed m; binder_relevance:=Relevant |}) <% unit %> (lift0 1 t)) <% tt %>.
 
 Lemma red_beta' 
-  (Σ : global_env) (Γ : context) (na : name) 
+  (Σ : global_env) (Γ : context) (na : aname) 
   (t b a : term) (l : list term) (x:term):
   x=mkApps (b {0 := a}) l ->
   red1 Σ Γ (tApp (tLambda na t b) (a :: l)) x.
@@ -91,17 +91,19 @@ From MetaCoq Require Import Checker.
 Definition dcf := config.default_checker_flags.
 Definition ig := init_graph.
 
+Import MCMonadNotation.
+
 (** print all messages in a term **)
 Fixpoint debugPrint (t:term) : TemplateMonad unit :=
   match t with
   | tEvar _ tl => monad_iter debugPrint tl
   | tCast t1 _ t2
   | tProd _ t1 t2
-  | tLambda _ t1 t2 => debugPrint t1;;debugPrint t2
-  | tLetIn _ t1 t2 t3 => debugPrint t1;;debugPrint t2;;debugPrint t3
+  | tLambda _ t1 t2 => (debugPrint t1 ;; debugPrint t2)
+  | tLetIn _ t1 t2 t3 => (debugPrint t1 ;; debugPrint t2;;debugPrint t3)
   | tApp t tl => 
     match t,tl with
-    | tLambda (nNamed msg) t1 b,[t2] =>
+    | tLambda ({| binder_name := nNamed msg; binder_relevance := Relevant |}) t1 b,[t2] =>
     if @Checker.eq_term dcf ig t1 <% unit %> && @Checker.eq_term dcf ig t2 <% tt %> then
       tmMsg (append "Debug Message: " msg);;
       print_nf b

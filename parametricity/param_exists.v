@@ -30,7 +30,7 @@ transforms a type parameter into a unary predicate
  **)
 Fixpoint augment (t:term) : option term :=
   match t with 
-  | tSort u => Some (tLambda nAnon t (tProd nAnon (tRel 0) t))
+  | tSort u => Some (tLambda (relevant_aname nAnon) t (tProd (relevant_aname(nAnon)) (tRel 0) t))
   | tProd na t1 t2 => 
     if augment t2 is Some t2' then
     (Some
@@ -47,7 +47,8 @@ Fixpoint augment (t:term) : option term :=
 
 Definition on_fst {X Y Z} (f:X->Z) (p:X*Y) := match p with (x,y) => (f x,y) end.
 
-Definition name_map f (na:name) := if na is nNamed id then nNamed (f id) else nAnon.
+Definition name_map0 f (na:name) := if na is nNamed id then nNamed (f id) else nAnon.
+Definition name_map f := map_binder_annot (name_map0 f).
 
 (** transforms a list of parameters and add new ones (the predicates) if possible **)
 Fixpoint transformParams (env:Env) (params:context) : context*Env :=
@@ -126,7 +127,7 @@ Fixpoint tsl_rec1' (E : tsl_table) (oldParamCount argCount:nat) (rec:term) (recI
   | tProd na t1 t2 => 
   (** ∀ x:A. B → λ (f:∀x:A. B). ∃ x:A. B (f x) **)
   if tsl_rec1' E oldParamCount argCount rec recInd t2 is Some r then
-    Some (tLambda nAnon t (
+    Some (tLambda (relevant_aname(nAnon)) t (
       tExists na (lift0 1 t1) (** universe problems **)
       (
         subst_app (lift0 1 r) [tApp (tRel 1) [tRel 0]]
@@ -184,7 +185,7 @@ Definition tsl_mind_body (prune:bool) (E : tsl_table) (mp : modpath) (kn : kerna
         let (ctx,tb) := decompose_prod_context (remove_arity mind.(ind_npars) ind.(ind_type)) in
         it_mkProd_or_LetIn paramlist (
           it_mkProd_or_LetIn ctx (** indices **)
-          (tProd nAnon 
+          (tProd (relevant_aname(nAnon ))
           (mkApps (lift0 #|ctx| (applyEnv env (tApp (tInd (mkInd kn i) []) (makeRels mind.(ind_npars))))) (makeRels #|ctx|)) (** old type with params **)
             (lift0 1 tb))) (** later tProd element **)
       ).
@@ -235,7 +236,7 @@ Definition tsl_mind_body (prune:bool) (E : tsl_table) (mp : modpath) (kn : kerna
           (let ctor_type := 
           it_mkProd_or_LetIn paramlist (
           it_mkProd_or_LetIn (rev args) (
-            tProd nAnon augArg
+            tProd (relevant_aname(nAnon)) augArg
             (lift0 1 tb')
           )) in
           (** name constructor **)
@@ -246,6 +247,7 @@ Definition tsl_mind_body (prune:bool) (E : tsl_table) (mp : modpath) (kn : kerna
           else acc
         ) args [])
     ).
+    + exact (ind.(ind_relevance)).
 Defined.
 
 (** removed the modpath in front of the identifier **)
@@ -274,6 +276,8 @@ Class existtranslated (ref:global_reference) :=
   content : tsl_table (** needed for inductive translations **)
   (** for constants this degenerates to [(ref,contentTerm)] **)
 }.
+
+Import MCMonadNotation.
 
 (** lookup a global reference in the translation database and add its
   translation table to the context **)
