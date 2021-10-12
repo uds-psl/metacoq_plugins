@@ -43,7 +43,9 @@ jobs:
           opam install coq-metacoq-template.dev coq-metacoq-pcuic.dev coq-metacoq-translations.dev
 
       - name: Compile this project
-        run: opam install .
+        run: |
+          opam install coq-metacoq-parametricity
+          opam install coq-metacoq-nested-induction
 
       - name: Cleanup
         run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction
