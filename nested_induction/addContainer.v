@@ -27,11 +27,17 @@ Open Scope string_scope.
 Require Import helperGen.
 Require Import removeNonAug.
 
-Definition nameAppend (n:name) (s:ident) :=
+Definition relevant_aname {X} (x:X) :=
+  {| binder_name := x; binder_relevance := Relevant |}.
+
+Definition nameAppend0 (n:name) (s:ident) :=
   match n with
     nAnon => nNamed s
   | nNamed s2 => nNamed (append s2 s)
   end.
+
+Definition nameAppend (n:aname) (s:ident) :=
+  map_binder_annot (fun n => nameAppend0 n s) n.
 
 (*
 manage nested, guarded
@@ -105,7 +111,7 @@ Fixpoint augmentType (ind:term) (assumption:option term) (args fullargs:list ter
       let arguments :=
         vass na t1::
         if sortType then 
-          vass (nameAppend na "P") (tProd nAnon (* P:X->Type *)
+          vass (nameAppend na "P") (tProd (relevant_aname nAnon) (* P:X->Type *)
             (tRel 0)
             (* (trans <% Prop %>) *)
             (* (trans <% nat %>) *)
@@ -115,7 +121,7 @@ Fixpoint augmentType (ind:term) (assumption:option term) (args fullargs:list ter
           (
             if assumption then
               [vass (nameAppend na "H")
-              (tProd (nNamed "x") (* H:forall (x:X), P x *)
+              (tProd (relevant_aname(nNamed "x")) (* H:forall (x:X), P x *)
                 (tRel 1)
                 (tApp (tRel 1) (tRel 0))
               ) ]
@@ -142,7 +148,7 @@ Fixpoint augmentType (ind:term) (assumption:option term) (args fullargs:list ter
           t2
       )
   | _ => 
-      tProd nAnon 
+      tProd (relevant_aname nAnon)
         (mkApps ind args)
         (
           match assumption with
