@@ -17,9 +17,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: "~/.opam"
-          key: opam-${{ matrix.target }}-${{github.base_ref}}-${{github.ref}} 
+          key: opamcache-${{ matrix.target }}-${{github.base_ref}}-${{github.ref}} 
           restore-keys: |
-            opam-${{ matrix.target }}--refs/heads/${{github.base_ref}}
+            opamcache-${{ matrix.target }}--refs/heads/${{github.base_ref}}
 
       - name: Checkout code
         uses: actions/checkout@v2
