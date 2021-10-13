@@ -33,7 +33,7 @@ jobs:
         run:  opam repo add coq-released https://coq.inria.fr/opam/released
 
       - name: Install Coq
-        if: steps.opam-cache.outputs.cache-hit != 'true'
+#        if: steps.opam-cache.outputs.cache-hit != 'true'
         run: |
           opam install coq.${{ env.COQ_VERSION }}
 
@@ -44,7 +44,7 @@ jobs:
           opam pin add -n -y -k git coq-metacoq-translations.dev "https://github.com/MetaCoq/metacoq.git#${{ env.METACOQ_VERSION }}"
 
       - name: Install dev version of MetaCoq (commit ${{ env.METACOQ_VERSION}})
-        if: steps.opam-cache.outputs.cache-hit != 'true'
+#        if: steps.opam-cache.outputs.cache-hit != 'true'
         run: |
           opam install coq-metacoq-template.dev coq-metacoq-pcuic.dev coq-metacoq-translations.dev
 
