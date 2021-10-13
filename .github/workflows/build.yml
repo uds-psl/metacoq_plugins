@@ -37,13 +37,19 @@ jobs:
           opam repo add coq-released https://coq.inria.fr/opam/released
           opam install coq.${{ env.COQ_VERSION }}
 
-      - name: Install dev version of MetaCoq (commit ${{ env.METACOQ_VERSION}})
-        if: steps.opam-cache.outputs.cache-hit != 'true'
+      - name: Pin dev version of MetaCoq (commit ${{ env.METACOQ_VERSION}})
         run: |
           opam pin add -n -y -k git coq-metacoq-template.dev "https://github.com/MetaCoq/metacoq.git#${{ env.METACOQ_VERSION }}"
           opam pin add -n -y -k git coq-metacoq-pcuic.dev "https://github.com/MetaCoq/metacoq.git#${{ env.METACOQ_VERSION }}"
           opam pin add -n -y -k git coq-metacoq-translations.dev "https://github.com/MetaCoq/metacoq.git#${{ env.METACOQ_VERSION }}"
+
+      - name: Install dev version of MetaCoq (commit ${{ env.METACOQ_VERSION}})
+        if: steps.opam-cache.outputs.cache-hit != 'true'
+        run: |
           opam install coq-metacoq-template.dev coq-metacoq-pcuic.dev coq-metacoq-translations.dev
+
+      - name: List installed opam packages
+        run: opam list --installed
 
       - name: Compile this project
         run: opam install .
