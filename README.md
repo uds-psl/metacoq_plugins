@@ -5,10 +5,10 @@
 ```sh
 opam repo add coq-released https://coq.inria.fr/opam/released
 
-set METACOQ_VERSION=7281139
-opam pin add -n -y -k git coq-metacoq-template.dev "https://github.com/MetaCoq/metacoq.git#$.METACOQ_VERSION"
-opam pin add -n -y -k git coq-metacoq-pcuic.dev "https://github.com/MetaCoq/metacoq.git#$env.METACOQ_VERSION"
-opam pin add -n -y -k git coq-metacoq-translations.dev "https://github.com/MetaCoq/metacoq.git#$env.METACOQ_VERSION"
+METACOQ_VERSION=7281139
+opam pin add -n -y -k git coq-metacoq-template.dev "https://github.com/MetaCoq/metacoq.git#$METACOQ_VERSION"
+opam pin add -n -y -k git coq-metacoq-pcuic.dev "https://github.com/MetaCoq/metacoq.git#$METACOQ_VERSION"
+opam pin add -n -y -k git coq-metacoq-translations.dev "https://github.com/MetaCoq/metacoq.git#$METACOQ_VERSION"
 
 opam install .
 ```
@@ -18,10 +18,10 @@ opam install .
 ```sh
 opam repo add coq-released https://coq.inria.fr/opam/released
 
-set METACOQ_VERSION=7281139
-opam pin add -n -y -k git coq-metacoq-template.dev "https://github.com/MetaCoq/metacoq.git#$.METACOQ_VERSION"
-opam pin add -n -y -k git coq-metacoq-pcuic.dev "https://github.com/MetaCoq/metacoq.git#$env.METACOQ_VERSION"
-opam pin add -n -y -k git coq-metacoq-translations.dev "https://github.com/MetaCoq/metacoq.git#$env.METACOQ_VERSION"
+METACOQ_VERSION=7281139
+opam pin add -n -y -k git coq-metacoq-template.dev "https://github.com/MetaCoq/metacoq.git#$METACOQ_VERSION"
+opam pin add -n -y -k git coq-metacoq-pcuic.dev "https://github.com/MetaCoq/metacoq.git#$METACOQ_VERSION"
+opam pin add -n -y -k git coq-metacoq-translations.dev "https://github.com/MetaCoq/metacoq.git#$METACOQ_VERSION"
 ```
 
 To compile a subproject with name `SUBPROJECT` use `make -C SUBPROJECT`. E.g. use `make -C parametricity` to compile the parametricity plugin.
