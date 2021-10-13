@@ -21,6 +21,9 @@ jobs:
           restore-keys: |
             opam-${{ matrix.target }}--refs/heads/${{github.base_ref}}
 
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Install OCaml
         if: steps.opam-cache.outputs.cache-hit != 'true'
         uses: avsm/setup-ocaml@v2
@@ -28,9 +31,6 @@ jobs:
           ocaml-compiler: ocaml-variants.${{ env.OCAML_VERSION }}
           opam-local-packages: |
             !*.opam
-
-      - name: Checkout code
-        uses: actions/checkout@v2
 
       - name: Install Coq
         if: steps.opam-cache.outputs.cache-hit != 'true'
