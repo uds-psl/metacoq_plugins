@@ -13,4 +13,5 @@ depends: [
   "coq" {= "8.12.0"}
   "coq-metacoq-template" {= "dev"}
   "coq-metacoq-pcuic" {= "dev"}
+  "coq-metacoq-parametricity" {= "dev+8.12"}
 ]
