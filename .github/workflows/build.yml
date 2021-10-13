@@ -31,10 +31,12 @@ jobs:
           opam-local-packages: |
             !*.opam
 
+      - name: Add Coq opam repository
+        run:  opam repo add coq-released https://coq.inria.fr/opam/released
+
       - name: Install Coq
         if: steps.opam-cache.outputs.cache-hit != 'true'
         run: |
-          opam repo add coq-released https://coq.inria.fr/opam/released
           opam install coq.${{ env.COQ_VERSION }}
 
       - name: Pin dev version of MetaCoq (commit ${{ env.METACOQ_VERSION}})
