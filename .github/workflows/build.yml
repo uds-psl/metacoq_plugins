@@ -42,10 +42,8 @@ jobs:
           opam pin add -n -y -k git coq-metacoq-translations.dev "https://github.com/MetaCoq/metacoq.git#${{ env.METACOQ_VERSION }}"
           opam install coq-metacoq-template.dev coq-metacoq-pcuic.dev coq-metacoq-translations.dev
 
-      - name: Compile this project
-        run: |
-          opam install coq-metacoq-parametricity
-          opam install coq-metacoq-nested-induction
+      # - name: Compile this project
+      #   run: opam install .
 
-      - name: Cleanup
-        run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction
+      # - name: Cleanup
+      #   run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction
