@@ -30,7 +30,6 @@ jobs:
           ocaml-version: ${{env.OCAML_VERSION}}
 
       - name: Add Coq opam repository
-        if: steps.opam-cache.outputs.cache-hit != 'true'
         run:  opam repo add coq-released https://coq.inria.fr/opam/released
 
       - name: Install Coq
@@ -52,8 +51,8 @@ jobs:
       - name: List installed opam packages
         run: opam list --installed
 
-      - name: Compile this project
-        run: opam install .
+      # - name: Compile this project
+      #   run: opam install .
 
-      - name: Cleanup
-        run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction
+      # - name: Cleanup
+      #   run: opam remove coq-metacoq-parametricity coq-metacoq-nested-induction
