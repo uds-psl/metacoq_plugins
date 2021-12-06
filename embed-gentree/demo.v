@@ -25,7 +25,10 @@ Print Ntree.
                 * 3   2    1
    can be represented as NBranch 4 [NLeaf 3; NLeaf 2; NLeaf 1]
  *)
-MetaCoq Run Derive Pickle for form.
+ MetaCoq Run Derive Pickle for form.
+ MetaCoq Run Derive Unpickle for form.
+
+
 (* When form is pickled, nat is automatically pickeled too, but not remembered yet.
    The nested inductives are currently only analyzed 1 level deep 
    (i.e. ind T := a :  T1 -> T ; ind T1 := t1: T2 -> T1 ; ind T2 , when trying to pickle T, it would not be inferred that T has to be picklable)
@@ -49,7 +52,7 @@ Print Pickle_mlbin.
 Lots of interesting types are contained in moreExamples.v
  *)
 
-MetaCoq Run Derive Unpickle for form. 
+(* MetaCoq Run Derive Unpickle for form.  *)
 MetaCoq Run Derive Unpickle for nat.
 MetaCoq Run Derive Unpickle for prod.
 MetaCoq Run Derive Unpickle for mlbin.
@@ -65,40 +68,42 @@ Fail MetaCoq Run Derive Unpickle for Vector.
  * unpickle (pickle p)) = (Some p)
  * We can show this using an easy induction. It could be further automated by using some clever Ltac / could be generated automatically.
  *)
+
+ Ltac rewrite_hyp :=
+   match goal with
+   | [E : pcancel _ _ |- _ ] => unfold pcancel in E
+   | [E : context [eq] |- _ ] => unfold pcancel in E; repeat rewrite E; clear E
+   end.
+
+ Ltac doit := intros n; induction n; cbn; repeat rewrite_hyp; try autorewrite with pickle; try reflexivity.
+              
+
 Lemma CancelNat : pcancel Pickle_nat Unpickle_nat. 
-Proof.
-  intro n. induction n.
-   - reflexivity.
-   - simpl Unpickle_nat.  rewrite IHn. auto.
+ Proof.
+   doit.
 Defined.
+
+Hint Rewrite CancelNat : pickle.
 
 Lemma CancelProd (A: Type) pA upA (H1: pcancel pA upA) (B: Type) pB upB (H2: pcancel pB upB) : pcancel (Pickle_prod A pA B pB) (Unpickle_prod A upA B upB).  
-Proof.
-  intro p. induction p.
-   - simpl Unpickle_prod. rewrite H1. rewrite H2. 
-   reflexivity.
-Defined.
+ Proof.
+   doit.
+ Defined.
 
 Lemma CancelForm : pcancel Pickle_form Unpickle_form. 
-Proof.
-  intro f.
-  induction f.
-  -   simpl Unpickle_form. pose (CancelNat n). unfold Pickle_nat in e. (* This is a bit hard to do without automation, but could use some clever ltac / automatic generation of principles *)
-      unfold Unpickle_nat in e. rewrite e. reflexivity.
-  -   simpl Unpickle_form. rewrite IHf1.  rewrite IHf2. reflexivity.
-  -   simpl Unpickle_form. rewrite IHf.  reflexivity.
-  -   simpl Unpickle_form. rewrite IHf1. rewrite IHf2.  reflexivity.
-  Show Proof.     
+ Proof.
+   doit.
 Defined.
 
+Hint Rewrite CancelProd : pickle.
+
 Lemma CancelMlbin (A: Type) pA upA (H: pcancel pA upA) : pcancel (Pickle_mlbin A pA) (Unpickle_mlbin A upA). 
-Proof.
-  intro b.
-  induction b.
-  -   pose (CancelProd A pA upA H A pA upA H).  unfold pcancel in p0.  unfold Pickle_prod in p0. unfold Unpickle_prod in p0.
-      simpl Unpickle_mlbin. simpl Pickle_mlbin.  
-      rewrite (p0 p). reflexivity.
-  -   cbv. rewrite H. reflexivity. 
+ Proof.
+   intros t; induction t.
+   - cbn [Pickle_mlbin]. pose (CancelProd A pA upA H A pA upA H).
+     unfold Pickle_prod, Unpickle_prod in p0. cbn.
+     now repeat rewrite_hyp.
+   - cbn. now repeat rewrite_hyp.
 Qed.
 
 (** 
@@ -106,46 +111,26 @@ Qed.
  *)
 
 
-Lemma EqDecMlbin (A: Type) (pA: Pickle A) upA (H: pcancel pA upA) : forall (x y: mlbin A), {x = y} + {x <> y}. 
+Lemma EqDecGen (A: Type) (pA: Pickle A) upA (H: pcancel pA upA) : forall (x y: A), {x = y} + {x <> y}. 
 Proof.
   intros x y.
-  decide ((Pickle_mlbin A pA x) = (Pickle_mlbin A pA y)).
-  left.  apply (f_equal (Unpickle_mlbin A upA)) in e. repeat rewrite (CancelMlbin A pA upA H) in e. inversion e. auto.
-   right. intro. apply n. apply (f_equal (Pickle_mlbin A pA)) in H0. congruence.
+  decide ((pA x) = (pA y)).
+  left.  apply (f_equal (upA)) in e. repeat rewrite (H) in e. inversion e. auto.
+   right. intro. apply n. apply (f_equal (pA)) in H0. congruence.
 Qed.
-
-
-(**
-   Since the equality decider proofs are quite generic, we use a short Ltac script to generate them.
- **)
-Ltac prove_equality p up cancel := intros a b ; decide ((p a) = (p b)); [left;
-                                                                         (match  goal with
-    | [ H : ?a = ?b  |- _ ] => idtac H; apply (f_equal (up)) in H; repeat rewrite cancel in H; inversion H; reflexivity
-    | _ => idtac
-  end)
-
-                                                                        |
-                                                                        right; intro;
-                                                                        (match  goal with
-    | [ H : (?a) = (?b)  |- _ ] =>   apply (f_equal p) in H; congruence
-    | _ => idtac
-  end)
-                                                                         
-                                                                        ].
 
 (** Yay! Now we can get an equality decider  for free
      
  *)
 Lemma form_eq_dec: forall (f1 f2: form), {f1 = f2} + {f1 <> f2}.
-Proof.
-  prove_equality Pickle_form Unpickle_form CancelForm.
+ Proof.
+   eapply EqDecGen. eapply CancelForm.
 Defined.   
 
 Lemma EqDecMlbin' (A: Type) (pA: Pickle A) upA (H: pcancel pA upA) : forall (x y: mlbin A), {x = y} + {x <> y}.
-  
-  prove_equality (Pickle_mlbin A pA) (Unpickle_mlbin A upA) (CancelMlbin A pA upA H).
+ Proof.
+   eapply EqDecGen. eapply CancelMlbin; eauto.
 Defined.
-
 
 Definition form_bool_dec (f1 f2: form) := if form_eq_dec f1 f2 then true else false.
 (* The generated equality deciders work as expected. *)
@@ -332,7 +317,7 @@ Definition count_nat_rosetree (n: nat) := ( (proj1_sig (rose_countable nat Pickl
 
 Lemma rose_eq_dec (A: Type) (pA: Pickle A) (upA: Unpickle A) (H: pcancel pA upA) : forall (r1 r2: rose A), {r1 = r2} + {r1 <> r2}.
 Proof.
-  prove_equality (Pickle_rose A pA) (Unpickle_rose A upA) (CancelRose A pA upA H).
+  eapply EqDecGen. eapply CancelRose; eauto.
 Defined.   
 
 (** That concludes our demo of the gherkin plugin,
