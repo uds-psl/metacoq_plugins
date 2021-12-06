@@ -1,11 +1,13 @@
- Require Import gherkin. 
- Require Import gentree.
- Require Import String List Lia.
- Import ListNotations.
-(** 
+Require Import gherkin. 
+Require Import gentree.
+Require Import String List Lia.
+Import ListNotations.
+
+(**
  * First we define some inducitve types
  *)
- Inductive form := Var (n: nat) | Imp (f1 f2: form) | Box (f: form) | And (f1 f2: form) .
+Inductive form := Var (n: nat) | Imp (f1 f2: form) | Box (f: form) | And (f1 f2: form) .
+
 
 Inductive mlbin (A: Type):= node: A *  A -> mlbin A | bleaf: A -> mlbin A .
 
@@ -69,19 +71,26 @@ Fail MetaCoq Run Derive Unpickle for Vector.
  * We can show this using an easy induction. It could be further automated by using some clever Ltac / could be generated automatically.
  *)
 
+ Inductive Locked {A : Type} :=
+   | Lock (a : A) : Locked.
+
+ Ltac lock H := eapply Lock in H.
+
  Ltac rewrite_hyp :=
    match goal with
+   (* | [E : Lock _ |- _ ] => fail 0 *)
    | [E : pcancel _ _ |- _ ] => unfold pcancel in E
-   | [E : context [eq] |- _ ] => unfold pcancel in E; repeat rewrite E; clear E
+   | [E : context [eq] |- _ ] => unfold pcancel in E; rewrite E; eauto
    end.
 
- Ltac doit := intros n; induction n; cbn; repeat rewrite_hyp; try autorewrite with pickle; try reflexivity.
+
+Ltac doit := intros n; induction n; cbn; intros; repeat rewrite_hyp; try autorewrite with pickle; try reflexivity; intros.
               
 
 Lemma CancelNat : pcancel Pickle_nat Unpickle_nat. 
- Proof.
+Proof.
    doit.
-Defined.
+Qed.
 
 Hint Rewrite CancelNat : pickle.
 
@@ -95,21 +104,21 @@ Lemma CancelForm : pcancel Pickle_form Unpickle_form.
    doit.
 Defined.
 
+(* Require Import Unicoq.Unicoq. *)
+(* Require Import ssreflect. *)
+(*  Set Unicoq Super Aggressive. *)
+
 Hint Rewrite CancelProd : pickle.
 
 Lemma CancelMlbin (A: Type) pA upA (H: pcancel pA upA) : pcancel (Pickle_mlbin A pA) (Unpickle_mlbin A upA). 
  Proof.
-   intros t; induction t.
-   - cbn [Pickle_mlbin]. pose (CancelProd A pA upA H A pA upA H).
-     unfold Pickle_prod, Unpickle_prod in p0. cbn.
-     now repeat rewrite_hyp.
-   - cbn. now repeat rewrite_hyp.
+   doit.
+   setoid_rewrite CancelProd; eauto. 
 Qed.
 
-(** 
+ (**
  * Now we can quite easily obtain equality deciders for the types.
  *)
-
 
 Lemma EqDecGen (A: Type) (pA: Pickle A) upA (H: pcancel pA upA) : forall (x y: A), {x = y} + {x <> y}. 
 Proof.
@@ -268,15 +277,15 @@ Compute (Unpickle_rose nat Unpickle_nat (Pickle_rose nat Pickle_nat (rtree nat [
 (* We need a stronger cancellation lemma for lists 
    (i.e. we do not need (Unpickle_A (Pickle_A a)) = Some a for every a 
    but only for the elements in the list *)
-Lemma List_PCancel (A: Type) (pA: Pickle A) (upA: Unpickle A) (l: list A):
+
+Definition pcancel_upto {A: Type} (P : A -> Prop) (f: Pickle A) (g: Unpickle A) := forall (a: A), P a -> (g (f a)) = Some a.
+
+ Lemma List_PCancel (A: Type) (pA: Pickle A) (upA: Unpickle A) l :
   (forall a, In a l -> (upA (pA a)) = Some a) -> (Unpickle_list A upA (Pickle_list A pA l)) = Some l.
-Proof.
-  intro.
-  induction l.
-  - cbv. auto.
-  - simpl Pickle_list.  simpl Unpickle_list. rewrite IHl. rewrite H. reflexivity.
-    auto. intros h H1. apply H. right. auto.
-Qed.
+ Proof.
+   revert l. doit.
+ Qed.
+
 (* Proving the cancellation property for rose is quite difficult.
  * It needs the stronger version of the cancellation lemma for Lists.
  *)
@@ -287,26 +296,9 @@ Proof.
   
   intro r.
   induction r using roseInd'.
-  -  simpl Pickle_rose. unfold Unpickle_rose.  
-     
-    induction xs. simpl. reflexivity.
-     
-    destruct (Nat.eqb 1 1) eqn:h1.  destruct (Nat.eqb 0 1) eqn:h2. 
-    + assert (Nat.eqb 0 1 = false) by eauto. congruence.
-    +  cbv. cbn.  
-       simpl.   simpl. unfold Unpickle_rose in IHxs. unfold Pickle_rose in IHxs.
-     repeat rewrite (List_PCancel (rose A) (Pickle_rose A pA) (Unpickle_rose A upA)).
-     rewrite (List_PCancel (rose A) (Pickle_rose A pA) (Unpickle_rose A upA)) in IHxs.
-
-     cbn in IHxs. rewrite H0.   reflexivity.
-     left. reflexivity.
-     intros a1 Ha1. apply H0.
-     right. auto.
-     intros a1 Ha1. apply H0.
-     right. auto.
-    + inversion h1.
+  - cbn. now setoid_rewrite List_PCancel.
   -  cbv. rewrite H. reflexivity.
-Qed.     
+Qed.
 
 (* We now get decidability + countability for free *)
 Lemma rose_countable (A: Type) (pA: Pickle A) (upA: Unpickle A) (H: pcancel pA upA): countable_list__T (rose A).
