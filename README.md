@@ -22,6 +22,8 @@ METACOQ_VERSION=7281139
 opam pin add -n -y -k git coq-metacoq-template.dev "https://github.com/MetaCoq/metacoq.git#$METACOQ_VERSION"
 opam pin add -n -y -k git coq-metacoq-pcuic.dev "https://github.com/MetaCoq/metacoq.git#$METACOQ_VERSION"
 opam pin add -n -y -k git coq-metacoq-translations.dev "https://github.com/MetaCoq/metacoq.git#$METACOQ_VERSION"
+
+opam install . --deps-only
 ```
 
 To compile a subproject with name `SUBPROJECT` use `make -C SUBPROJECT`. E.g. use `make -C parametricity` to compile the parametricity plugin.

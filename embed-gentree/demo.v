@@ -3,105 +3,51 @@ Require Import gentree.
 Require Import String List Lia.
 Import ListNotations.
 
-(**
- * First we define some inducitve types
- *)
-Inductive form := Var (n: nat) | Imp (f1 f2: form) | Box (f: form) | And (f1 f2: form) .
-
+Inductive form := Var (n: nat) | Imp (f1 f2: form) | Box (f: form) | And (f1 f2: form).
 
 Inductive mlbin (A: Type):= node: A *  A -> mlbin A | bleaf: A -> mlbin A .
 
-
-Inductive Vector (A : Type) : nat -> Type :=
-    nilV : Vector A 0
-  | consV : forall n : nat, A -> Vector A n -> Vector A (S n).
-Print Ntree. 
-(* Let's generate a pickle function for form. 
-   The generated function will embed forms into a general tree type called Ntree.
-
-   Ltrees can either be a leaf with a natural number attached or a branch, that is a number and a list of subtrees 
-                     * 4
-                   /  | \
-                  /   |  \
-                 /    |   \
-                * 3   2    1
-   can be represented as NBranch 4 [NLeaf 3; NLeaf 2; NLeaf 1]
- *)
- MetaCoq Run Derive Pickle for form.
- MetaCoq Run Derive Unpickle for form.
+MetaCoq Run Derive Pickle for form.
+MetaCoq Run Derive Unpickle for form.
 
 
 (* When form is pickled, nat is automatically pickeled too, but not remembered yet.
    The nested inductives are currently only analyzed 1 level deep 
    (i.e. ind T := a :  T1 -> T ; ind T1 := t1: T2 -> T1 ; ind T2 , when trying to pickle T, it would not be inferred that T has to be picklable)
+
+TODO YF: what?
  *)
 MetaCoq Run Derive Pickle for nat.
 MetaCoq Run Derive Pickle for prod.
 MetaCoq Run Derive Pickle for mlbin.
-
-Fail MetaCoq Run Derive Pickle for Vector.
-(* Let's take a look at the generated functions:
-   They basically remember the constructor number and recursively pickle the constructors fields.
-
-  Note that parameters are also dealt with.
-*)
-Print Pickle_form.
-Print Pickle_mlbin.
-(* The inverse function unpickle can also be generated. Since pickle must only be injective and not surjective,  it maps from Ntrees into option T.
-
- However this plugin has limitations: Types having indices (i.e. deduction systems, Vectors, etc.) can currently not be pickled, so Dark Dieter will have to pickle his type by hand.
-
-Lots of interesting types are contained in moreExamples.v
- *)
-
-(* MetaCoq Run Derive Unpickle for form.  *)
 MetaCoq Run Derive Unpickle for nat.
 MetaCoq Run Derive Unpickle for prod.
 MetaCoq Run Derive Unpickle for mlbin.
+ 
+Ltac rewrite_hyp :=
+  match goal with
+  | [E : pcancel _ _ |- _ ] => unfold pcancel in E
+  | [E : context [eq] |- _ ] => rewrite E; eauto
+  end.
 
-(* Let's take a look at those too *)
-Print Unpickle_form.
-
-Fail MetaCoq Run Derive Unpickle for Vector.
-
-(**
- * Now that we have the pickle functions all that is left to do inorder to proof countability / equality deciders is to show that the generated functions have a certain
- * cancellation property:
- * unpickle (pickle p)) = (Some p)
- * We can show this using an easy induction. It could be further automated by using some clever Ltac / could be generated automatically.
- *)
-
- Inductive Locked {A : Type} :=
-   | Lock (a : A) : Locked.
-
- Ltac lock H := eapply Lock in H.
-
- Ltac rewrite_hyp :=
-   match goal with
-   (* | [E : Lock _ |- _ ] => fail 0 *)
-   | [E : pcancel _ _ |- _ ] => unfold pcancel in E
-   | [E : context [eq] |- _ ] => unfold pcancel in E; rewrite E; eauto
-   end.
-
-
-Ltac doit := intros n; induction n; cbn; intros; repeat rewrite_hyp; try autorewrite with pickle; try reflexivity; intros.
+Ltac prove_pcancel := intros n; induction n; cbn; intros; repeat rewrite_hyp; try autorewrite with pickle; try reflexivity; intros.
               
 
 Lemma CancelNat : pcancel Pickle_nat Unpickle_nat. 
 Proof.
-   doit.
+  prove_pcancel.
 Qed.
 
 Hint Rewrite CancelNat : pickle.
 
 Lemma CancelProd (A: Type) pA upA (H1: pcancel pA upA) (B: Type) pB upB (H2: pcancel pB upB) : pcancel (Pickle_prod A pA B pB) (Unpickle_prod A upA B upB).  
- Proof.
-   doit.
- Defined.
+Proof.
+  prove_pcancel.
+Defined.
 
 Lemma CancelForm : pcancel Pickle_form Unpickle_form. 
- Proof.
-   doit.
+Proof.
+  prove_pcancel.
 Defined.
 
 (* Require Import Unicoq.Unicoq. *)
@@ -112,12 +58,12 @@ Hint Rewrite CancelProd : pickle.
 
 Lemma CancelMlbin (A: Type) pA upA (H: pcancel pA upA) : pcancel (Pickle_mlbin A pA) (Unpickle_mlbin A upA). 
  Proof.
-   doit.
-   setoid_rewrite CancelProd; eauto. 
+   prove_pcancel.
+   setoid_rewrite CancelProd; eauto. (* TODO YF:  *)
 Qed.
 
  (**
- * Now we can quite easily obtain equality deciders for the types.
+ * Equality deciders
  *)
 
 Lemma EqDecGen (A: Type) (pA: Pickle A) upA (H: pcancel pA upA) : forall (x y: A), {x = y} + {x <> y}. 
@@ -128,9 +74,6 @@ Proof.
    right. intro. apply n. apply (f_equal (pA)) in H0. congruence.
 Qed.
 
-(** Yay! Now we can get an equality decider  for free
-     
- *)
 Lemma form_eq_dec: forall (f1 f2: form), {f1 = f2} + {f1 <> f2}.
  Proof.
    eapply EqDecGen. eapply CancelForm.
@@ -280,24 +223,25 @@ Compute (Unpickle_rose nat Unpickle_nat (Pickle_rose nat Pickle_nat (rtree nat [
 
 Definition pcancel_upto {A: Type} (P : A -> Prop) (f: Pickle A) (g: Unpickle A) := forall (a: A), P a -> (g (f a)) = Some a.
 
- Lemma List_PCancel (A: Type) (pA: Pickle A) (upA: Unpickle A) l :
+Lemma List_PCancel (A: Type) (pA: Pickle A) (upA: Unpickle A) l :
   (forall a, In a l -> (upA (pA a)) = Some a) -> (Unpickle_list A upA (Pickle_list A pA l)) = Some l.
- Proof.
-   revert l. doit.
- Qed.
+Proof.
+  revert l. prove_pcancel.
+Qed.
 
 (* Proving the cancellation property for rose is quite difficult.
  * It needs the stronger version of the cancellation lemma for Lists.
  *)
 
+Ltac prove_pcancel_using H := intros n; induction n using H; cbn; intros; repeat rewrite_hyp; try autorewrite with pickle; try reflexivity; intros.
+
+Hint Rewrite List_PCancel : pickle.
+
 Lemma CancelRose (A: Type) (pA: Pickle A) (upA: Unpickle A) (H: pcancel pA upA):
   pcancel (Pickle_rose A pA) (Unpickle_rose A upA).
 Proof.
-  
-  intro r.
-  induction r using roseInd'.
-  - cbn. now setoid_rewrite List_PCancel.
-  -  cbv. rewrite H. reflexivity.
+  prove_pcancel_using roseInd'.
+  now setoid_rewrite List_PCancel.
 Qed.
 
 (* We now get decidability + countability for free *)
@@ -311,7 +255,3 @@ Lemma rose_eq_dec (A: Type) (pA: Pickle A) (upA: Unpickle A) (H: pcancel pA upA)
 Proof.
   eapply EqDecGen. eapply CancelRose; eauto.
 Defined.   
-
-(** That concludes our demo of the gherkin plugin,
-    Some more examples of 'harder to pickle' types are contained in the file examples.v    
- **)
