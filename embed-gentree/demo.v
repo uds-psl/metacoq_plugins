@@ -204,6 +204,12 @@ Inductive rose (A: Type) := rleaf (a: A) | rtree (l: list (rose A)).
 Hypothesis roseInd' :
   forall A, forall (P: rose A -> Prop), (forall xs, (forall x, In x xs -> P x) -> P (rtree A xs)) -> (forall a, P (rleaf A a)) ->
                           forall (x: rose A), P x.
+
+Hypothesis roseInd'' :
+  forall A, forall (P: rose A -> Prop), (forall xs, Forall P xs -> P (rtree A xs)) -> (forall a, P (rleaf A a)) ->
+                          forall (x: rose A), P x.
+
+
 MetaCoq Run Derive Pickle for rose. 
 MetaCoq Run Derive Unpickle for rose. 
 
@@ -227,18 +233,36 @@ Proof.
   revert l. prove_pcancel.
 Qed.
 
+Lemma List_PCancel' (A: Type) (pA: Pickle A) (upA: Unpickle A) l :
+  (Forall (fun a => (upA (pA a)) = Some a) l) -> (Unpickle_list A upA (Pickle_list A pA l)) = Some l.
+Proof.
+  prove_pcancel.
+Qed.
+
 (* Proving the cancellation property for rose is quite difficult.
  * It needs the stronger version of the cancellation lemma for Lists.
  *)
 
 Ltac prove_pcancel_using H := intros n; induction n using H; cbn; intros; repeat rewrite_hyp; eauto with pickle; intros.
 
+
+Section old.
 Hint Extern 0 => setoid_rewrite List_PCancel : pickle.
 
 Lemma CancelRose (A: Type) (pA: Pickle A) (upA: Unpickle A) (H: pcancel pA upA):
   pcancel (Pickle_rose A pA) (Unpickle_rose A upA).
 Proof.
   prove_pcancel_using roseInd'.
+Qed.
+
+Section old.
+
+Hint Extern 0 => setoid_rewrite List_PCancel' : pickle.
+
+Lemma CancelRose' (A: Type) (pA: Pickle A) (upA: Unpickle A) (H: pcancel pA upA):
+  pcancel (Pickle_rose A pA) (Unpickle_rose A upA).
+Proof.
+  prove_pcancel_using roseInd''.
 Qed.
 
 (* We now get decidability + countability for free *)
