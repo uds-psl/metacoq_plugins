@@ -64,9 +64,9 @@ Print vector_packed.
 
 Definition vector_subterm :=
   fun A : Type =>
-Relation_Operators.clos_trans (vector_packed A)
+    Relation_Operators.clos_trans (vector_packed A)
                               (fun x y : (vector_packed A) =>
-   vector_direct_subterm A (pr1 x) (pr1 y) (pr2 x) (pr2 y)).
+                                 vector_direct_subterm A (pr1 x) (pr1 y) (pr2 x) (pr2 y)).
 
 Lemma well_founded_vector_subterm : forall A : Type, WellFounded (vector_subterm A).
 Proof.
@@ -99,7 +99,43 @@ Proof.
 Qed.
 
 Inductive rose (A: Type) := rleaf (a: A) | rtree (l: list (rose A)).
-MetaCoq Run (subterm <%rose%>).
+MetaCoq Run (inductive_printer <%rose%>).
+(* MetaCoq Run (subterm <%rose%>). *)
+(* Print rose_direct_subterm. *)
+
+(* MetaCoq Run (subterm <%nat%>). *)
+
+Inductive nat_direct_subterm : nat -> nat -> Prop :=
+    S_subterm0 : forall H H2 : nat, eq H H2 -> nat_direct_subterm H (S H2).
+
+Inductive rose_direct_subterm (A : Type) : rose A -> rose A -> Prop :=
+| C1 (t : rose A) l :
+  let RIn := (fun x l => Exists (Relation_Operators.clos_refl (rose A) (rose_direct_subterm A) x) l) in
+  RIn t l -> rose_direct_subterm A t (rtree A l).
+
+(*
+  choices:
+
+  - the above
+  - use Relation_Operators.clos_refl_trans instead
+  - define rose_direct_subterm with 2 constructors for refl and trans
+ *)
+
+Definition rose_subterm := fun A =>
+  Relation_Operators.clos_trans (rose A)
+                                (rose_direct_subterm A).
+
+Goal forall A t, rose_subterm A t (rtree A [rtree A [rtree A [t]]]).
+Proof.
+  intros.
+  eapply Relation_Operators.t_step.
+  eapply C1. econstructor.
+  eapply Relation_Operators.r_step.
+  eapply C1. econstructor.
+  eapply Relation_Operators.r_step.
+  eapply C1. econstructor.
+  eapply Relation_Operators.r_refl.
+Qed.
 
 Print rose_direct_subterm.
 

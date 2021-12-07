@@ -59,6 +59,8 @@ Inductive listᴱ (A : Type) (Aᴱ : A -> Type) : list A -> Type :=
              listᴱ A Aᴱ H0 -> listᴱ A Aᴱ (H :: H0)
 **)
 
+Print HintDb existtranslated.
+
 
 Open Scope type.
 Definition iffT (A:Type) (B:Type) := (A->B) * (B->A).
