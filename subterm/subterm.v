@@ -44,9 +44,9 @@ Definition subterms_for_constructor
                       in let (f, s) := decompose_app ar
                       in match f with
                          | tRel j => if Nat.eqb p j
-                                    then [inl (i, ctx, s)]
+                                    then [(i, ctx, s)]
                                     else []
-                         | tInd list [] => 
+                         | _ => []
                          end) ctx) in
     let '(ctx_sbst, _) := decompose_prod_assum [] (subst1 ref indrel ct) in
     let construct_cons :=
@@ -126,7 +126,7 @@ Definition direct_subterm_for_mutual_ind
     ret {|
         ind_finite := BasicAst.Finite;
         ind_npars := 0;
-        ind_universes := tInfer ;
+        ind_universes := ind_universes mind;
         ind_params := [];
         ind_bodies := [subterm_for_ind ind0 ref mind.(ind_npars) ntypes b];
         ind_variance := None
