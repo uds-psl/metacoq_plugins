@@ -1171,3 +1171,162 @@ Notation "'Derive' 'unpickle' 'for' T 'with' z" :=
 
 
 
+(** *  Generate a lemma for pickle / unpickle correctness **)
+(* Examples 
+   forall n, (unpickle (pickle n)) = (Some n))
+   
+   Example correctness stmt for rosetree 
+     pcancel (Pickle_rose A pA) (Unpickle_rose A upA).
+ *)
+
+(* 
+   Takes a chain of terms (e.g. T1 ; T2 ; T3 ; t4 ] and a term (representing types) and creates
+   forall A: T1, forall (PA : Pickle A), forall (UPA : Unpickle A), (H5: pcancel A PA UPA   
+ *)
+Fixpoint  lemchain (l: list term) (t: term) :=
+match l with  
+| [] => t  
+| (x::xr) => (tProd nAnon x
+                  (tProd nAnon (tApp <% Pickle %> [(tRel 0)])
+                         (tProd nAnon (tApp <% Unpickle %> [(tRel 1)])
+                                 (tProd nAnon (tApp <% @pcancel %> [tRel 2;tRel 1; tRel 0]) 
+                                       (lemchain xr t)
+                                 )
+                          )      
+                  )
+           )
+end.
+
+Print snoc.
+MetaCoq Run Derive Pickle for list.
+MetaCoq Run Derive Pickle for nat.
+
+MetaCoq Run Derive Unpickle for nat.
+MetaCoq Run Derive Unpickle for list.
+Print Unpickle_list.
+Print mkApps.
+Definition rcons {A: Type} (L: list A) (a: A) : list A := L++[a].
+Print zip. 
+Definition lemma_for_single_ind
+           (mind: mutual_inductive_body)
+           (refi : inductive)
+           (ref   : term)
+           (allparams : nat)
+           (ind   : one_inductive_body)
+           (pf upf: term)
+  : term :=
+  (* Generate the function type *)
+  let params := collect_prods ind.(ind_type) in
+  let matchTerm := generateMatch in
+  (* Count parameters *)
+  let npars  := (ind_npars mind) in
+  let nunipars := (countUniform.getParamCount (TemplateToPCUIC.trans_one_ind_body ind) npars) in 
+  let nnonunipars := npars - nunipars in
+
+  let uniparams := firstn nunipars params in
+  let nuniparams := skipn nunipars params in
+
+
+  (* Generate a list for the position of each parameter *)
+  let paramList := generateParamList nunipars nnonunipars in
+
+
+  ((lemchain (typeList uniparams)
+             (tProd
+                (nAnon)
+                (mkApps ref (List.map tRel (rev (seq' 3 4 npars))))  
+                (tApp
+                   (tApp <% @Logic.eq %>
+                         [(mkApp <% option %> ((mkApps ref (List.map tRel (rev (seq' 4 4 npars)) ))))])
+                         [
+                           (* (mkApp <% @None %> (mkApps ref (List.map tRel (rev (seq' 4 4 npars))))) *)
+                           (mkApps
+                               upf
+                               
+                               (@rcons term (zip (List.map tRel (rev (seq' 4 4 npars))) (List.map tRel (rev (seq' 2 4 npars))))
+                                       (mkApps pf
+                                               ((zip (List.map tRel (rev (seq' 4 4 npars))) (List.map tRel (rev (seq' 3 4 npars)
+                                                                                           ))
+                                                )++[tRel 0]))    
+                                       (*(mkApps
+                                          pf
+                                          ((zip (List.map tRel (rev (seq' 3 4 npars))) (List.map tRel (rev (seq' 2 4 npars)))))++[(tRel 0)]
+                               )*)))
+                              
+                           ;
+                         (mkApp
+                            (mkApp <% @Some %> (mkApps ref (List.map tRel (rev (seq' 4 4 npars)))))
+                            (tRel 0)
+                         )   
+                         ]
+                 )         
+             )
+             )
+  ).
+
+
+
+Definition genlemma_for_ind
+           (mind: mutual_inductive_body)
+           (ind0: inductive)
+           (ref: term)
+           (pf upf: Ast.term)
+  : TemplateMonad term :=
+   match nth_error mind.(ind_bodies) 0 with
+    None => tmFail "err" 
+   | Some b =>
+     let i0 := inductive_ind ind0 in
+     let ntypes := List.length (ind_bodies mind) in
+     let x := lemma_for_single_ind mind ind0 ref mind.(ind_npars) b pf upf in 
+     tmReturn x
+  end.
+
+
+Definition genLemmaSingle
+           (t : Ast.term)
+           (pf: Ast.term)
+           (upf: Ast.term)
+            :=
+  match t with
+  | Ast.tInd ind0 _ =>
+       decl <- tmQuoteInductive (inductive_mind ind0);;
+      tyOne <- get_ind_body decl ;;
+      bodyDef <-   (genlemma_for_ind (decl) ind0 (t) pf upf) ;; 
+      tmReturn bodyDef
+  | _ => tmFail "not inductive" end.               
+
+
+Definition genLemma
+           (t: Ast.term) (* Quoted inductive to generate the lemma for *)
+           (pterm: Ast.term) (* Term representing the pickle function *)
+           (upterm: Ast.term) (* Term representing the unpickle function *)
+  :=
+     match t with
+     | Ast.tInd ind0 _ =>
+      (tmPrint "Is inductive";; 
+      decl <- tmQuoteInductive (inductive_mind ind0);;
+      tyOne <- get_ind_body decl;;
+      z <-  (genLemmaSingle t pterm upterm);;
+      print_nf z;;
+      v <- tmUnquote z;;
+      tmPrint v;;
+      tmReturn v;;
+      tmReturn "oK")
+     | _ => tmFail "Not an inductive"
+     end.            
+
+MetaCoq Run Derive Pickle for prod.
+
+MetaCoq Run Derive Unpickle for prod.
+Inductive rose (A: Type) := rleaf (a: A) | rtree (l: list (rose A)).
+
+Print rose.
+MetaCoq Run Derive Pickle for rose.
+
+MetaCoq Run Derive Unpickle for rose.
+
+
+Notation "'Derive' 'PLemma' 'for' T " := (genLemma <% T %> <% Pickle_rose %> <% Unpickle_rose %>) (at level 0).
+Print Pickle_prod. 
+MetaCoq Run Derive PLemma for rose.
+
