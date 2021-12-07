@@ -255,7 +255,7 @@ Proof.
   prove_pcancel_using roseInd'.
 Qed.
 
-Section old.
+End old.
 
 Hint Extern 0 => setoid_rewrite List_PCancel' : pickle.
 
