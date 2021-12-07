@@ -30,8 +30,11 @@ Ltac rewrite_hyp :=
   | [E : context [eq] |- _ ] => rewrite E; eauto
   end.
 
-Ltac prove_pcancel := intros n; induction n; cbn; intros; repeat rewrite_hyp; try autorewrite with pickle; try reflexivity; intros.
-              
+Create HintDb pickle.
+
+Hint Extern 1 => autorewrite with pickle : pickle.
+
+Ltac prove_pcancel := intros n; induction n; cbn; intros; repeat rewrite_hyp; eauto with pickle; intros.
 
 Lemma CancelNat : pcancel Pickle_nat Unpickle_nat. 
 Proof.
@@ -45,21 +48,16 @@ Proof.
   prove_pcancel.
 Defined.
 
+Hint Extern 1 => setoid_rewrite CancelProd : pickle.
+
 Lemma CancelForm : pcancel Pickle_form Unpickle_form. 
 Proof.
   prove_pcancel.
 Defined.
 
-(* Require Import Unicoq.Unicoq. *)
-(* Require Import ssreflect. *)
-(*  Set Unicoq Super Aggressive. *)
-
-Hint Rewrite CancelProd : pickle.
-
 Lemma CancelMlbin (A: Type) pA upA (H: pcancel pA upA) : pcancel (Pickle_mlbin A pA) (Unpickle_mlbin A upA). 
- Proof.
-   prove_pcancel.
-   setoid_rewrite CancelProd; eauto. (* TODO YF:  *)
+Proof.
+  prove_pcancel.
 Qed.
 
  (**
@@ -233,15 +231,14 @@ Qed.
  * It needs the stronger version of the cancellation lemma for Lists.
  *)
 
-Ltac prove_pcancel_using H := intros n; induction n using H; cbn; intros; repeat rewrite_hyp; try autorewrite with pickle; try reflexivity; intros.
+Ltac prove_pcancel_using H := intros n; induction n using H; cbn; intros; repeat rewrite_hyp; eauto with pickle; intros.
 
-Hint Rewrite List_PCancel : pickle.
+Hint Extern 0 => setoid_rewrite List_PCancel : pickle.
 
 Lemma CancelRose (A: Type) (pA: Pickle A) (upA: Unpickle A) (H: pcancel pA upA):
   pcancel (Pickle_rose A pA) (Unpickle_rose A upA).
 Proof.
   prove_pcancel_using roseInd'.
-  now setoid_rewrite List_PCancel.
 Qed.
 
 (* We now get decidability + countability for free *)
@@ -254,4 +251,4 @@ Definition count_nat_rosetree (n: nat) := ( (proj1_sig (rose_countable nat Pickl
 Lemma rose_eq_dec (A: Type) (pA: Pickle A) (upA: Unpickle A) (H: pcancel pA upA) : forall (r1 r2: rose A), {r1 = r2} + {r1 <> r2}.
 Proof.
   eapply EqDecGen. eapply CancelRose; eauto.
-Defined.   
+Defined.
