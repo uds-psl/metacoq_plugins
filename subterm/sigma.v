@@ -11,10 +11,15 @@ Definition ex := tInd
   {|
   inductive_mind := (MPfile ["Logic"; "Init"; "Coq"], "ex");
   inductive_ind := 0 |} [].
-Definition sigma := tInd
-  {|
-  inductive_mind := (MPfile ["Specif"; "Init"; "Coq"], "sigT");
-  inductive_ind := 0 |} [].
+
+(* Definition sigma := tInd *)
+(*   {| *)
+(*   inductive_mind := (MPfile ["Specif"; "Init"; "Coq"], "sigT"); *)
+(*     inductive_ind := 0 |} []. *)
+
+Definition sigma := match <% @Init.sigma %> with Ast.tInd i l => tInd i l | _ => tVar "no" end.
+Print sigma.
+
 Definition acc := tInd
   {| inductive_mind := (MPfile ["Wf"; "Init"; "Coq"], "Acc"); inductive_ind := 0 |}
   [].
@@ -52,8 +57,12 @@ Definition sigma_pack_inductive
   match (List.nth_error (ind_bodies m) (inductive_ind i)) with
   | None => None
   | Some ind =>
-    let (inds, _) := decompose_prod_assum [] (ind_type ind) in
-    Some (sigma_pack_go (List.length inds - 1) inds (fun l => mkApps (tInd i []) l) [])
+      let (inds, _) := decompose_prod_assum [] (ind_type ind) in
+      let params := firstn (ind_npars m) (rev inds) in
+      let inds := rev (skipn (ind_npars m) (rev inds)) in
+      Some (
+          it_mkLambda_or_LetIn params (
+          sigma_pack_go (List.length inds - 1) inds (fun l => mkApps (tInd i []) (map tRel (rev (seq (List.length inds) (ind_npars m))) ++ l)) []))
   end.
 
 Definition pack_inductive (t : Ast.term) : TemplateMonad (Ast.term) :=
@@ -76,11 +85,3 @@ Definition pack_inductive (t : Ast.term) : TemplateMonad (Ast.term) :=
     end.
 
 
-From MetaCoq.Template Require Import All.
-
-Inductive fin (A : Type) : nat -> Type :=
-| fin0 : forall n, fin A n
-| finS : forall n, fin A n -> fin A (S n).
-
-
-MetaCoq Run (pack_inductive <%fin%>).

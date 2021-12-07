@@ -30,6 +30,79 @@ MetaCoq Run (inductive_printer <%test%>).
 
 MetaCoq Run (inductive_printer <%list%>).
 MetaCoq Run (subterm <%list%>).
+
+
+From Equations Require Import Equations.
+
+(* Derive Subterm for list. *)
+
+Definition list_subterm := 
+  fun A : Type => Relation_Operators.clos_trans (list A) (list_direct_subterm A).
+
+Lemma well_founded_list_subterm : forall A : Type, WellFounded (list_subterm A).
+Proof.
+  solve_subterm.
+Qed.
+
+Inductive vector (A : Type) : nat -> Type :=
+| vnil : vector A 0
+| vcons n : A -> vector A n -> vector A (S n).
+
+Derive NoConfusionHom for vector.
+(* Derive Subterm for vector. *)
+
+MetaCoq Run (subterm <%vector%>).
+
+Require Import sigma.
+
+(* From MetaCoq.Template Require Import All. *)
+
+Unset Strict Unquote Universe Mode.
+
+MetaCoq Run (tmBind (pack_inductive <% vector %>) (tmMkDefinition "vector_packed")).
+Print vector_packed.
+
+Definition vector_subterm :=
+  fun A : Type =>
+Relation_Operators.clos_trans (vector_packed A)
+                              (fun x y : (vector_packed A) =>
+   vector_direct_subterm A (pr1 x) (pr1 y) (pr2 x) (pr2 y)).
+
+Lemma well_founded_vector_subterm : forall A : Type, WellFounded (vector_subterm A).
+Proof.
+  unfold vector_subterm, vector_packed.
+  solve_subterm.
+Qed.
+
+Inductive fin (A : Type) : nat -> Type :=
+| fin0 : forall n, fin A n
+| finS : forall n, fin A n -> fin A (S n).
+
+MetaCoq Run (pack_inductive <%fin%> >>= tmMkDefinition "fin_packed").
+Print fin_packed.
+
+MetaCoq Run (subterm <% fin %>).
+Print fin_direct_subterm.
+
+
+Definition fin_subterm := fun A =>
+  Relation_Operators.clos_trans (fin_packed A)
+                                (fun x y : (fin_packed A) =>
+                                   fin_direct_subterm A (pr1 x) (pr1 y) (pr2 x) (pr2 y)).
+
+Derive NoConfusionHom for fin.
+
+Lemma well_founded_fin_subterm : forall A : Type, WellFounded (fin_subterm A).
+Proof.
+  unfold fin_subterm, fin_packed.
+  solve_subterm.
+Qed.
+
+Inductive rose (A: Type) := rleaf (a: A) | rtree (l: list (rose A)).
+MetaCoq Run (subterm <%rose%>).
+
+Print rose_direct_subterm.
+
 (*Derive Subterm for list.*)
 
 MetaCoq Run (inductive_printer <%list_direct_subterm%>).
@@ -43,7 +116,6 @@ with  dummy : nat -> Prop :=
 with odd : nat -> Prop :=
 | odd_S : forall n, even n -> odd (S n).
 
-
 MetaCoq Run (inductive_printer <%even%>).
 
 MetaCoq Run (subterm <%odd%>).
@@ -54,9 +126,9 @@ Inductive finn A : list(A) -> nat -> Type :=
   F1n : forall (l : list A) (n : nat), finn A l (S n)
 | FSn : let p := list A in forall (l : p) (n : nat), finn A l n -> finn A l (S n).
 
-Inductive fin : nat -> Type :=
-  F0 : forall n, fin n
-| FS : forall n : nat, fin n -> fin (S n).
+(* Inductive fin : nat -> Type := *)
+(*   F0 : forall n, fin n *)
+(* | FS : forall n : nat, fin n -> fin (S n). *)
 
 MetaCoq Run (inductive_printer <%finn%>).
 
