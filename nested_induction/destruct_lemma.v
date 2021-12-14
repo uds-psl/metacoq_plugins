@@ -292,7 +292,10 @@ refine(
       if mainApp then
         Some (mkApps app appList)
       else
-        generatePCall2 paramCount recpos (if generateProof then fpos else ppos) app appList n []
+        match generatePCall2 paramCount recpos (if generateProof then fpos else ppos) app appList n [] with
+        | None => dummyResult
+        | h => h
+        end
 
         (* inner call when nested induction is needed *)
     | tInd {| inductive_mind := name; inductive_ind := idx |} u =>
