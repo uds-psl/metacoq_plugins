@@ -61,6 +61,9 @@ Fixpoint lookupTable (gr: global_reference) (T: tsl_table) : option term :=
   | ((x, y)::tr) => if gref_eq_dec x gr then Some y else lookupTable gr tr
   end.
 
+Class pickle_instance (ind:inductive) := { pickle_fun : term; }.
+Class unpickle_instance (ind:inductive) := { unpickle_fun : term; }.
+
 (** We define some auxilary function doing interesting stuff on terms 
     Some are taken from Marcel's work
 **)
@@ -613,7 +616,13 @@ Definition pickle
       name <- tmEval all (mk_instance_name (ind_name y));;
        tmPrint "Sucess";;
        z <- (augmentTable ind0 bodyDef table) ;;
-        tmDefinitionRed name (Some cbv) res';;    
+        def <- tmDefinitionRed name (Some cbv) res';;    
+        (* additionally, register the pickle function *)
+        def_quoted <- tmQuote def;;
+        let lemma_name := name^"_instance" in
+        let inst := {| pickle_fun := def_quoted |}:pickle_instance ind0 in
+        tmDefinition lemma_name inst;;
+        tmExistingInstance (VarRef lemma_name);;
         tmReturn z)     else (
           print_nf bodyDef;;
           body <- tmUnquote bodyDef ;;
@@ -1127,7 +1136,13 @@ let  unpickleMultiple := fix pmm (t: list (inductive)) (tab: tsl_table) : TM tsl
       name <- tmEval all (mk_up_name (ind_name y));;
        tmPrint "Sucess";;
        z <- (augmentTable ind0 bodyDef table) ;;
-             tmDefinitionRed name (Some cbv) res';;    
+             def <- tmDefinitionRed name (Some cbv) res';;    
+                (* additionally, register the unpickle function *)
+                def_quoted <- tmQuote def;;
+                let lemma_name := name^"_instance" in
+                let inst := {| unpickle_fun := def_quoted |}:unpickle_instance ind0 in
+                tmDefinition lemma_name inst;;
+                tmExistingInstance (VarRef lemma_name);;
              tmReturn z )    else (
 body <- tmUnquote bodyDef ;;
       res' <- tmEval cbn (my_projT2 body) ;;
@@ -1313,7 +1328,7 @@ Definition genLemma
       tmReturn v;;
       tmReturn "oK")
      | _ => tmFail "Not an inductive"
-     end.            
+     end.
 
 MetaCoq Run Derive Pickle for prod.
 
@@ -1322,11 +1337,73 @@ Inductive rose (A: Type) := rleaf (a: A) | rtree (l: list (rose A)).
 
 Print rose.
 MetaCoq Run Derive Pickle for rose.
-
 MetaCoq Run Derive Unpickle for rose.
 
-
-Notation "'Derive' 'PLemma' 'for' T " := (genLemma <% T %> <% Pickle_rose %> <% Unpickle_rose %>) (at level 0).
+Notation "'Get' 'PLemma' 'for' T " := (genLemma <% T %> <% Pickle_rose %> <% Unpickle_rose %>) (at level 0).
 Print Pickle_prod. 
-MetaCoq Run Derive PLemma for rose.
+MetaCoq Run Get PLemma for rose.
 
+
+
+
+(* some tactics to allow the user to solve obligations *)
+Ltac rewrite_hyp :=
+  match goal with
+  | [E : pcancel _ _ |- _ ] => unfold pcancel in E
+  | [E : context [@Logic.eq] |- _ ] => rewrite E; eauto
+  end.
+Create HintDb pickle.
+Hint Extern 1 => autorewrite with pickle : pickle.
+Ltac prove_pcancel := intros n; induction n; cbn; intros; repeat rewrite_hyp; eauto with pickle; intros.
+Definition pcancel_upto {A: Type} (P : A -> Prop) (f: Pickle A) (g: Unpickle A) := forall (a: A), P a -> (g (f a)) = Some a.
+Ltac prove_pcancel_using H := intros n; induction n using H; cbn; intros; repeat rewrite_hyp; eauto with pickle; intros.
+
+
+Definition defLemma
+           (t: Ast.term) (* Quoted inductive to generate the lemma for *)
+           (pterm: Ast.term) (* Term representing the pickle function *)
+           (upterm: Ast.term) (* Term representing the unpickle function *)
+  :=
+     match t with
+     | Ast.tInd ind0 _ =>
+      (tmPrint "Is inductive";; 
+      decl <- tmQuoteInductive (inductive_mind ind0);;
+      tyOne <- get_ind_body decl;;
+      z <-  (genLemmaSingle t pterm upterm);;
+      print_nf z;;
+      tmMsg "An obligation will be opened for the cancelation lemma. Try the prove_pcancel tactic first. If this does not solve the goal, read the guide.";;
+      v <- tmUnquoteTyped Type z;;
+      let lemma_name := "Cancel_"^(snd ind0.(inductive_mind)) in
+      lemma <- tmLemma lemma_name (v:Type);;
+      tmReturn ("The cancelation lemma is defined as "^lemma_name))
+     | _ => tmFail "Not an inductive"
+     end.
+     (* TODO: "consider adding a hint" message
+     Hint Rewrite CancelNat : pickle.
+     Hint Extern 1 => setoid_rewrite CancelProd : pickle.
+     *)
+
+Fixpoint defLemmaInfer t :=
+     match t with
+     | Ast.tInd ind0 _ =>
+        pickle_inst <- tmInferInstance (Some lazy) (pickle_instance ind0);;
+        unpickle_inst <- tmInferInstance (Some lazy) (unpickle_instance ind0);;
+        let name := snd ind0.(inductive_mind) in
+        match pickle_inst,unpickle_inst with
+        | my_None,_ => tmFail ((mk_instance_name name)^" was not found. Try running 'MetaCoq Run Derive Pickle for "^name^".'")
+        | _,my_None => tmFail ((mk_up_name name)^" was not found. Try running 'MetaCoq Run Derive Unpickle for "^name^".'")
+        | my_Some pi,my_Some upi => 
+          defLemma t (@pickle_fun _ pi) (@unpickle_fun _ upi)
+        end
+     | Ast.tApp b _ => defLemmaInfer b (* for maximally inserted arguments *)
+     | _ => tmFail "Not an inductive"
+     end.
+
+Notation "'Derive' 'PLemma' 'for' T " := (defLemmaInfer <% T %>) (at level 0).
+
+(* example: *)
+(* MetaCoq Run Derive PLemma for nat.
+Next Obligation.
+  revert H.
+  prove_pcancel.
+Defined. *)
