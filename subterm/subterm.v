@@ -8,23 +8,23 @@ Import MCMonadNotation.
 Require Import List String Relation_Operators.
 Import ListNotations.
 
+From MetaCoq.Translations Require Import param_all.
+
 From Local Require Import non_uniform.
 
-Definition clift0 (n : nat) (t : context_decl) : context_decl :=
-  {| decl_name := t.(decl_name);
-     decl_body := match t.(decl_body) with
-                   | Some q => Some (lift0 n q)
-                   | None => None
-                  end;
-     decl_type := lift0 n t.(decl_type)
-  |}.
+
+(* Variant 
+  | IndInst (idx:nat) (ctx:context) (params:list term)
+  | NestInst (idx:nat) *)
+
+
 
 Definition subterms_for_constructor
            (refi : inductive)
            (ref   : term) (* we need the term for exactly this inductive just for the substition *)
            (ntypes : nat) (* number of types in the mutual inductive *)
            (npars : nat) (* number of parameters in the type *)
-           (nind : nat) (* number of proper indeces in the type *)
+           (nind : nat) (* number of proper indices in the type *)
            (ct    : term) (* type of the constructor *)
            (ncons : nat) (* index of the constructor in the inductive *)
            (nargs : nat) (* number of arguments in this constructor *)
@@ -40,15 +40,16 @@ Definition subterms_for_constructor
            (* so this i represents distance from return object to `t` *)
               mapi (fun i t =>
                       let '(ctx, ar) := decompose_prod_assum [] (decl_type t)
-                      in let p := (indrel + (len - i - 1) + List.length (ctx))
+                      in let p := (indrel + (len - i - 1) + List.length (ctx)) (* distance to ind *)
                       in let (f, s) := decompose_app ar
                       in match f with
-                         | tRel j => if Nat.eqb p j
-                                    then [(i, ctx, s)]
+                         | tRel j => if Nat.eqb p j (* recursive call to ind *)
+                                    then [(i, ctx, s)] (* index of arg, binders, applications *)
                                     else []
                          | _ => []
                          end) ctx) in
     let '(ctx_sbst, _) := decompose_prod_assum [] (subst1 ref indrel ct) in
+    (* ^ replace tRel with tInd for the type in question *)
     let construct_cons :=
         fun (* index of a subterm in this constructor *)
           (i: nat)
@@ -58,16 +59,16 @@ Definition subterms_for_constructor
           (ctx': context)
           (* these are arguments of the type of the subterm *)
           (args' : list term) =>
-          let len' := List.length ctx' in
-          let ctxl' := (map (clift0 (2 + i)) ctx') in
+          let len' := List.length ctx' in (* number of binders *)
+          let ctxl' := (map_context (lift0 (2 + i)) ctx') in (* lift over other args (i) and own arg (1) *)
           it_mkProd_or_LetIn
              (ctxl' ++ ctx_sbst)
              (mkApps (tRel (len + len'))
                    ((map (lift0 (len' + len - npars))
-                         (to_extended_list params)) ++
-                    (map (lift (1 + i + len') len') (List.skipn npars args')) ++
-                    (map (lift0 len') inds) ++
-                    [mkApps (tRel (i + len'))
+                         (to_extended_list params)) ++ (* parameters *)
+                    (map (lift (1 + i + len') len') (List.skipn npars args')) ++ (* non-uniform parameters *)
+                    (map (lift0 len') inds) ++ (* indices *)
+                    [mkApps (tRel (i + len')) (* subterm instance *)
                           (to_extended_list ctxl');
                      mkApps (tConstruct refi ncons [])
                          (map (lift0 len') (to_extended_list ctx_sbst))])) in
@@ -101,7 +102,7 @@ Definition subterm_for_ind
                    (it_mkProd_or_LetIn
                       (inds)
                    (it_mkProd_or_LetIn
-                      (map (clift0 (ninds)) inds)
+                      (map_context (lift0 (ninds)) inds)
                    (it_mkProd_or_LetIn
                        [mkdecl nAnon None aptype2; mkdecl nAnon None aptype1]
                        sort)));
