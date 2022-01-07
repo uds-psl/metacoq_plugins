@@ -12,12 +12,24 @@ From MetaCoq.Translations Require Import param_all.
 
 From Local Require Import non_uniform.
 
+Import IfNotations.
 
-(* Variant 
-  | IndInst (idx:nat) (ctx:context) (params:list term)
-  | NestInst (idx:nat) *)
+Variant subInstance :=
+  | IndInst (params:list term)
+  | NestInst (arguments:list term) (ind:inductive) (inst:Instance.t).
 
+Fixpoint filter_map {X Y} (f:X->option Y) xs :=
+  match xs with
+  | [] => []
+  | y::ys => 
+    if f y is Some a then a::filter_map f ys else filter_map f ys
+  end.
 
+Definition filter_mapi {X Y} (f:nat->X->option Y) xs :=
+  filter_map (fun x => x) (mapi f xs).
+
+Definition index {X} :=
+  mapi (A:=X) (fun i x => (i,x)).
 
 Definition subterms_for_constructor
            (refi : inductive)
@@ -28,7 +40,7 @@ Definition subterms_for_constructor
            (ct    : term) (* type of the constructor *)
            (ncons : nat) (* index of the constructor in the inductive *)
            (nargs : nat) (* number of arguments in this constructor *)
-                  : list (nat * term * nat)
+                  : list (nat * (term * nat))
   := let indrel := (ntypes - inductive_ind refi - 1) in
     let '(ctx, ap) := decompose_prod_assum [] ct in
     (*    ^ now ctx is a reversed list of assumptions and definitions *)
@@ -44,8 +56,9 @@ Definition subterms_for_constructor
                       in let (f, s) := decompose_app ar
                       in match f with
                          | tRel j => if Nat.eqb p j (* recursive call to ind *)
-                                    then [(i, ctx, s)] (* index of arg, binders, applications *)
+                                    then [(i, ctx, IndInst s)] (* index of arg, binders, applications *)
                                     else []
+                         | tInd ind inst => [(i,ctx,NestInst s ind inst)]
                          | _ => []
                          end) ctx) in
     let '(ctx_sbst, _) := decompose_prod_assum [] (subst1 ref indrel ct) in
@@ -58,21 +71,30 @@ Definition subterms_for_constructor
              and if applied fully returns something of the needed type *)
           (ctx': context)
           (* these are arguments of the type of the subterm *)
-          (args' : list term) =>
-          let len' := List.length ctx' in (* number of binders *)
-          let ctxl' := (map_context (lift0 (2 + i)) ctx') in (* lift over other args (i) and own arg (1) *)
-          it_mkProd_or_LetIn
-             (ctxl' ++ ctx_sbst)
-             (mkApps (tRel (len + len'))
-                   ((map (lift0 (len' + len - npars))
-                         (to_extended_list params)) ++ (* parameters *)
-                    (map (lift (1 + i + len') len') (List.skipn npars args')) ++ (* non-uniform parameters *)
-                    (map (lift0 len') inds) ++ (* indices *)
-                    [mkApps (tRel (i + len')) (* subterm instance *)
-                          (to_extended_list ctxl');
-                     mkApps (tConstruct refi ncons [])
-                         (map (lift0 len') (to_extended_list ctx_sbst))])) in
-    mapi (fun i '(n, c, a) => (i, construct_cons n c a, len + List.length c)) d.
+          (subInst:subInstance) =>
+          match subInst with
+          | IndInst args' =>
+            let len' := List.length ctx' in (* number of binders *)
+            let ctxl' := (map_context (lift0 (2 + i)) ctx') in (* lift over other args (i) and own arg (1) *)
+            Some (it_mkProd_or_LetIn
+              (ctxl' ++ ctx_sbst)
+              (mkApps (tRel (len + len'))
+                    ((map (lift0 (len' + len - npars))
+                          (to_extended_list params)) ++ (* parameters *)
+                      (map (lift (1 + i + len') len') (List.skipn npars args')) ++ (* indices of subterm instance *)
+                      (map (lift0 len') inds) ++ (* indices of constructed inductive inst *)
+                      [mkApps (tRel (i + len')) (* subterm instance *)
+                            (to_extended_list ctxl');
+                      mkApps (tConstruct refi ncons []) (* inductive instance *)
+                          (map (lift0 len') (to_extended_list ctx_sbst))])))
+          | _ => None 
+          end in
+    index(filter_map (fun '(n, c, a) => 
+      match construct_cons n c a with 
+      | Some x => Some (x,len + List.length c)
+      | None => None
+      end
+    ) d).
 
 Definition nAnon := mkBindAnn nAnon Relevant.
 
@@ -109,7 +131,7 @@ Definition subterm_for_ind
        ind_kelim := IntoPropSProp;
        ind_ctors :=List.concat
                      (mapi (fun n '(id', ct, k) => (
-                       map (fun '(si, st, sk) => (renamer id' si, st, sk))
+                       map (fun '(si, (st, sk)) => (renamer id' si, st, sk))
                        (subterms_for_constructor refi ref ntypes npars ninds ct n k)))
                        ind.(ind_ctors));
       ind_projs := [];
