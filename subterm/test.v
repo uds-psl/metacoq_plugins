@@ -30,7 +30,70 @@ MetaCoq Run (inductive_printer <%test%>).
 
 MetaCoq Run (inductive_printer <%list%>).
 MetaCoq Run (subterm <%list%>).
+Print list_direct_subterm.
 
+Inductive G : Set := guard (h:nat -> G).
+MetaCoq Run (subterm <%G%>).
+Print G_direct_subterm.
+Inductive Rose (X:Type) : Set := tree (xs:List (Rose X)) (y:Rose X).
+MetaCoq Run (subterm <%List%>).
+Print List_direct_subterm.
+MetaCoq Run (subterm <%Rose%>).
+Print Rose_direct_subterm.
+
+Inductive Vec (X:Set) : nat -> Set := NilVec : Vec X 0 | ConsVec (x:X) n (xs:Vec X n) : Vec X (S n).
+Inductive RoseVec (X:Type) : Set := treeVec n (h:Vec (RoseVec X) n) (y:RoseVec X).
+MetaCoq Run (subterm <%RoseVec%>).
+Print RoseVec_direct_subterm.
+
+Inductive RoseInd (X:Type) : nat -> Set := treeInd n (h:List (RoseInd X n)) (y:RoseInd X n): RoseInd X (S n).
+MetaCoq Run (subterm <%RoseInd%>).
+Print RoseInd_direct_subterm.
+
+From MetaCoq.Translations Require Import param_all.
+(* MetaCoq Run Derive Translations for List. *)
+MetaCoq Run Derive Translations for Vec.
+
+Inductive Rose_direct_subterm_nest : forall X : Type, Rose X -> Rose X -> Prop :=
+	tree_subterm_nest0 : forall (X : Type) (h : List (Rose X)) (y : Rose X),
+                    Rose_direct_subterm_nest X y (tree X h y)
+  | tree_subterm_nest1 : forall (X : Type) (h : List (Rose X)) (y : Rose X),
+                    forall (z:Rose X),
+                      Listᴱ (Rose X) (fun x => x=z) h ->
+                    Rose_direct_subterm_nest X z (tree X h y).
+
+Inductive RoseInd_direct_subterm_nest
+	: forall (X : Type) (H H0 : nat), RoseInd X H -> RoseInd X H0 -> Prop :=
+    treeInd_subterm0_nest : forall (X : Type) (n : nat) 
+                         (h : List (RoseInd X n)) 
+                         (y : RoseInd X n),
+                       RoseInd_direct_subterm_nest X n (S n) y (treeInd X n h y)
+  | treeInd_subterm1_nest : forall (X : Type) (n : nat) 
+                         (h : List (RoseInd X n)) 
+                         (y : RoseInd X n),
+                         forall (z:forall m, RoseInd X m),
+                       Listᴱ (RoseInd X n) (fun x => x=z n) h ->
+                       forall m,
+                       (False + (m=n)) ->
+                       RoseInd_direct_subterm_nest X m 
+                         (S n) (z m) (treeInd X n h y).
+
+Definition rose_subterm := fun A =>
+  Relation_Operators.clos_trans (rose A)
+                                (RoseInd_direct_subterm_nest A).
+
+
+Inductive nonUniDepTest (A:Type) (N:nat) (*non-uni:*) (xs:list A) : bool -> nat -> Type :=
+    | CD1: forall (H1:nonUniDepTest A N [] false 1) (a:A) (M:nat) (H2:nonUniDepTest A N [] false 0), nonUniDepTest A N xs true N
+    (* . *)
+    | CD2: forall (k:nat) 
+    (* (f:forall (a:A), nonUniDepTest A N [] true 0) *)
+    (* (g:forall b, nonUniDepTest A N [] b 0) *)
+    (* (h:forall n b, nonUniDepTest A N [] b n) *)
+    (a:A)
+    (HA:nonUniDepTest A N (a::xs) true 0), nonUniDepTest A N xs false 1.
+MetaCoq Run (subterm <%nonUniDepTest%>).
+Print nonUniDepTest_direct_subterm.
 
 From Equations Require Import Equations.
 

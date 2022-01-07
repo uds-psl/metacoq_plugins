@@ -31,6 +31,14 @@ Definition filter_mapi {X Y} (f:nat->X->option Y) xs :=
 Definition index {X} :=
   mapi (A:=X) (fun i x => (i,x)).
 
+
+Inductive List (X:Set) : Set := Nil | Cons (x:X) (xs:List X).
+MetaCoq Run Derive Translations for List.
+  MetaCoq Quote Definition TrueQ := True.
+  MetaCoq Quote Definition ListQ := List.
+  MetaCoq Quote Definition ListEQ := Listᴱ.
+  MetaCoq Quote Definition EqQ := @eq.
+
 Definition subterms_for_constructor
            (refi : inductive)
            (ref   : term) (* we need the term for exactly this inductive just for the substition *)
@@ -87,7 +95,82 @@ Definition subterms_for_constructor
                             (to_extended_list ctxl');
                       mkApps (tConstruct refi ncons []) (* inductive instance *)
                           (map (lift0 len') (to_extended_list ctx_sbst))])))
-          | _ => None 
+          | NestInst args ind inst => 
+            let len' := List.length ctx' in (* number of binders *)
+            let ctxl' := (map_context (lift0 (2 + i)) ctx') in (* lift over other args (i) and own arg (1) *)
+            match args with (* special case for list *)
+            | [] => None
+            | _::_::_ => None
+            | [arg] =>
+            Some (it_mkProd_or_LetIn
+              (
+                [
+                  vass ({| binder_name := nNamed "Hxs"; binder_relevance := Relevant |}) 
+                  (
+                    (* TemplateToPCUIC.trans TrueQ *)
+                    (* mkApps (TemplateToPCUIC.trans ListQ)
+                    [mkApps ref [tRel 3]] *)
+                    (* (map (lift (i+len'+1) len') (List.firstn 1 args)) *)
+                    (* [ TemplateToPCUIC.trans TrueQ ] *)
+
+                    (* TODO *)
+                    (* let containee := mkApps ref [tRel 3] in *)
+                    let containee := 
+                    lift (2 + i + len') len'
+                      (subst1 ref (
+                        indrel + (len - i - 1) + List.length (ctx')
+                      ) arg) in
+
+                    (* TODO *)
+                    mkApps (TemplateToPCUIC.trans ListEQ)
+                      [
+                        containee;
+                        (tLambda 
+                          {| binder_name := nAnon; binder_relevance := Relevant |}
+                          containee
+                          (* (TemplateToPCUIC.trans TrueQ) *)
+                          (
+                          mkApps (TemplateToPCUIC.trans EqQ)
+                          [
+                            (lift0 1 containee);
+                            tRel 0;
+                            tRel 1
+                          ]
+                          )
+                        );
+                        tRel (i + len'+1) (* container *)
+                      ]
+
+                    (* (map (lift (1 + i + len') len')
+                          (args)) *)
+                  );
+                  (* (TemplateToPCUIC.trans TrueQ); *)
+
+                  (* witness instance:
+                  forall non-uniform indices, tInd params non-uni indices
+                  TODO: forall quantification
+                   *)
+                  vass ({| binder_name := nAnon; binder_relevance := Relevant |})
+                  (mkApps ref (
+                    (map (lift0 (len' + len - npars))
+                          (to_extended_list params)) ++
+                    (map (lift0 len') inds) (* use local indice quantification instead *)
+                  ))
+                ]
+                 ++ ctxl' ++ ctx_sbst)
+                 (* +2 => subterm witness and subterm property (Exists parametricity) *)
+              (mkApps (tRel (len + len'+2))
+                    ((map (lift0 (len' + len - npars+2))
+                          (to_extended_list params)) ++ (* parameters *)
+                      (map (lift0 (len'+2)) inds) ++ (* indices of constructed inductive inst *)
+                      (map (lift0 (len'+2)) inds) ++ (* indices of constructed inductive inst *)
+                      [
+                        tRel 1;
+                      (* mkApps (tConstruct refi ncons []) (* inductive instance *)
+                          (map (lift0 (len'+1)) (to_extended_list ctx_sbst)); *)
+                      mkApps (tConstruct refi ncons []) (* inductive instance *)
+                          (map (lift0 (len'+2)) (to_extended_list ctx_sbst))])))
+            end
           end in
     index(filter_map (fun '(n, c, a) => 
       match construct_cons n c a with 
