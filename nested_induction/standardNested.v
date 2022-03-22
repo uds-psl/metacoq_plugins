@@ -16,12 +16,12 @@ From MetaCoq.PCUIC Require Import TemplateToPCUIC.
 Require Import List String.
 Import ListNotations MCMonadNotation Nat.
 Require Import MetaCoq.Template.Pretty.
-Require Import MetaCoq.PCUIC.PCUICPretty.
+Require Import MetaCoq.PCUIC.utils.PCUICPretty.
 
 From Equations Require Import Equations.
 Require Import nested_datatypes.
 
-Open Scope string_scope.
+Open Scope bs_scope.
 
 
 Print prod.

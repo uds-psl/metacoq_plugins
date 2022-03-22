@@ -24,10 +24,19 @@ Definition mkFreshContextDecl (x:context_decl) : TemplateMonad context_decl :=
     decl_type := decl_type x
   |}.
 
+Definition update_cstr_name na (c : constructor_body) : constructor_body :=
+  {| cstr_name := na;
+     cstr_args := c.(cstr_args);
+     cstr_indices := c.(cstr_indices);
+     cstr_type := c.(cstr_type);
+     cstr_arity := c.(cstr_arity) |}.
+
   (* replaces the inductive name, the names of projections and all constructor names *)
 Definition mkFreshOneInd (x:one_inductive_body) : TemplateMonad one_inductive_body :=
   ident' <- tmFreshName (ind_name x);;
-  ctors' <- monad_map (fun '(id,t,n) => id' <- tmFreshName id;;tmReturn ((id',t),n)) (ind_ctors x);;
+  ctors' <- monad_map (fun cb => id' <- tmFreshName cb.(cstr_name);;
+    tmReturn (update_cstr_name id' cb))
+    (ind_ctors x);;
   projs' <- monad_map (fun '(id,t) => id' <- tmFreshName id;;tmReturn (id',t)) (ind_projs x);;
   tmReturn {|
     ind_name := ident';
@@ -35,6 +44,8 @@ Definition mkFreshOneInd (x:one_inductive_body) : TemplateMonad one_inductive_bo
     ind_kelim := ind_kelim x;
     ind_ctors := ctors';
     ind_projs := projs';
+    ind_indices := x.(ind_indices);
+    ind_sort := x.(ind_sort);
     ind_relevance := x.(ind_relevance)
   |}.
 

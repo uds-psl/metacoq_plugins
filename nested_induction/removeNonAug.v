@@ -2,17 +2,33 @@
 
 
 From MetaCoq Require Import Template.All.
-Require Import List String.
+Require Import List.
 Import ListNotations MCMonadNotation.
 Require Import MetaCoq.Template.Pretty.
 
-
+Open Scope bs.
 (* From MetaCoq.Checker Require Import All. *)
-(* From MetaCoq.Translations Require Import translation_utils. *)
+From MetaCoq.Translations Require Import translation_utils.
 (* From MetaCoq.Translations Require Import param_original. *)
 
 (* From MetaCoq.Translations Require Import param_all. *)
 
+
+Definition build_constructor_body pars name type :=
+  let dummycb :=
+   {| cstr_name := name; cstr_args := []; cstr_indices := []; cstr_type := type; 
+      cstr_arity := 0 |} in
+  match decompose_prod_n_assum [] #|pars| type with
+  | Some (ctx, ty) => 
+    let '(args, concl) := decompose_prod_assum [] ty in
+    let '(hd, conclargs) := decompose_app concl in
+    let indices := skipn (context_assumptions pars) conclargs in
+    {| cstr_name := name; cstr_args := args; 
+       cstr_indices := indices;
+       cstr_type := type; 
+       cstr_arity := context_assumptions args |}
+  | None => dummycb
+  end.
 
 
 Fixpoint isAugmentable (isMain:bool) (t:term) : bool := 
@@ -105,30 +121,45 @@ Fixpoint removeArgList (t:term) (xs:list nat) (rec:nat) :=
 
 (* Print monad_map. *)
 
-Definition cleanOInd (ind:one_inductive_body) := 
+Definition build_one_inductive_body (pars : context) name type kelim ctors projs rel :=
+  let dummyoib := 
+   {| ind_name := name; ind_indices := []; ind_sort := Universe.type0 ; 
+      ind_type := type; ind_kelim := kelim; ind_ctors := ctors; ind_projs := projs;
+      ind_relevance := rel |} in
+  match decompose_prod_n_assum [] #|pars| type with
+  | Some (ctx, ty) => 
+    let '(indices, concl) := decompose_prod_assum [] ty in
+    let sort := match concl with tSort s => s | _ => Universe.type0 end in
+    {| ind_name := name; 
+       ind_indices := indices; 
+       ind_sort := sort;
+       ind_type := type; 
+       ind_kelim := kelim; 
+       ind_ctors := ctors; 
+       ind_projs := projs;
+       ind_relevance := rel |}
+  | None => dummyoib
+  end.
+
+Definition cleanOInd params (ind:one_inductive_body) := 
   (* : TemplateMonad one_inductive_body := *)
   xp <- removeNonAugmentable ind.(ind_type) 0;;
   let (t,xs) := xp : term * list nat in
   (* tmPrint xs;; *)
   ctors <- monad_map 
-    (fun '(na,t,n) => 
-      tp <- removeNonAugmentable t 0;;
-      newName <- tmFreshName na;;
-let rmt := removeArgList tp.1 xs 0 in
-      tmReturn (newName,rmt,n)
+    (fun cb => 
+    (* '(na,t,n) =>  *)
+      tp <- removeNonAugmentable cb.(cstr_type) 0;;
+      newName <- tmFreshName cb.(cstr_name);;
+      let rmt := removeArgList tp.1 xs 0 in
+      tmReturn (build_constructor_body params newName rmt)
     )
     ind.(ind_ctors);;
     (* tmMsg "A". *)
   oldName <- tmEval all ind.(ind_name);;
   newName <- tmFreshName oldName;;
   tmReturn(
-    Build_one_inductive_body 
-      newName
-      t
-      ind.(ind_kelim)
-      (* ind.(ind_ctors) *)
-      ctors
-      ind.(ind_projs)
+    build_one_inductive_body params newName t ind.(ind_kelim) ctors ind.(ind_projs)
       ind.(ind_relevance)
   ).
 
@@ -139,8 +170,8 @@ let rmt := removeArgList tp.1 xs 0 in
 
 Definition cleanInd (kname:kername) (idx:nat) (u:Instance.t) :=
     mind <- tmQuoteInductive kname;;
-    nparam <- (removeNonAugList (rev mind.(ind_params)));;
-    noinds <- monad_map cleanOInd mind.(ind_bodies);;
+    nparam <- removeNonAugList (rev mind.(ind_params));;
+    noinds <- monad_map (cleanOInd (rev nparam)) mind.(ind_bodies);;
     (* tmMsg "Fin". *)
     tmMkInductive (mind_body_to_entry {|
       ind_finite := mind.(ind_finite);
@@ -152,7 +183,7 @@ Definition cleanInd (kname:kername) (idx:nat) (u:Instance.t) :=
     |});;
     (* tmMsg "Fin". *)
     match nth_error noinds idx with
-      None => tmFail "no inductive was constructed"
+      None => tmFail "no inductive was constructed"%bs
     | Some oind => tmReturn oind.(ind_name)
     end.
 

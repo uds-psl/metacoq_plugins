@@ -29,7 +29,7 @@ Fixpoint lookup_tsl_table (E : tsl_table) (gr : global_reference)
 
 Definition tsl_context := (global_env_ext * tsl_table)%type.
 
-Definition emptyTC : tsl_context := (empty_ext [], []).
+Definition emptyTC : tsl_context := (empty_ext empty_global_env, []).
 
 Inductive tsl_error :=
 | NotEnoughFuel
@@ -97,7 +97,7 @@ Definition tmDebug {A} : A -> TemplateMonad unit
 
 
 Definition add_global_decl d (Σ : global_env_ext) : global_env_ext
-  := (d :: Σ.1, Σ.2).
+  := (add_global_decl Σ.1 d, Σ.2).
 
 Definition tmLocateCst (q : qualid) : TemplateMonad kername :=
   l <- tmLocate q ;;
@@ -169,7 +169,8 @@ Definition Translate {tsl : Translation} (ΣE : tsl_context) (id : ident)
         tmDebug "doneu" ;;
         gr' <- tmLocate1 id' ;;
         let decl := {| cst_universes := univs;
-                       cst_type := A; cst_body := Some t |} in
+                       cst_type := A; cst_body := Some t;
+                       cst_relevance := e.(cst_relevance) |} in
         let Σ' := add_global_decl (kn, ConstantDecl decl) (fst ΣE) in
         let E' := (ConstRef kn, monomorph_globref_term gr') :: (snd ΣE) in
         Σ' <- tmEval lazy Σ' ;;
@@ -200,8 +201,9 @@ Definition Implement {tsl : Translation} (ΣE : tsl_context)
       tmAxiom id A ;;
       kn <- tmLocateCst id ;;
       gr' <- tmLocate1 id' ;;
-      let decl := {| cst_universes := Monomorphic_ctx ContextSet.empty;
-                     cst_type := tA; cst_body := None |} in
+      let decl := {| cst_universes := Monomorphic_ctx;
+                     cst_type := tA; cst_body := None;
+                     cst_relevance := Relevant |} in
       let Σ' := add_global_decl (kn, ConstantDecl decl) (fst ΣE) in
       let E' := (ConstRef kn, monomorph_globref_term gr') :: (snd ΣE) in
       print_nf (id ^ " has been translated as " ^ id') ;;
@@ -238,8 +240,9 @@ Definition ImplementExisting {tsl : Translation} (ΣE : tsl_context) (id : ident
       tmDebug "plop3" ;;
       tmLemma id' A' ;;
       gr' <- tmLocate1 id' ;;
-      let decl := {| cst_universes := Monomorphic_ctx ContextSet.empty;
-                     cst_type := A; cst_body := e.(cst_body) |} in
+      let decl := {| cst_universes := Monomorphic_ctx;
+                     cst_type := A; cst_body := e.(cst_body);
+                     cst_relevance := Relevant |} in
       let Σ' := add_global_decl (kn, ConstantDecl decl) (fst ΣE) in
       let E' := (ConstRef kn, monomorph_globref_term gr') :: (snd ΣE) in
       print_nf (id ^ " has been translated as " ^ id') ;;
@@ -279,7 +282,8 @@ Definition ImplementExisting {tsl : Translation} (ΣE : tsl_context) (id : ident
       match List.nth_error ctors k with
       | None => fail_nf ("The body of "
                           ^ id ^ " has not enough constructors. This is a bug.")
-      | Some (_, ty, _) =>  (* keep id? *)
+      | Some ctor =>
+        let ty := ctor.(cstr_type) in
         tmDebug "plop3" ;;
         let A := subst0 (inds kn [] (* FIXME uctx *) (ind_bodies d)) ty in
         tmDebug "plop4" ;;
@@ -322,7 +326,8 @@ Definition TranslateRec {tsl : Translation} (ΣE : tsl_context) {A} (t : A) :=
         | {| cst_body := None |} =>
           fail_nf (string_of_kername kn ^ " is an axiom. Use Implement Existing.")
                     
-        | {| cst_type := A; cst_body := Some t; cst_universes := univs |} =>
+        | {| cst_type := A; cst_body := Some t; cst_universes := univs; 
+            cst_relevance := rel |} =>
           tmDebug "go";;
           t' <- tmEval lazy (tsl_tm ΣE t) ;;
           tmDebug "done";;
@@ -375,4 +380,21 @@ Definition TranslateRec {tsl : Translation} (ΣE : tsl_context) {A} (t : A) :=
          end
       end
     end)
-  (fst p) ΣE.
+  (fst p).(declarations) ΣE.
+
+
+Definition build_constructor_body pars name type :=
+  let dummycb :=
+   {| cstr_name := name; cstr_args := []; cstr_indices := []; cstr_type := type; 
+      cstr_arity := 0 |} in
+  match decompose_prod_n_assum [] #|pars| type with
+  | Some (ctx, ty) => 
+    let '(args, concl) := decompose_prod_assum [] ty in
+    let '(hd, conclargs) := decompose_app concl in
+    let indices := skipn (context_assumptions pars) conclargs in
+    {| cstr_name := name; cstr_args := args; 
+       cstr_indices := indices;
+       cstr_type := type; 
+       cstr_arity := context_assumptions args |}
+  | None => dummycb
+  end.

@@ -11,14 +11,14 @@ From MetaCoq.PCUIC Require Import
 From MetaCoq.PCUIC Require Import PCUICToTemplate.
 From MetaCoq.PCUIC Require Import TemplateToPCUIC.
 
-Require Import List String.
+Require Import List.
 Import ListNotations MCMonadNotation Nat.
 Require Import MetaCoq.Template.Pretty.
-Require Import MetaCoq.PCUIC.PCUICPretty.
+Require Import MetaCoq.PCUIC.utils.PCUICPretty.
 
 Require Import Modes.
 
-Open Scope string_scope.
+Open Scope bs_scope.
 
 Definition nestedMode := "Nested_Inductives".
 
@@ -56,7 +56,7 @@ Definition errorMessage (name:string) : TemplateMonad unit :=
   (* tmMsg "was not found in the registered database and thus will be ignored.";; *)
 
 (* maybe wrong distinction kername / ident *)
-Definition createFunction (inds:list (kername * option nat * Instance.t)) : TemplateMonad( kername -> nat -> option (term×term) ) :=
+Definition createFunction (Σ : global_env_map) (inds:list (kername * option nat * Instance.t)) : TemplateMonad( kername -> nat -> option (term×term) ) :=
   monad_fold_left
   (fun acc '(kname2,no,u) =>
             let (_,kname) := kname2 : kername in 
@@ -78,11 +78,11 @@ Definition createFunction (inds:list (kername * option nat * Instance.t)) : Temp
             tmReturn acc
         | Some n =>
           mind <- tmQuoteInductive kname2;;
-          match nth_error (Ast.ind_bodies mind) n with
+          match nth_error (Ast.Env.ind_bodies mind) n with
           | Some oind => 
-              match isAugmentable true (trans (Ast.ind_type oind)) with
+              match isAugmentable true (trans Σ (Ast.Env.ind_type oind)) with
               | true => 
-                  errorMessage (Ast.ind_name oind);;
+                  errorMessage (Ast.Env.ind_name oind);;
                   tmReturn acc
               | false => 
                   (* tmMsg "not found and not augmentable";; *)
@@ -100,10 +100,10 @@ Definition createFunction (inds:list (kername * option nat * Instance.t)) : Temp
         tmReturn
           (fun name i => 
             let (_,name2) := name :kername in (* TODO complete comparison needed *)
-            if name2 =? kname then (* TODO use i and no for mutual *)
+            if ReflectEq.eqb name2 kname then (* TODO use i and no for mutual *)
               Some (
-                TemplateToPCUIC.trans assumE,
-                TemplateToPCUIC.trans proofE
+                TemplateToPCUIC.trans Σ assumE,
+                TemplateToPCUIC.trans Σ proofE
               )
             else
               acc name i
@@ -153,26 +153,26 @@ Fixpoint findRecInd (rec:nat) (forceAdd:bool) (t:term) : list (kername * option 
 
 
 Definition getInd (oind:one_inductive_body) : list (kername * option nat * Instance.t) :=
-  List.concat (map (fun '(n,t,i) => findRecInd 0 false t) oind.(ind_ctors)).
+  List.concat (map (fun c => findRecInd 0 false c.(cstr_type)) oind.(ind_ctors)).
 
 Definition getInds (oind:one_inductive_body) : TemplateMonad (list (kername * option nat * Instance.t)) :=
         monad_fold_left 
-        (fun acc '(n,t,i) =>
-          et <- tmEval all t;;
+        (fun acc c =>
+          et <- tmEval all c.(cstr_type);;
           let inds := findRecInd 0 false et in
           tmReturn (app acc inds)
         )
         oind.(ind_ctors)
         [].
 
-Definition extractFunction (mind:mutual_inductive_body) (n:nat) : TemplateMonad( kername -> nat -> option (term×term) )  :=
+Definition extractFunction Σ (mind:mutual_inductive_body) (n:nat) : TemplateMonad( kername -> nat -> option (term×term) )  :=
   isNested <- getMode nestedMode;;
   if isNested:bool then
     match nth_error mind.(ind_bodies) n with
       None => tmFail "mutual inductive body was not found"
     | Some oind => 
         inds <- getInds oind;;
-        createFunction inds
+        createFunction Σ inds
     end
   else
     tmMsg "Nested recursion will be ignored.";;

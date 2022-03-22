@@ -35,7 +35,7 @@ Fixpoint countOfCtor (indref maxparam :nat) (c:term) : bool * nat :=
   end.
 
 Definition getParamCount (ind:one_inductive_body) (n0:nat) : nat :=
-  fold_left (fun m c => min m (snd (countOfCtor 0 m (snd(fst c))))) ind.(ind_ctors) n0.
+  fold_left (fun m c => min m (snd (countOfCtor 0 m c.(cstr_type)))) ind.(ind_ctors) n0.
 
 Definition getPCount (ind:mutual_inductive_body) (c:nat) : option nat :=
   match nth_error ind.(ind_bodies) c with
@@ -53,8 +53,9 @@ Definition getP (tm : Ast.term)
   := match tm with
      | Ast.tInd ind0 univ =>
        decl <- tmQuoteInductive (inductive_mind ind0) ;;
-            c <- tmEval lazy (getPCount (TemplateToPCUIC.trans_minductive_body decl) ind0.(inductive_ind));;
-            tmPrint c
+       c <- tmEval lazy (getPCount (TemplateToPCUIC.trans_minductive_body 
+        (TemplateToPCUIC.trans_global_env Ast.Env.empty_global_env) decl) ind0.(inductive_ind));;
+       tmPrint c
      | _ => tmFail "not inductive"
     end.
 

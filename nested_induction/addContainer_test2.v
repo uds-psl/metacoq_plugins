@@ -21,7 +21,7 @@ Load addContainer.
 (*   - now constructor. *)
 (* Defined. *)
 
-
+(* Unset MetaCoq Strict Unquote Universe Mode. *)
 
 MetaCoq Run (addType list).
 Next Obligation.

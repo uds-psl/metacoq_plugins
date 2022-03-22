@@ -10,16 +10,16 @@ From MetaCoq.PCUIC Require Import
 From MetaCoq.PCUIC Require Import PCUICToTemplate.
 
 
-Require Import List String.
+Require Import List.
 Import ListNotations MCMonadNotation Nat.
 Require Import MetaCoq.Template.Pretty.
-Require Import MetaCoq.PCUIC.PCUICPretty.
+Require Import MetaCoq.PCUIC.utils.PCUICPretty.
 
 Open Scope list_scope.
 Open Scope nat_scope.
 
 Require Import non_uniform.
-Require Import de_bruijn_print.
+From MetaCoq.Induction Require Import de_bruijn_print.
 
 Require Import Even.
 Require Import Recdef.
@@ -31,9 +31,12 @@ Definition canElim := allowed_eliminations_beq.
 
 Unset Strict Unquote Universe Mode. 
 
+Definition trans_empty_env := TemplateToPCUIC.trans_global_env Ast.Env.empty_global_env.
+Definition topcuic := TemplateToPCUIC.trans trans_empty_env.
+
   (* convert max elimination level into term *)
 Definition getMaxElim (xs : allowed_eliminations) :PCUICAst.term :=
-  TemplateToPCUIC.trans
+  topcuic
   (if canElim IntoAny xs then <% Type %> else (* todo: is this always the correct Level? *)
     if canElim IntoSetPropSProp xs then <% Set %> else
       <% Prop %>).
@@ -90,7 +93,7 @@ Fixpoint findRel (nested: kername -> nat -> option (term×term)) (k:nat) (u:term
   | tLetIn na b ty b' => orb (orb (findRel nested k b) (findRel nested k ty)) (findRel nested (S k) b')
   | tApp t1 t2 =>
     orb (findRel nested k t1) (findRel nested k t2)
-  | tCase ind p c brs => orb (orb (findRel nested k p) (findRel nested k c)) (hasSat (map (fun p => findRel nested k p.2) brs))
+  | tCase ind p c brs => orb (orb (test_predicate (fun _ => false)  (findRel nested k) p) (findRel nested k c)) (hasSat (map (fun p => findRel nested k p.(bbody)) brs))
   | tProj p c => (findRel nested k c)
   | tFix mfix idx =>
       let k' := #|mfix| + k in
@@ -107,8 +110,8 @@ Definition trans := TemplateToPCUIC.trans.
 (* dummy predicates used for arguments in assumption functions *)
 Definition trivialPred (X:Type) (x:X) := True.
 Definition trivialProof (X:Type) (x:X) : trivialPred X x := I.
-Definition tr1 := trans <% trivialPred %>.
-Definition tr2 := trans <% trivialProof %>.
+Definition tr1 := topcuic <% trivialPred %>.
+Definition tr2 := topcuic <% trivialProof %>.
 
 
 
@@ -163,10 +166,18 @@ Fixpoint termsize (t:term) : nat :=
   | tLambda _ t1 t2 => 1+termsize t1 + termsize t2
   | tLetIn _ t1 t2 t3 => 1+termsize t1 + termsize t2 + termsize t3
   | tApp t1 t2 => 1+termsize t1 + termsize t2
-  | tCase _ t1 t2 xs => 1+fold_right (fun t x => termsize (snd t) + x) (termsize t1 + termsize t2) xs
+  | tCase _ t1 t2 xs => 1+fold_right (fun t x => termsize t.(bbody) + x) 
+    (predicate_size termsize t1 + termsize t2) xs
   | tProj _ t1 => 1+ termsize t1
   | _ => 1
   end.
+
+Lemma list_size_all {A} (f g : A -> nat) (l : list A) :
+  All (fun x => f x = g x) l ->
+  list_size f l = list_size g l.
+Proof.
+  induction 1; cbn; auto. lia.
+Qed.
 
 Lemma termSizeLifting t n k: 
   termsize (lift n k t) = termsize t.
@@ -180,15 +191,15 @@ Proof.
     rewrite fold_right_map.
     symmetry;rewrite fold_right_map;symmetry.
     f_equal.
-    + now rewrite IHt1, IHt2.
-    + induction X.
-      * reflexivity.
-      * cbn. rewrite IHX.
-        f_equal.
-        destruct x.
-        unfold on_snd.
-        simpl in *.
-        now rewrite p0.
+    + f_equal.
+      * unfold predicate_size. f_equal. f_equal.
+        destruct X. rewrite list_size_map.
+        apply list_size_all. solve_all.
+        apply X.
+      * apply IHt.
+    + red in X0.
+      rewrite !map_map_compose.
+      solve_all.
 Qed.
 
 Require Import Lia.
@@ -413,19 +424,19 @@ Require Import nested_datatypes.
 Definition mkRelNum (n:nat) :=
   nat_rect (fun _ => list term) [] (fun n a => tRel n :: a) n.
 
-Require Import String.
-Open Scope string_scope.
+Open Scope bs_scope.
 
 (* generated the cases from the constructor list *)
-Definition quantifyCases (isInductive:bool) (ctors : list ((ident×term)×nat)) (paramCount:nat) (ind:inductive) (univ:Instance.t) (nested: kername -> nat -> option (term×term)):=
+Definition quantifyCases (isInductive:bool) (ctors : list constructor_body) (paramCount:nat) (ind:inductive) (univ:Instance.t) (nested: kername -> nat -> option (term×term)):=
   let ctorCount := #|ctors| in
   let type := tInd ind univ in
       (* fold over constructors for cases *)
   (* can be omitted with type inference *)
         mapi
-        (fun n (x:(ident × term) × nat) =>
-          let (y,count) := x in (* count=arguments of constructor case *)
-          let (name,a) := y in
+        (fun n cb => 
+          let count := cb.(cstr_arity) in  (* count=arguments of constructor case *)
+          let name := cb.(cstr_name) in
+          let a := cb.(cstr_type) in
           let lcount := n in (* how many cases before this *)
            vass
              ({| binder_name := nNamed ("H_" +s name); binder_relevance := Relevant |})
@@ -451,6 +462,53 @@ Definition quantifyCases (isInductive:bool) (ctors : list ((ident×term)×nat)) 
              )
         ) ctors.
 
+Definition update_arity (fn : nat -> nat) (cb : constructor_body) :=
+  {| cstr_name := cb.(cstr_name); 
+     cstr_type := cb.(cstr_type);
+     cstr_indices := cb.(cstr_indices);
+     cstr_args := cb.(cstr_args);
+     cstr_arity := fn cb.(cstr_arity) |}.
+
+Definition make_predicate (mib : mutual_inductive_body) (oib : one_inductive_body) 
+    (paramlist : list term) univ (ty : term) : predicate term :=
+  let (pctx, concl) := 
+    match decompose_prod_n_assum [] #|mib.(ind_params)| ty with
+    | Some a => a
+    | None => ([], ty) (* impossible *)
+    end
+  in
+  let concl := 
+    match concl with
+    | tProd _ b concl => concl
+    | _ => concl (* impossible *)
+    end
+  in
+  {| pparams := paramlist;
+     puinst := univ;
+     pcontext := pctx;
+     preturn := concl |}.
+
+Fixpoint decompose_lam_n_assum (Γ : context) n (t : term) : option (context * term) :=
+  match n with
+  | 0 => Some (Γ, t)
+  | S n =>
+    match t with
+    | tLambda na A B => decompose_lam_n_assum (Γ ,, vass na A) n B
+    | tLetIn na b bty b' => decompose_lam_n_assum (Γ ,, vdef na b bty) n b'
+    | _ => None
+    end
+  end.
+
+Definition make_branch ind ind_body one_body pred term := 
+  let ctx := case_predicate_context ind ind_body one_body pred in
+  let body := 
+    match decompose_lam_n_assum [] #|ctx| term with 
+    | Some (ctx, body) => body
+    | None => term
+    end
+  in
+  {| bcontext := ctx; 
+     bbody := body |}.
 
 (*
 arguments:
@@ -482,11 +540,12 @@ Definition createElim (isInductive:bool) (ind:inductive) (univ:Instance.t) (ind_
   let trueParams := skipn nonUniformArgCount allParams in
 
   let trueParamCtors := one_body.(ind_ctors) in
-  let allParamCtors := map (on_snd (plus nonUniformArgCount)) one_body.(ind_ctors) in
+  let allParamCtors := map (update_arity (plus nonUniformArgCount)) one_body.(ind_ctors) in
 
   let type := tInd ind univ in
+  let paramlist := (mapi (fun i _ => tRel (trueParamCount-i-1)) trueParams) in
   let ind_applied := (* typ applied with params *)
-      mkApps type (mapi (fun i _ => tRel (trueParamCount-i-1)) trueParams)
+      mkApps type paramlist
   in
   let nuIndex_type := remove_arity trueParamCount one_body.(ind_type) in
   let trueIndex_type := remove_arity allParamCount one_body.(ind_type) in
@@ -510,6 +569,21 @@ Definition createElim (isInductive:bool) (ind:inductive) (univ:Instance.t) (ind_
          )
          (* quantify over indices but not over params *)
          nuIndex_type in
+  let case_pred :=
+    make_predicate ind_body one_body paramlist univ
+      (lift0 (S trueIndCount)
+      (replaceLastLambda'
+        (mapProdToLambda
+      (lift (2+ctorCount) nonUniformArgCount
+                  (remove_arity nonUniformArgCount predType)
+        ))
+        (* apply p with indices and instace *)
+        (* p is after instance, indices, f, arguments (indices and instance) and cases *)
+        (* trueInd from above, nonUniformArgCount, f,  *)
+        (createAppChain (tRel (1+allIndCount+1+ctorCount) (* 1+trueIndCount *)
+                        ) (S allIndCount))
+      ))
+  in
   (* quantify over all params *)
   it_mkLambda_or_LetIn trueParams
   (tLambda
@@ -527,7 +601,7 @@ Definition createElim (isInductive:bool) (ind:inductive) (univ:Instance.t) (ind_
          (
               tFix
             [{|
-             dname := {| binder_name := nNamed "f"%string; binder_relevance := Relevant |};
+             dname := {| binder_name := nNamed "f"; binder_relevance := Relevant |};
              dtype := (* could be omitted using type inference *)
                (* lift over cases for constructor and p *)
                replaceLastProd'
@@ -543,68 +617,46 @@ Definition createElim (isInductive:bool) (ind:inductive) (univ:Instance.t) (ind_
                   (
                     (* match on instance *)
                     (* use change match return type, case application and access to non uniform *)
-                        (tCase (ind, allParamCount)
+                        (tCase {| ci_ind := ind; ci_npar := allParamCount; 
+                          ci_relevance := one_body.(ind_relevance) |}
                             (* return type of match *)
-                            (
-                              (lift0 (S trueIndCount)
-                              (replaceLastLambda'
-                                (mapProdToLambda
-                              (lift (2+ctorCount) nonUniformArgCount
-                                          (remove_arity nonUniformArgCount predType)
-                                ))
-                                (* apply p with indices and instace *)
-                                (* p is after instance, indices, f, arguments (indices and instance) and cases *)
-                                (* trueInd from above, nonUniformArgCount, f,  *)
-                                (createAppChain (tRel (1+allIndCount+1+ctorCount) (* 1+trueIndCount *)
-                                                ) (S allIndCount))
-                              ))
-                            )
+                            case_pred
                            (* on instance *)
                             (tRel 0)
                             (* map case for each constructor *)
 
-                           (mapi
-                              (fun i (x:(ident × term) × nat) =>
-                                 let (y,count) := x in (* count for arguments of constructor *)
-                                 let (_,a) := y in
-                                 (count,
+    (mapi
+      (fun i cb =>
+        let count := cb.(cstr_arity) in (* count for arguments of constructor *)
+        let a := cb.(cstr_type) in 
+        make_branch ind ind_body one_body case_pred 
+           (let fpos := 1+allIndCount in
+            let Hstart := fpos in
+            let Hpos := Hstart+(ctorCount -i) in
 
+            let ppos := 1+Hstart+ctorCount in
+            let paramOffset := 1+ppos in
+            let recPos := paramOffset + trueParamCount in
 
-                     let fpos := 1+allIndCount in
-                     let Hstart := fpos in
-                     let Hpos := Hstart+(ctorCount -i) in
-
-                     let ppos := 1+Hstart+ctorCount in
-                     let paramOffset := 1+ppos in
-                     let recPos := paramOffset + trueParamCount in
-
-                     let ctorType :=
-                                  (
-                                    (lift0 (S trueIndCount)
-                                    (lift (2+ctorCount) nonUniformArgCount
-                                        (* (mapProdToLambda *)
-                                          (remove_arity allParamCount a)
-                                        (* ) *)
-                                    )
-                                    )
-                                  )
-                         in
-
-
-                     match
-                       generateInductiveAssumptions trueParamCount nested isInductive recPos ppos fpos (tRel Hpos) (map (lift0 (1+trueIndCount)) (mkRelNum nonUniformArgCount)) false true true false ctorType
-                     with
-                       None => tVar "this can't happen (proof)"
-                     | Some t =>
-                       subst1 type recPos t
-                     end
-                                 )
-                              )
-                              trueParamCtors
-                           )
+            let ctorType :=
+                        (
+                          (lift0 (S trueIndCount)
+                          (lift (2+ctorCount) nonUniformArgCount
+                                (remove_arity allParamCount a)
+                          )
+                          )
                         )
-                )
-             ;
+            in
+            match
+              generateInductiveAssumptions trueParamCount nested isInductive recPos 
+                ppos fpos (tRel Hpos) (map (lift0 (1+trueIndCount)) 
+                (mkRelNum nonUniformArgCount)) false true true false ctorType
+            with
+              None => tVar "this can't happen (proof)"
+            | Some t =>
+              subst1 type recPos t
+            end
+            )) trueParamCtors))) ;
              (* recursion over instance (last argument) *)
              rarg := allIndCount |}] 0)
     )) 
@@ -629,20 +681,16 @@ Print tmDefinitionRed.
 Definition runElim {A:Type} (indTm : A) (isInductive:bool) (create:bool) (nameOpt:option ident) (returnType:option Ast.term)
   : TemplateMonad unit
   := p <- tmQuoteRec indTm;;
-     let (env,tm) := (p:Ast.program) in
+     let (env,tm) := (p:Ast.Env.program) in
+     let tenv := TemplateToPCUIC.trans_global_env env in
      match tm with
      | Ast.tInd ind0 univ =>
        decl <- tmQuoteInductive (inductive_mind ind0) ;;
-       nestedFunc <- extractFunction (TemplateToPCUIC.trans_minductive_body decl) (inductive_ind ind0);;
+       nestedFunc <- extractFunction tenv (TemplateToPCUIC.trans_minductive_body tenv decl) (inductive_ind ind0);;
             let namingFun (na:name) (t:term) : name :=
-                fresh_name
-                  (empty_ext
-                     (TemplateToPCUIC.trans_global_decls env)
-                  )
-                  []
-                  t na
+                BasicAst.nNamed (fresh_name (empty_ext tenv.(TemplateToPCUIC.trans_env_env)) [] na (Some t))
             in
-            let lemma : option (term×string) := createElim isInductive ind0 univ (TemplateToPCUIC.trans_minductive_body decl) (option_map trans returnType) namingFun nestedFunc in
+            let lemma : option (term×string) := createElim isInductive ind0 univ (TemplateToPCUIC.trans_minductive_body tenv decl) (option_map (trans tenv) returnType) namingFun nestedFunc in
             evaluated <- tmEval lazy lemma;;
             if create then
               match evaluated with
@@ -686,9 +734,9 @@ Definition runElim {A:Type} (indTm : A) (isInductive:bool) (create:bool) (nameOp
                   tmPrint x;;
                   bruijn_print x;;
                   tmMsg "";;
-                  tmMsg (print_term (empty_ext (TemplateToPCUIC.trans_global_decls env)) [] true false x)
+                  tmMsg (print_term (empty_ext (TemplateToPCUIC.trans_env_env tenv)) true [] true false x)
               end
-     | _ => tmPrint tm ;; tmFail " is not an inductive"
+     | _ => tmPrint tm ;; tmFail " is not an inductive"%bs
      end.
 
 (* Print Universes. *)
