@@ -175,27 +175,36 @@ Definition tsl_mind_body (prune:bool) (E : tsl_table) (mp : modpath) (kn : kerna
   - (** translate the one_inductive_bodys individually **)
     refine (mapi _ mind.(ind_bodies)).
     intros i ind. (** number of inductive body and body **)
+    (** translate the type (with parameters) of the inductive body **)
+    set (indtype :=
+      let (ctx,tb) := decompose_prod_context (remove_arity mind.(ind_npars) ind.(ind_type)) in
+      it_mkProd_or_LetIn paramlist (
+        it_mkProd_or_LetIn ctx (** indices **)
+        (tProd (relevant_aname(nAnon ))
+        (mkApps (lift0 #|ctx| (applyEnv env (tApp (tInd (mkInd kn i) []) (makeRels mind.(ind_npars))))) (makeRels #|ctx|)) (** old type with params **)
+          (lift0 1 tb))) (** later tProd element **)).
+    set (indicessort := 
+      match decompose_prod_n_assum [] #|paramlist| indtype with
+      | Some (_, ty) => decompose_prod_assum [] ty
+      | None => ([], tSort ind.(ind_sort))
+      end).
     refine {| ind_name := tsl_ident ind.(ind_name);
-              ind_type := _;
+              ind_indices := fst indicessort;
+              ind_sort := match snd indicessort with tSort s => s | _ => ind.(ind_sort) end;
+              ind_type := indtype;
               ind_kelim := ind.(ind_kelim);
               ind_ctors := _;
               ind_projs := [] |}.
-    + (** translate the type (with parameters) of the inductive body **)
-      refine (
-        let (ctx,tb) := decompose_prod_context (remove_arity mind.(ind_npars) ind.(ind_type)) in
-        it_mkProd_or_LetIn paramlist (
-          it_mkProd_or_LetIn ctx (** indices **)
-          (tProd (relevant_aname(nAnon ))
-          (mkApps (lift0 #|ctx| (applyEnv env (tApp (tInd (mkInd kn i) []) (makeRels mind.(ind_npars))))) (makeRels #|ctx|)) (** old type with params **)
-            (lift0 1 tb))) (** later tProd element **)
-      ).
     + (** constructors **)
       (** definition as function for better control flow overview **)
       refine (concat _).
     refine(
       mapi 
       (
-        fun k '((name,typ,nargs)) => 
+        fun k cb => 
+        let name := cb.(cstr_name) in
+        let typ := cb.(cstr_type) in
+        let nargs := cb.(cstr_arity) in
         let typInd :=  (** fillin inductives for recursion **)
           (fold_left_i 
             (fun t0 i u  => t0 {i := u})
@@ -240,10 +249,7 @@ Definition tsl_mind_body (prune:bool) (E : tsl_table) (mp : modpath) (kn : kerna
             (lift0 1 tb')
           )) in
           (** name constructor **)
-          (na^(string_of_nat j), 
-          ctor_type, 
-          #|fst (decompose_prod_context ctor_type)| - #|paramlist|)
-          :: acc)
+          build_constructor_body paramlist (na^(string_of_nat j)) ctor_type :: acc)
           else acc
         ) args [])
     ).
@@ -254,7 +260,7 @@ Defined.
 Definition tsl_ident' id := tsl_ident(fst(lastPart id)).
 
 (** registeres the exists parametricity translations as translation instance **)
-Instance existparam : Translation :=
+Global Instance existparam : Translation :=
   {| tsl_id := tsl_ident' ;
      tsl_tm := fun ΣE t => ret (paramTermTrans (snd ΣE) t);
      (** Implement and Implement Existing cannot be used with this translation **)
@@ -311,12 +317,12 @@ Definition ConstructExistsTable {A} (t:A) : TemplateMonad tsl_context :=
     | ConstantDecl decl => checkTranslation ΣE (ConstRef kn)
     | InductiveDecl d => checkTranslation ΣE (IndRef (mkInd kn 0))
     end)
-  (fst p) (emptyTC).
+  (fst p).(declarations) (emptyTC).
 
 (** the cases could be all in one and the command with 
   distinction on references/other terms could be a Template command
  **)
-Definition getIdentKername' (t:term)  : TemplateMonad kername :=
+Polymorphic Definition getIdentKername'@{u v} (t:term)  : TemplateMonad@{u v} kername :=
   tmReturn match t with
   (** handle all cases in one **)
   | tInd (mkInd kername _) _
@@ -325,22 +331,22 @@ Definition getIdentKername' (t:term)  : TemplateMonad kername :=
     kername
   | _ => (MPfile [],"") (** dummy value **)
   end.
-Definition getIdentKername {A} (t:A)  : TemplateMonad kername :=
+Polymorphic Definition getIdentKername@{u v} {A : Type@{u}} (t:A)  : TemplateMonad@{u v} kername :=
   q <- tmQuote t;;
   getIdentKername' (if q is tApp q' _ then q' else q).
 
 (** gets the local identifier (short name) **)
-Definition getIdent {A} (t:A)  : TemplateMonad string :=
+Polymorphic Definition getIdent@{u v} {A : Type@{u}} (t:A)  : TemplateMonad@{u v} string :=
   kername <- getIdentKername t;;
   tmReturn (snd kername).
 
 (** full mod path and identifier (separated by '.') **)
-Definition getIdentComplete {A} (t:A)  : TemplateMonad string :=
+Polymorphic Definition getIdentComplete@{u v} {A : Type@{u}} (t:A)  : TemplateMonad@{u v} string :=
   kername <- getIdentKername t;;
   tmReturn (string_of_kername kername).
 
   (** retrieves a reference from a coq term of a definition **)
-Definition tmLookup {A} (t:A) : TemplateMonad global_reference :=
+Definition tmLookup@{u v} {A : Type@{u}} (t:A) : TemplateMonad@{u Set} global_reference :=
   getIdentComplete t >>= tmLocate1.
 
 (** generates a table with all translations possibly needed for lookup **)
@@ -354,7 +360,7 @@ Definition persistentExistsTranslate {A} (t:A) : TemplateMonad tsl_context :=
 
   gr <- tmLookup t;;
   (** extend table **)
-      nameString <- tmEval lazy (append idname "_tableLookup");;
+      nameString <- tmEval lazy (String.append idname "_tableLookup");;
       newName <- tmFreshName nameString;;
       tmDefinition newName (
         {|

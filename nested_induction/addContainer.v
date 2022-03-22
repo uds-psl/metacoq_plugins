@@ -12,20 +12,21 @@ From MetaCoq.PCUIC Require Import PCUICToTemplate.
 From MetaCoq.PCUIC Require Import TemplateToPCUIC.
 
 From MetaCoq.Translations Require Import translation_utils.
-(* From MetaCoq.Translations Require Import param_original. *)
-From MetaCoq.Translations Require Import param_all.
-From MetaCoq.Translations Require Import param_unary.
+From MetaCoq.Translations Require Import param_original.
+(* From MetaCoq.Translations Require Import param_all. *)
+(* From MetaCoq.Translations Require Import param_unary. *)
 
-Require Import List String.
+Require Import List.
 Import ListNotations MCMonadNotation Nat.
 Require Import MetaCoq.Template.Pretty.
-Require Import MetaCoq.PCUIC.PCUICPretty.
+Require Import MetaCoq.PCUIC.utils.PCUICPretty.
 
-
-Open Scope string_scope.
+Import String (append).
+Open Scope bs_scope.
 
 Require Import helperGen.
 Require Import removeNonAug.
+Import MetaCoq.Template.BasicAst.
 
 Definition relevant_aname {X} (x:X) :=
   {| binder_name := x; binder_relevance := Relevant |}.
@@ -204,8 +205,9 @@ Definition getIndProp (kname:kername) (TL:tsl_table) :=
 Print tmUnquote.
 Print typed_term. *)
 
-Require Import de_bruijn_print.
+From MetaCoq.Induction Require Import de_bruijn_print.
 
+Definition trans_empty_env := TemplateToPCUIC.trans_global_env Ast.Env.empty_global_env.
 
 Polymorphic Definition addType {X} (t:X) :TemplateMonad unit :=
   tq <- tmQuote t;;
@@ -213,9 +215,9 @@ Polymorphic Definition addType {X} (t:X) :TemplateMonad unit :=
   | Ast.tInd ((mkInd kname idx) as ind) _ => 
       mind <- tmQuoteInductive (inductive_mind ind);;
       let name := 
-        match nth_error (Ast.ind_bodies mind) (inductive_ind ind) with
+        match nth_error (Ast.Env.ind_bodies mind) (inductive_ind ind) with
         | None => "noName"
-        | Some oind => Ast.ind_name oind
+        | Some oind => Ast.Env.ind_name oind
         end
       in
 
@@ -226,12 +228,12 @@ Polymorphic Definition addType {X} (t:X) :TemplateMonad unit :=
       end;;
       T <- tmQuote X;;
 
-      (* TL <- @TranslateRec param emptyTC _ t;; *)
-      TLL <- persistentTranslate t;;
+      TL <- @TranslateRec param emptyTC _ t;;
+      (* TLL <- persistentTranslate t;; *)
       (* tsl_table *)
       (* tsl_context *)
-      let (_,TL) := TLL:tsl_context in
-      let tbl := TL in
+      (* let (_,TL) := TLL:tsl_context in *)
+      let tbl := TL.2 in
       (* TL.2 *)
 
       newInd <- getIndProp kname tbl;;
@@ -250,7 +252,7 @@ Polymorphic Definition addType {X} (t:X) :TemplateMonad unit :=
       let (kname3,idx3) := newInd2 : kername * nat in
       let h := Ast.tInd (mkInd kname3 idx3) u in
 
-      let assTt := augmentType (trans tq) None [] [] (trans T) in
+      let assTt := augmentType (trans trans_empty_env tq) None [] [] (trans trans_empty_env T) in (* Fixme: in empty environment *)
       assT <- tmUnquoteTyped Type (PCUICToTemplate.trans assTt);; 
       assI <- tmUnquoteTyped (assT:Type) h;;
         (* tp <- tmUnquote h;; *)
@@ -273,7 +275,7 @@ Polymorphic Definition addType {X} (t:X) :TemplateMonad unit :=
       nameString2 <- tmEval lazy (append name "_proof");;
       newName2 <- tmFreshName nameString2;; (* T_proof *)
         (* h2 <- tmQuote assI2;; *)
-      let proofTt := augmentType (trans tq) (Some (trans h)) [] [] (trans T) in
+      let proofTt := augmentType (trans trans_empty_env tq) (Some (trans trans_empty_env h)) [] [] (trans trans_empty_env T) in
         (* print_nf h;; *)
         (* print_nf proofTt;; *)
         (* tmReturn tt *)

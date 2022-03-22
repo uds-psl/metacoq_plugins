@@ -1,10 +1,10 @@
 (** implementation of a flag system in MetaCoq **)
 
 Require Import MetaCoq.Template.All.
-Require Import String.
 Import MCMonadNotation.
-
+Open Scope bs.
 Class mode (s:string) := { state: bool }.
+Import String (append).
 
 Print tmExistingInstance.
 Print tmFreshName.
@@ -32,7 +32,7 @@ Definition getName (x : nat -> nat) :=
   t <- tmQuote x;;
   match t with 
   | Ast.tLambda ({| binder_name := nNamed na |}) _ _ => tmReturn na
-  | _ => tmReturn ""%string
+  | _ => tmReturn ""%bs
   end.
 
 

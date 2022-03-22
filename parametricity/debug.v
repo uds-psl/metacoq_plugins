@@ -66,22 +66,22 @@ Lemma red_beta'
   intros ->;apply red_beta.
 Qed.
 
-Lemma subst1Nothing t t2: Ast.wf t -> (lift0 1 t) {0:=t2} = t.
+Lemma subst1Nothing Σ t t2: WfAst.wf Σ t -> (lift0 1 t) {0:=t2} = t.
 Proof.
   intros H.
   unfold subst1.
-  rewrite simpl_subst;trivial.
+  rewrite (simpl_subst Σ);trivial.
   now rewrite lift0_id.
 Qed.
 
 (** the message does not change meaning of programs **)
-Lemma debugId Σ Γ m t: Ast.wf t -> red Σ Γ (debugMessage m t) t.
+Lemma debugId Σ Γ m t: WfAst.wf Σ t -> red Σ Γ (debugMessage m t) t.
 Proof.
     intros H.
     eapply trans_red;[apply refl_red|].
     unfold debugMessage. unfold mkApp.
     apply red_beta'.
-    now rewrite subst1Nothing.
+    now rewrite (subst1Nothing Σ).
 Qed.
 
 
@@ -92,6 +92,8 @@ Definition dcf := config.default_checker_flags.
 Definition ig := init_graph.
 
 Import MCMonadNotation.
+
+Open Scope bs.
 
 (** print all messages in a term **)
 Fixpoint debugPrint (t:term) : TemplateMonad unit :=
@@ -105,7 +107,7 @@ Fixpoint debugPrint (t:term) : TemplateMonad unit :=
     match t,tl with
     | tLambda ({| binder_name := nNamed msg; binder_relevance := Relevant |}) t1 b,[t2] =>
     if @Checker.eq_term dcf ig t1 <% unit %> && @Checker.eq_term dcf ig t2 <% tt %> then
-      tmMsg (append "Debug Message: " msg);;
+      tmMsg ("Debug Message: " ^ msg);;
       print_nf b
     else
       debugPrint t;;monad_iter debugPrint tl

@@ -64,8 +64,8 @@ Fixpoint tsl_rec0_2 (rel:Env) (t : term) {struct t} : term :=
   | tLambda na A t => tLambda na (tsl_rec0_2 rel A) (tsl_rec0_2 (EnvUp rel) t)
   | tLetIn na t A u => tLetIn na (tsl_rec0_2 rel t) (tsl_rec0_2 rel A) (tsl_rec0_2 (EnvUp rel) u)
   | tApp t lu => tApp (tsl_rec0_2 rel t) (map (tsl_rec0_2 rel) lu)
-  | tCase ik t u br => tCase ik (tsl_rec0_2 rel t) (tsl_rec0_2 rel u)
-                            (map (fun x => (fst x, tsl_rec0_2 rel (snd x))) br)
+  | tCase ik p u br => tCase ik (map_predicate id (tsl_rec0_2 rel) (tsl_rec0_2 rel) p) (tsl_rec0_2 rel u)
+                            (map (map_branch (tsl_rec0_2 rel)) br)
   | tProj p t => tProj p (tsl_rec0_2 rel t)
   (** | tFix : mfixpoint term -> nat -> term **)
   (** | tCoFix : mfixpoint term -> nat -> term **)
@@ -267,7 +267,6 @@ Fixpoint tsl_rec1' (deleteNonTypes:bool) (Env Envt: nat -> nat) (E : tsl_table) 
   | tProj _ _ => todo "tsl"
   | tFix _ _ | tCoFix _ _ => todo "tsl"
   | tVar _ | tEvar _ _ => todo "tsl var"
-  | tInt _ | tFloat _ => todo "tsl numeric"
   end.
 
 Notation "'if' x 'is' p 'then' A 'else' B" :=
@@ -327,7 +326,7 @@ Definition tsl_mind_body (prune:bool) (E : tsl_table) (mp : modpath) (kn : kerna
   (** for a pure unary parametricity translation even
   mind.(ind_params) ++ mind.(ind_params) workds **)
  (** the universe of the inductive and the variance are not changed by the translation **)
-  set(paramlist := transformParams prune E mind.(ind_params)).
+  set(paramlist := transformParams prune E mind.(ind_params)).  
   refine (_, [{| ind_npars := #|paramlist|;
                  ind_params := paramlist;
                  ind_bodies := _;
@@ -349,20 +348,28 @@ Definition tsl_mind_body (prune:bool) (E : tsl_table) (mp : modpath) (kn : kerna
   - (** translate the one_inductive_bodys individually **)
     refine (mapi _ mind.(ind_bodies)).
     intros i ind. (** number of inductive body and body **)
+    (** translate the type (with parameters) of the inductive body **)
+    set (indtype := (subst_app (tsl_rec1_prune prune E ind.(ind_type))
+    [tInd (mkInd kn i) []])).
+    set (indicessort := 
+      match decompose_prod_n_assum [] #|paramlist| indtype with
+      | Some (_, ty) => decompose_prod_assum [] ty
+      | None => ([], tSort ind.(ind_sort))
+      end).
     refine {| ind_name := tsl_ident ind.(ind_name);
-              ind_type := _;
+              ind_indices := fst indicessort;
+              ind_sort := match snd indicessort with tSort s => s | _ => ind.(ind_sort) end;
+              ind_type := indtype;
               ind_kelim := ind.(ind_kelim);
               ind_ctors := _;
               ind_projs := [] |}.
-    + (** translate the type (with parameters) of the inductive body **)
-      refine (subst_app (tsl_rec1_prune prune E ind.(ind_type))
-                                  [tInd (mkInd kn i) []]).
     + (** constructors **)
       (** definition as function for better control flow overview **)
     refine(
       mapi 
       (
-        fun k '((name,typ,nargs)) => 
+        fun k cb => 
+        (* '((name,typ,nargs)) =>  *)
         let ctor_type :=
         subst_app 
         (** possibility: add nat -> tRel 0 in table for 
@@ -373,14 +380,14 @@ Definition tsl_mind_body (prune:bool) (E : tsl_table) (mp : modpath) (kn : kerna
             (fun t0 i u  => t0 {S i := u})
             (rev (mapi (fun i _ => tInd (mkInd kn i) [])
                               mind.(ind_bodies)))
-            (tsl_rec1_prune prune E typ)) (** first translate s.t. tRel 0 => tRel 0 ; tRel 1 
+            (tsl_rec1_prune prune E cb.(cstr_type))) (** first translate s.t. tRel 0 => tRel 0 ; tRel 1 
               instead of nat => nat ; nat^t (does not exists) **)
           )
          [tConstruct (mkInd kn i) k []] 
          (** place original constructor in generated relation as tRel 0 **) in
-        (tsl_ident name, (** translate constructor name **)
-        ctor_type, (** translated constructor type **)
-        #|fst (decompose_prod_context ctor_type)|) (** all prods are arguments **)
+        build_constructor_body paramlist 
+          (tsl_ident cb.(cstr_name)) (** translate constructor name **)
+          ctor_type (** translated constructor type **)
       )
       ind.(ind_ctors)
     ).
@@ -389,9 +396,7 @@ Defined.
 
 
 (** one way to get the dot character '.' **)
-Definition dot : Ascii.ascii.
-destruct "." eqn:H;[discriminate|assumption].
-Defined.
+Definition dot := "."%byte.
 
 (** computes last part after dot **)
 (** needed to find identifies of, for example, local definitions **)
@@ -399,19 +404,19 @@ Defined.
   when a modpath-part with '.' is present **)
 Fixpoint lastPart (id:ident) :=
   match id with
-  | EmptyString => (id,false)
-  | String a id' => 
+  | String.EmptyString => (id,false)
+  | String.String a id' => 
     let (idr,b) := lastPart id' in
     if b then (idr,b) else
     (
-      if Ascii.eqb a dot then (idr,true) else (String a idr,false) 
+      if eqb a dot then (idr,true) else (String.String a idr,false) 
     )
   end.
 
 (** removed the modpath in front of the identifier **)
 Definition tsl_ident' id := tsl_ident(fst(lastPart id)).
 
-Instance param_prune : Translation :=
+Global Instance param_prune : Translation :=
   {| tsl_id := tsl_ident' ;
      tsl_tm := fun ΣE t => ret (tsl_rec1_prune true (snd ΣE) t) ;
      (** Implement and Implement Existing cannot be used with this translation **)
@@ -420,7 +425,7 @@ Instance param_prune : Translation :=
      ret (tsl_mind_body true (snd ΣE) mp kn mind) |}.
 
 (** registeres the unary parametricity translations as translation instance **)
-Instance param : Translation :=
+Global Instance param : Translation :=
   {| tsl_id := tsl_ident' ;
      tsl_tm := fun ΣE t => ret (tsl_rec1_prune false (snd ΣE) t) ;
      (** Implement and Implement Existing cannot be used with this translation **)
@@ -474,12 +479,12 @@ Definition ConstructTable {A} (t:A) : TemplateMonad tsl_context :=
     | ConstantDecl decl => checkTranslation ΣE (ConstRef kn)
     | InductiveDecl d => checkTranslation ΣE (IndRef (mkInd kn 0))
     end)
-  (fst p) (emptyTC).
+  (fst p).(declarations) (emptyTC).
 
 (** the cases could be all in one and the command with 
   distinction on references/other terms could be a Template command
  **)
-Definition getIdentKername' (t:term)  : TemplateMonad kername :=
+Polymorphic Definition getIdentKername'@{u v} (t:term)  : TemplateMonad@{u v} kername :=
   tmReturn match t with
   (** handle all cases in one **)
   | tInd (mkInd kername _) _
@@ -488,23 +493,23 @@ Definition getIdentKername' (t:term)  : TemplateMonad kername :=
     kername
   | _ => (MPfile [],"") (** dummy value **)
   end.
-Definition getIdentKername {A} (t:A)  : TemplateMonad kername :=
+Polymorphic Definition getIdentKername@{u v} {A : Type@{u}} (t:A)  : TemplateMonad@{u v} kername :=
   q <- tmQuote t;;
   getIdentKername' (if q is tApp q' _ then q' else q).
 
 (** gets the local identifier (short name) **)
-Definition getIdent {A} (t:A)  : TemplateMonad string :=
+Polymorphic Definition getIdent@{u v} {A : Type@{u}} (t:A) : TemplateMonad@{u v} string :=
   kername <- getIdentKername t;;
   tmReturn (snd kername).
 
 (** full mod path and identifier (separated by '.') **)
-Definition getIdentComplete {A} (t:A)  : TemplateMonad string :=
+Polymorphic Definition getIdentComplete@{u v} {A : Type@{u}} (t:A)  : TemplateMonad@{u v} string :=
   kername <- getIdentKername t;;
   tmReturn (string_of_kername kername).
 
-  (** retrieves a reference from a coq term of a definition **)
-Definition tmLookup {A} (t:A) : TemplateMonad global_reference :=
-  getIdentComplete t >>= tmLocate1.
+(** retrieves a reference from a coq term of a definition **)
+Polymorphic Definition tmLookup@{u v} {A : Type@{u}} (t:A) : TemplateMonad@{u Set} global_reference :=
+  tmBind (getIdentComplete t) (fun x => tmLocate1 x).
 
 (** generates a table with all translations possibly needed for lookup **)
 Definition persistentTranslate_prune {A} (t:A) (prune:bool) : TemplateMonad tsl_context :=
@@ -517,7 +522,7 @@ Definition persistentTranslate_prune {A} (t:A) (prune:bool) : TemplateMonad tsl_
 
   gr <- tmLookup t;;
   (** extend table **)
-      nameString <- tmEval lazy (append idname "_tableLookup");;
+      nameString <- tmEval lazy (String.append idname "_tableLookup");;
       newName <- tmFreshName nameString;;
       tmDefinition newName (
         {|

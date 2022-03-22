@@ -17,55 +17,36 @@ From MetaCoq.PCUIC Require Import PCUICAst PCUICAstUtils PCUICInduction
 
 From MetaCoq.PCUIC Require Import TemplateToPCUIC.
 
-Require Import List String.
-Require Import Ascii.
+Require Import List.
 Require Import Program Arith Lia PeanoNat.
 Import ListNotations MCMonadNotation Nat.
+Open Scope bs.
 
-Definition ascii_to_string (a:ascii) : string := String a (EmptyString).
-Definition natToChar (n:nat) : ascii := ascii_of_nat(48+n).
+(** could use string_of_nat **)
+Definition natToString := string_of_nat.
+Infix ":s" := String.String (at level 73).
+(** normally ^ **)
+Infix "+s" := String.append (at level 72).
+Definition linebreak := nl.
 
-Program Fixpoint natToString (n:nat) {measure n} : string :=
-  match leb n 9 with
-    true =>
-    ascii_to_string (natToChar n)
-  | false =>
-    append (natToString (Nat.div n 10)) (ascii_to_string(natToChar(Nat.modulo n 10)))
-  end.
-Next Obligation.
-  symmetry in Heq_anonymous.
-  apply leb_complete_conv in Heq_anonymous.
-  pose proof (divmod_spec n 9 0 9).
-  destruct divmod.
-  destruct H;trivial.
-  cbn. lia.
-Qed.
+Definition join := String.concat "".
+Definition append := String.append.
 
-Infix ":s" := String (at level 73).
-Infix "+s" := append (at level 72).
-Definition linebreak := ascii_to_string(ascii_of_nat 10).
-
-Definition join (xs:list string) : string :=
-  fold_left append xs EmptyString.
-
-Require Import String.
-Open Scope string_scope.
-
-(* needed for mutual inductive types *)
+(** needed for mutual inductive types **)
 Definition getInductiveName (ind:kername) (indIndex:nat) :TemplateMonad string :=
-  ind <- tmQuoteInductive ind;;
-  tmEval lazy match nth_error (trans_minductive_body ind).(ind_bodies) indIndex with
-           | None => ""
-           | Some b => b.(ind_name)
+  ind <- tmQuoteInductive ind ;;
+  tmEval lazy match nth_error (ind).(Env.ind_bodies) indIndex with
+           | None => ""%bs
+           | Some b => b.(Env.ind_name)
               end.
 
 Definition getConstructName (ind:kername) (indIndex:nat) (consIndex:nat) :TemplateMonad string :=
   ind <- tmQuoteInductive ind;;
-  tmEval lazy match nth_error (trans_minductive_body ind).(ind_bodies) indIndex with
+  tmEval lazy match nth_error (ind).(Env.ind_bodies) indIndex with
            | None => ""
-           | Some b => match nth_error b.(ind_ctors) consIndex with
+           | Some b => match nth_error b.(Env.ind_ctors) consIndex with
                         None => ""
-                      | Some (s,_,_) => s
+                      | Some cb => cb.(Env.cstr_name)
                       end
            end.
 
@@ -78,10 +59,7 @@ Definition nameToString (s:name) : string :=
 Definition concatString (xs:list string) : string :=
   fold_left (fun a b => a +s b) xs "".
 
-(* Print kername.
-Print ident.
-Print tmQuoteInductive. *)
-
+(** auxiliary function to generate the tring **)
 Fixpoint bruijn_print_aux (t:term) : TemplateMonad string :=
   match t with
   | tRel n => tmReturn("R" :s (natToString n))
@@ -116,10 +94,14 @@ Fixpoint bruijn_print_aux (t:term) : TemplateMonad string :=
   | tConst kn ui => let (_,name) := kn in tmReturn name
   | tInd ind ui => getInductiveName ind.(inductive_mind) ind.(inductive_ind)
   | tConstruct ind n ui => getConstructName ind.(inductive_mind) ind.(inductive_ind) n
-  | tCase (ind,n) p c brs =>
+  | tCase ci p c brs =>
+    let ind := ci.(ci_ind) in
+    let n := ci.(ci_npar) in
+    let rel := ci.(ci_relevance) in
     sc <- bruijn_print_aux c;;
-    sp <- bruijn_print_aux p;;
-    sb <- fold_left (fun sa x => match x with (n,t) => st <- bruijn_print_aux t;;sb <- sa;;tmReturn (sb +s " | ("+s(natToString n)+s") " +s st +s linebreak) end) brs (tmReturn "");;
+    sp <- bruijn_print_aux p.(preturn) ;;
+    sb <- fold_left (fun sa x => match x with {| bcontext := n; bbody := t |} => st <- bruijn_print_aux t;;sb <- sa;;tmReturn (sb +s " | ("+s(natToString (List.length n))+s") " +s st +s linebreak) end) 
+      brs (tmReturn "");;
     tmReturn(linebreak +s "match (P:" +s (natToString n) +s ") "+s sc +s " return " +s sp +s " with" +s linebreak +s
             sb +s
              "end")
@@ -137,17 +119,13 @@ Fixpoint bruijn_print_aux (t:term) : TemplateMonad string :=
   | _ => tmReturn "TODO"
   end.
 
-
-
-
+(** evalute and print, it is important to use lazy evaluation **)
 Definition bruijn_print (t:term) : TemplateMonad unit :=
   s <- bruijn_print_aux t;;
   val <- tmEval lazy s;;
   tmMsg val.
 
-
-
 MetaCoq Quote Definition printTest := 
   (forall (P:nat->Prop) (H0:P 0) (HS: forall n, P n -> P (S n)) (n:nat), P n).
 
-(* MetaCoq Run (bruijn_print (trans printTest)). *)
+(* MetaCoq Run (bruijn_print (trans (trans_global_env Ast.Env.empty_global_env) printTest)). *)

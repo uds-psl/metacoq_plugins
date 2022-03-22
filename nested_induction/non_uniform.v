@@ -64,7 +64,7 @@ Fixpoint collect_prods (t:term) : list (context_decl) :=
 Definition count_prods (t : term) : nat := #|collect_prods t|.
 
 Definition getParamCount (ind:one_inductive_body) (n0:nat) : nat :=
-  fold_right (fun c m => min m (countOfCtor 0 (count_prods (ind.(ind_type))) (snd(fst c)))) n0 ind.(ind_ctors).
+  fold_right (fun c m => min m (countOfCtor 0 (count_prods (ind.(ind_type))) c.(cstr_type))) n0 ind.(ind_ctors).
 
 Definition getPCount (ind:mutual_inductive_body) (c:nat) : option nat :=
   match nth_error ind.(ind_bodies) c with
@@ -74,12 +74,16 @@ Definition getPCount (ind:mutual_inductive_body) (c:nat) : option nat :=
 
 From MetaCoq.PCUIC Require Import TemplateToPCUIC.
 
+Definition trans_mind := 
+  (TemplateToPCUIC.trans_minductive_body 
+  (TemplateToPCUIC.trans_global_env Ast.Env.empty_global_env)).
+
 Definition getP (tm : Ast.term)
   : TemplateMonad unit
   := match tm with
      | Ast.tInd ind0 univ =>
        decl <- tmQuoteInductive (inductive_mind ind0) ;;
-       c <- tmEval lazy (getPCount (trans_minductive_body decl) ind0.(inductive_ind));;
+       c <- tmEval lazy (getPCount (trans_mind decl) ind0.(inductive_ind));;
        tmPrint c
      | _ => tmFail "not inductive"
      end.

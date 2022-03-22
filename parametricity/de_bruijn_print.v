@@ -15,42 +15,20 @@ and does not print tRels and tInd in a useful way
  **)
 
 Require Import MetaCoq.Template.All.
-
-Require Import List String.
-Require Import Ascii.
+Open Scope bs.
+Require Import List.
 Require Import Program Arith Lia PeanoNat.
 Import ListNotations MCMonadNotation Nat.
 
-Definition ascii_to_string (a:ascii) : string := String a (EmptyString).
-Definition natToChar (n:nat) : ascii := ascii_of_nat(48+n).
-
 (** could use string_of_nat **)
-Program Fixpoint natToString (n:nat) {measure n} : string :=
-  match leb n 9 with
-    true =>
-    ascii_to_string (natToChar n)
-  | false =>
-    append (natToString (Nat.div n 10)) (ascii_to_string(natToChar(Nat.modulo n 10)))
-  end.
-Next Obligation.
-  symmetry in Heq_anonymous.
-  apply leb_complete_conv in Heq_anonymous.
-  pose proof (divmod_spec n 9 0 9).
-  destruct divmod.
-  destruct H;trivial.
-  cbn. lia.
-Qed.
-
-Infix ":s" := String (at level 73).
+Definition natToString := string_of_nat.
+Infix ":s" := String.String (at level 73).
 (** normally ^ **)
-Infix "+s" := append (at level 72).
-Definition linebreak := ascii_to_string(ascii_of_nat 10).
+Infix "+s" := String.append (at level 72).
+Definition linebreak := nl.
 
-Definition join (xs:list string) : string :=
-  fold_left append xs EmptyString.
-
-Require Import String.
-Open Scope string_scope.
+Definition join := String.concat "".
+Definition append := String.append.
 
 (** needed for mutual inductive types **)
 Definition getInductiveName (ind:kername) (indIndex:nat) :TemplateMonad string :=
@@ -66,7 +44,7 @@ Definition getConstructName (ind:kername) (indIndex:nat) (consIndex:nat) :Templa
            | None => ""
            | Some b => match nth_error b.(ind_ctors) consIndex with
                         None => ""
-                      | Some (s,_,_) => s
+                      | Some cb => cb.(cstr_name)
                       end
            end.
 
@@ -114,10 +92,14 @@ Fixpoint bruijn_print_aux (t:term) : TemplateMonad string :=
   | tConst kn ui => let (_,name) := kn in tmReturn name
   | tInd ind ui => getInductiveName ind.(inductive_mind) ind.(inductive_ind)
   | tConstruct ind n ui => getConstructName ind.(inductive_mind) ind.(inductive_ind) n
-  | tCase ((ind,n),rel) p c brs =>
+  | tCase ci p c brs =>
+    let ind := ci.(ci_ind) in
+    let n := ci.(ci_npar) in
+    let rel := ci.(ci_relevance) in
     sc <- bruijn_print_aux c;;
-    sp <- bruijn_print_aux p;;
-    sb <- fold_left (fun sa x => match x with (n,t) => st <- bruijn_print_aux t;;sb <- sa;;tmReturn (sb +s " | ("+s(natToString n)+s") " +s st +s linebreak) end) brs (tmReturn "");;
+    sp <- bruijn_print_aux p.(preturn) ;;
+    sb <- fold_left (fun sa x => match x with {| bcontext := n; bbody := t |} => st <- bruijn_print_aux t;;sb <- sa;;tmReturn (sb +s " | ("+s(natToString (List.length n))+s") " +s st +s linebreak) end) 
+      brs (tmReturn "");;
     tmReturn(linebreak +s "match (P:" +s (natToString n) +s ") "+s sc +s " return " +s sp +s " with" +s linebreak +s
             sb +s
              "end")
